@@ -1,15 +1,17 @@
 import React from 'react';
-import { Button, ButtonProps } from 'react-native-paper';
+import { Button, ButtonProps, Text } from 'react-native-paper';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 
 interface PrimaryButtonProps extends Omit<ButtonProps, 'mode'> {
   variant?: 'filled' | 'outlined' | 'text';
   size?: 'small' | 'medium' | 'large';
+  error?: string;
 }
 
 export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   variant = 'filled',
   size = 'medium',
+  error = "",
   style,
   labelStyle,
   ...props
@@ -34,13 +36,17 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   ];
 
   return (
-    <Button
-      mode={variant === 'filled' ? 'contained' : variant === 'outlined' ? 'outlined' : 'text'}
-      buttonColor={variant === 'filled' ? colors.primary : undefined}
-      textColor={variant === 'filled' ? colors.onPrimary : colors.primary}
-      style={buttonStyle}
-      labelStyle={textStyle}
-      {...props}
-    />
+    <>
+      <Button
+        mode={variant === 'filled' ? 'contained' : variant === 'outlined' ? 'outlined' : 'text'}
+        buttonColor={variant === 'filled' ? colors.primary : undefined}
+        textColor={variant === 'filled' ? colors.onPrimary : colors.primary}
+        style={buttonStyle}
+        labelStyle={textStyle}
+        {...props}
+      />
+      {error!="" && <Text className={"absolute mb-8 text-black"}>{error}</Text>}
+    </>
+
   );
 };

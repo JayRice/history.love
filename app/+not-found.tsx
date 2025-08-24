@@ -1,5 +1,6 @@
-import { Link, Stack } from 'expo-router';
+import { Link, router, Stack } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
+import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
 export default function NotFoundScreen() {
   return (
@@ -8,7 +9,9 @@ export default function NotFoundScreen() {
       <View style={styles.container}>
         <Text style={styles.text}>This screen doesn't exist. :(</Text>
         <Link href="/" style={styles.link}>
-          <Text>Go to home screen!</Text>
+          <PrimaryButton variant={"outlined"} size={"medium"} onPress={() => {
+            router.replace('/home')
+          }}>Go to home screen</PrimaryButton>
         </Link>
       </View>
     </>

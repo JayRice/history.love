@@ -9,19 +9,26 @@ import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
 import { useAuth } from '@/src/hooks/useAuth';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
+import { useUserStore } from '../../store/userStore';
+import { BackButton } from '@/src/components/buttons/BackButton';
+import loginWithEmail from '@/src/database/auth/loginWithEmail';
+import Logo from '@/assets/images/logo.svg';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+
   const colors = useThemeColors();
+
+
+
 
   const handleLogin = async () => {
     if (!email || !password) return;
     
     setLoading(true);
-    const success = await login(email, password);
+    const success = await loginWithEmail(email, password);
     
     if (success) {
       router.replace('/(app)/home');
@@ -29,23 +36,23 @@ export default function LoginScreen() {
     setLoading(false);
   };
 
+
+
   const navigateToRegister = () => {
     router.push('/(auth)/register');
   };
 
   return (
     <Screen safeArea={false} className="bg-gradient-to-br from-primary/10 to-secondary/10">
+      <BackButton onPress={() => router.replace("/start")}/>
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1 justify-center px-6"
       >
         <View className="items-center mb-12">
-          <View className="bg-primary p-4 rounded-full mb-4">
-            <Heart size={32} color="white" fill="white" />
-          </View>
-          <Text variant="headlineLarge" className="text-gray-900 font-bold">
-            History.love
-          </Text>
+
+          <Logo width={200} height={200}></Logo>
+
           <Text variant="bodyLarge" className="text-gray-600 text-center mt-2">
             Your relationship journey, beautifully documented
           </Text>
@@ -86,7 +93,7 @@ export default function LoginScreen() {
           </View>
         </Card>
 
-        <View className="mt-6 flex-row justify-center">
+        <View className="mt-6 flex-row justify-center items-center">
           <Text variant="bodyMedium" className="text-gray-600">
             Don't have an account?{' '}
           </Text>

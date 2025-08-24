@@ -3,18 +3,9 @@ export * from './Relationship';
 export * from './Journal';
 export * from './Consent';
 
-export interface User {
-  id: string;
-  email: string;
-  username: string;
-  firstName: string;
-  lastName: string;
-  createdAt: string;
-  profileComplete: boolean;
-}
+
 
 export interface AuthState {
-  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }

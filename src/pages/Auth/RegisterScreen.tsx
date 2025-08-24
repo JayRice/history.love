@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, KeyboardAvoidingView, Platform } from 'react-native';
-import { Text, Card } from 'react-native-paper';
+import { Text, Card, Divider } from 'react-native-paper';
 import { Heart } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
 import { TextField } from '@/src/components/inputs/TextField';
@@ -9,8 +9,15 @@ import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
 import { useAuth } from '@/src/hooks/useAuth';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
+import { useUserStore } from '../../store/userStore';
+import { BackButton } from '@/src/components/buttons/BackButton';
+import Logo from '@/assets/images/logo.svg';
+import signupWithEmail from '@/src/database/auth/signupWithEmail';
+import { useGoogleLogin } from '@/src/hooks/useGoogleLogin';
+import { useToast } from '@/src/contexts/ToastProvider';
 
 export default function RegisterScreen() {
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -19,8 +26,10 @@ export default function RegisterScreen() {
     password: '',
     confirmPassword: '',
   });
-  const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const setUserProperty = useUserStore((state) => state.setUserProperty);
+
+  const [submitLoading, setSubmitLoading] = useState(false);
+
   const colors = useThemeColors();
 
   const updateField = (field: string, value: string) => {
@@ -32,36 +41,68 @@ export default function RegisterScreen() {
     
     if (!firstName || !lastName || !username || !email || !password) return;
     if (password !== confirmPassword) return;
+
+    setSubmitLoading(true);
+    const authUser = await signupWithEmail(email, password);
+
+    setUserProperty("name", firstName.trim() + " " + lastName.trim());
+
+    setUserProperty("email", email);
     
-    setLoading(true);
-    const success = await register({ firstName, lastName, username, email, password });
-    
-    if (success) {
-      router.replace('/(app)/home');
-    }
-    setLoading(false);
+    router.replace('/(app)/home');
+
+    setSubmitLoading(false);
   };
 
   const navigateToLogin = () => {
     router.push('/(auth)/login');
   };
 
+  const toast = useToast();
+
+  const { signInWithGoogle, googleLoading, googleError } = useGoogleLogin();
+
+
+  const handleGoogleLogin = async () => {
+    const userCred = await signInWithGoogle();
+    if (userCred) {
+      const user = userCred.user;
+
+      const uid = user.uid;
+      const email = user.email;
+      const displayName = user.displayName;
+      const photoURL = user.photoURL;
+
+      if (!email || !displayName || !photoURL) {
+        return toast("Google account is invalid, try again.")
+      }
+      setUserProperty("email", email);
+      setUserProperty("name", displayName);
+      setUserProperty("profileImage", {
+        type: "google",
+        url: photoURL
+      })
+
+      router.replace("/onboarding");
+    }
+  };
+
   const isFormValid = Object.values(formData).every(value => value.trim() !== '') && 
     formData.password === formData.confirmPassword;
 
+
+
+
   return (
     <Screen safeArea={false} scrollable className="bg-gradient-to-br from-primary/10 to-secondary/10">
+      <BackButton onPress={() => router.replace("/start")}/>
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1 justify-center px-6 py-12"
       >
-        <View className="items-center mb-8">
-          <View className="bg-primary p-4 rounded-full mb-4">
-            <Heart size={32} color="white" fill="white" />
-          </View>
-          <Text variant="headlineLarge" className="text-gray-900 font-bold">
-            History.love
-          </Text>
+        <View className="items-center mb-12">
+
+          <Logo width={200} height={200}></Logo>
           <Text variant="bodyLarge" className="text-gray-600 text-center mt-2">
             Start documenting your love story
           </Text>
@@ -73,30 +114,7 @@ export default function RegisterScreen() {
           </Text>
 
           <View className="space-y-4">
-            <View className="flex-row space-x-3">
-              <View className="flex-1">
-                <TextField
-                  label="First Name"
-                  value={formData.firstName}
-                  onChangeText={(value) => updateField('firstName', value)}
-                />
-              </View>
-              <View className="flex-1">
-                <TextField
-                  label="Last Name"
-                  value={formData.lastName}
-                  onChangeText={(value) => updateField('lastName', value)}
-                />
-              </View>
-            </View>
 
-            <TextField
-              label="Username"
-              value={formData.username}
-              onChangeText={(value) => updateField('username', value)}
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
 
             <TextField
               label="Email"
@@ -106,7 +124,6 @@ export default function RegisterScreen() {
               autoCapitalize="none"
               autoCorrect={false}
             />
-
             <TextField
               label="Password"
               value={formData.password}
@@ -121,12 +138,30 @@ export default function RegisterScreen() {
               secureTextEntry
               error={formData.password !== formData.confirmPassword && formData.confirmPassword !== ''}
             />
+            <Divider/>
+
+            <View>
+              <PrimaryButton
+                onPress={handleGoogleLogin}
+                error={googleError ?? ""}
+                loading={googleLoading}
+                size="large"
+              >
+                Continue with Google
+              </PrimaryButton>
+
+
+            </View>
+
+
+
+
           </View>
 
           <View className="mt-8">
             <PrimaryButton
               onPress={handleRegister}
-              loading={loading}
+              loading={submitLoading}
               disabled={!isFormValid}
               size="large"
             >
@@ -135,7 +170,7 @@ export default function RegisterScreen() {
           </View>
         </Card>
 
-        <View className="mt-6 flex-row justify-center">
+        <View className="mt-6 flex-row justify-center items-center">
           <Text variant="bodyMedium" className="text-gray-600">
             Already have an account?{' '}
           </Text>

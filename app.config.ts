@@ -1,0 +1,39 @@
+// app.config.ts
+export default () => ({
+  expo: {
+    name: "history.love",
+    slug: "historylove",
+    owner: "jaydenrice",
+    entryPoint: "./index.tsx",
+    version: "1.0.0",
+    orientation: "portrait",
+    icon: "./assets/images/icon.png",
+    scheme: "myapp",
+    userInterfaceStyle: "automatic",
+    newArchEnabled: true,
+    ios: {
+      supportsTablet: true,
+    },
+    web: {
+      bundler: "metro",
+      output: "single",
+      favicon: "./assets/images/favicon.png",
+    },
+    plugins: ["expo-router", "expo-font", "expo-web-browser"],
+    experiments: {
+      typedRoutes: true,
+    },
+    android: {
+      package: "com.historylove.app",
+    },
+    extra: {
+      router: {},
+      "eas": {
+        "projectId": "bd3fcdab-b533-42b8-8275-54aee70ef587"
+      },
+      firebaseApiKey: process.env.FIREBASE_API_KEY,
+      webClientId: process.env.WEB_CLIENT_ID,
+      androidClientId: process.env.androidClientId,
+    },
+  },
+});

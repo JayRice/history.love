@@ -6,25 +6,19 @@ import { Redirect, router } from 'expo-router';
 import { useAuth } from '@/src/hooks/useAuth';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 import Logo from '@/assets/images/logo.svg';
-import { useUserStore } from '@/src/store/userStore';
+
+
+import {Screen} from "@/src/components/layout/Screen"
+
 
 export default function Index() {
 
-  const { authUser, authUserLoading } = useAuth();
 
-
-
-  const [dataUserLoading, setDataUserLoading] = useState<boolean>(false);
-
-  if (false) {
-    return <View className="flex-1 w-screen h-screen bg-background justify-center items-center gap-2">
-      <Card>
-        <Logo width={64} height={64}></Logo>
-        <LoadingSpinner />
-      </Card>
-    </View>
-  }
-
-  return <Redirect href={authUser ? "/home" : "/start"} />;
+    return <Screen safeArea={true} className={"h-screen w-full items-center justify-center"}>
+      <View className={"h-[]"}>
+        <Logo width={200} height={200}></Logo>
+        <LoadingSpinner  size={50} />
+      </View>
+    </Screen>
 
 }

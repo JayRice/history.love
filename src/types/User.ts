@@ -1,3 +1,45 @@
+
+export type RelationshipGoal =
+  | "better-communication"
+  | "quality-time"
+  | "conflict-resolution"
+  | "deeper-intimacy"
+  | "trust-building"
+  | "shared-habits"
+  | "milestone-planning"
+  | "gratitude-practice"
+  | "fun-and-play"
+  | "dating-new";
+
+export type Cohabitation = "together" | "separately-nearby" | "separately-far";
+
+export type Gender = "female" | "male" | "non-binary" | "other";
+
+export type Relationship = | "in-relationship"
+  | "engaged"
+  | "married"
+  | "civil-partnership"
+  | "situationship"
+  | "single";
+
+export type Source = | "facebook/instagram"
+  | "blog/article"
+  | "youtube"
+  | "chatgpt-or-similar"
+  | "therapist/counselor"
+  | "app/play-store"
+  | "partner"
+  | "streaming"
+  | "tiktok"
+  | "podcast"
+  | "friend/family";
+
+
+export type ProfileImage = {
+    type: "google" | "stored",
+    url: string;
+}
+
 export default interface User {
   id: string;
   email: string;
@@ -6,38 +48,20 @@ export default interface User {
   username?: string;
 
   birthday?: Date;
-  gender?: "female" | "male" | "non-binary" | "other";
+  gender?: Gender | string;
 
   partner_name?: string;
   together_since?: Date;
 
-  relationship?:
-    | "in-relationship"
-    | "engaged"
-    | "married"
-    | "civil-partnership"
-    | "situationship";
+  relationship?: Relationship;
 
-  cohabitation?: "together" | "separately-nearby" | "separately-far";
+  cohabitation?: Cohabitation;
   kids?: boolean;
   send_notifications?: boolean;
 
-  source?:
-    | "facebook/instagram"
-    | "blog/article"
-    | "youtube"
-    | "chatgpt-or-similar"
-    | "therapist/counselor"
-    | "app/play-store"
-    | "partner"
-    | "streaming"
-    | "tiktok"
-    | "podcast"
-    | "friend/family";
+  goals?: RelationshipGoal[] | null;
 
+  source?: Source | null;
 
-    profileImage?: {
-      type: "google" | "stored",
-      url: string;
-    };
+  profileImage?: ProfileImage | null;
 }

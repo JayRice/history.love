@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, ButtonProps, Text } from 'react-native-paper';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { View } from 'react-native';
 
 interface PrimaryButtonProps extends Omit<ButtonProps, 'mode'> {
   variant?: 'filled' | 'outlined' | 'text';
@@ -36,7 +37,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   ];
 
   return (
-    <>
+    <View className={"flex flex-col gap-2"}>
       <Button
         mode={variant === 'filled' ? 'contained' : variant === 'outlined' ? 'outlined' : 'text'}
         buttonColor={variant === 'filled' ? colors.primary : undefined}
@@ -45,8 +46,8 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
         labelStyle={textStyle}
         {...props}
       />
-      {error!="" && <Text className={"absolute mb-8 text-black"}>{error}</Text>}
-    </>
+      {error!="" && <Text style={{ color: colors.error }} className={" mb-8 "}>{error}</Text>}
+    </View>
 
   );
 };

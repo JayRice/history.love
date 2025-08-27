@@ -21,9 +21,9 @@ export function useGoogleLogin(): UseGoogleLogin {
   const extras = Constants.expoConfig?.extra ?? {};
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    webClientId: extras.webClientId,
-    androidClientId: extras.androidClientId,
-    iosClientId: "ADD IOS CLIENT ID HERE LATER",
+    webClientId: extras.webClientId ?? "",
+    androidClientId: extras.androidClientId ?? "",
+    iosClientId: extras.iosClientId ?? "",
     scopes: ["openid", "email", "profile"],
     // This helps avoid auto-picking the last account
     selectAccount: true,

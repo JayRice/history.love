@@ -15,17 +15,18 @@ import Logo from '@/assets/images/logo.svg';
 import signupWithEmail from '@/src/database/auth/signupWithEmail';
 import { useGoogleLogin } from '@/src/hooks/useGoogleLogin';
 import { useToast } from '@/src/contexts/ToastProvider';
+import { Google } from '@expo/config-plugins/build/ios';
 
 export default function RegisterScreen() {
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
+
+  const [formError, setFormError] = useState<string | null>(null)
+
   const setUserProperty = useUserStore((state) => state.setUserProperty);
 
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -37,19 +38,22 @@ export default function RegisterScreen() {
   };
 
   const handleRegister = async () => {
-    const { firstName, lastName, username, email, password, confirmPassword } = formData;
+    const {email, password, confirmPassword } = formData;
     
-    if (!firstName || !lastName || !username || !email || !password) return;
+    if (!email || !password) return;
     if (password !== confirmPassword) return;
 
     setSubmitLoading(true);
-    const authUser = await signupWithEmail(email, password);
+    const response = await signupWithEmail(email, password);
 
-    setUserProperty("name", firstName.trim() + " " + lastName.trim());
 
-    setUserProperty("email", email);
-    
-    router.replace('/(app)/home');
+    if (!response.success){
+      setFormError(response.error)
+      setSubmitLoading(false)
+      return;
+    }
+
+    router.replace('/onboarding');
 
     setSubmitLoading(false);
   };
@@ -138,34 +142,36 @@ export default function RegisterScreen() {
               secureTextEntry
               error={formData.password !== formData.confirmPassword && formData.confirmPassword !== ''}
             />
-            <Divider/>
-
-            <View>
-              <PrimaryButton
-                onPress={handleGoogleLogin}
-                error={googleError ?? ""}
-                loading={googleLoading}
-                size="large"
-              >
-                Continue with Google
-              </PrimaryButton>
-
-
-            </View>
 
 
 
 
           </View>
 
-          <View className="mt-8">
+          <View className="mt-8 space-y-4">
             <PrimaryButton
               onPress={handleRegister}
               loading={submitLoading}
               disabled={!isFormValid}
+              error={formError!}
               size="large"
             >
               Create Account
+            </PrimaryButton>
+            <View className="relative w-full h-[1px] bg-gray-500 bg-opacity-30 my-4">
+              <Text className="absolute text-xl -translate-x-6 left-1/2 -top-3 bg-white px-2 text-gray-600 transform -translate-x-1/2">
+                OR
+              </Text>
+            </View>
+
+
+            <PrimaryButton
+              onPress={handleGoogleLogin}
+              error={googleError ?? ""}
+              loading={googleLoading}
+              size="large"
+            >
+              <Text className={"text-white"}> Continue with Google</Text>
             </PrimaryButton>
           </View>
         </Card>
@@ -182,6 +188,9 @@ export default function RegisterScreen() {
             Sign In
           </SecondaryButton>
         </View>
+
+
+
       </KeyboardAvoidingView>
     </Screen>
   );

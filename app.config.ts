@@ -23,6 +23,7 @@ export default () => ({
     experiments: {
       typedRoutes: true,
     },
+
     android: {
       package: "com.historylove.app",
     },

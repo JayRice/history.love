@@ -17,7 +17,10 @@ import Logo from '@/assets/images/logo.svg';
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
+
+  const [formError, setFormError] = useState<string | null>(null)
+
 
   const colors = useThemeColors();
 
@@ -27,13 +30,18 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     if (!email || !password) return;
     
-    setLoading(true);
-    const success = await loginWithEmail(email, password);
+    setSubmitLoading(true);
+    const response = await loginWithEmail(email, password);
     
-    if (success) {
-      router.replace('/(app)/home');
+    if (!response.success) {
+      setFormError(response.error)
+      setSubmitLoading(false)
+      return;
     }
-    setLoading(false);
+
+    router.replace('/(app)/home');
+
+    setSubmitLoading(false);
   };
 
 
@@ -84,7 +92,8 @@ export default function LoginScreen() {
           <View className="mt-8">
             <PrimaryButton
               onPress={handleLogin}
-              loading={loading}
+              loading={submitLoading}
+              error={formError ?? ""}
               disabled={!email || !password}
               size="large"
             >

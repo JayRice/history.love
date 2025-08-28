@@ -13,6 +13,10 @@ export default () => ({
     newArchEnabled: true,
     ios: {
       supportsTablet: true,
+      infoPlist: {
+        NSCameraUsageDescription: "Allow taking a profile photo.",
+        NSPhotoLibraryUsageDescription: "Allow choosing a profile photo.",
+      }
     },
     web: {
       bundler: "metro",

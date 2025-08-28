@@ -22,7 +22,7 @@ export type Relationship = | "in-relationship"
   | "situationship"
   | "single";
 
-export type Source = | "facebook/instagram"
+export type UserSource = | "facebook/instagram"
   | "blog/article"
   | "youtube"
   | "chatgpt-or-similar"
@@ -45,23 +45,34 @@ export default interface User {
   email: string;
   name: string;
 
-  username?: string;
 
-  birthday?: Date;
-  gender?: Gender | string;
+  settings?: {
+    send_notifications?: boolean;
+  }
 
-  partner_name?: string;
-  together_since?: Date;
+  profile?: {
+    username?: string;
+    birthday?: Date;
+    gender?: Gender | string;
+    profileImage?: ProfileImage | null;
+    bio: string;
+  }
 
-  relationship?: Relationship;
+  partner?: {
+    name?: string;
+    together_since?: Date;
+    relationship?: Relationship;
+    cohabitation?: Cohabitation;
+    kids?: boolean;
+    goals?: RelationshipGoal[] | null;
+  }
 
-  cohabitation?: Cohabitation;
-  kids?: boolean;
-  send_notifications?: boolean;
+  analytics?: {
+    source?: UserSource | null;
+  }
 
-  goals?: RelationshipGoal[] | null;
 
-  source?: Source | null;
+  data? : {
 
-  profileImage?: ProfileImage | null;
+  }
 }

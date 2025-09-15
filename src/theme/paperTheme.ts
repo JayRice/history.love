@@ -6,6 +6,8 @@ export const paperTheme = {
   colors: {
     ...MD3LightTheme.colors,
     primary: colors.primary,
+    primary_accent: colors.accent.primary,
+    card_surface: colors.card_surface,
     secondary: colors.secondary,
     tertiary: colors.accent.gold,
     surface: colors.surface,
@@ -19,5 +21,7 @@ export const paperTheme = {
     outlineVariant: colors.gray[200],
     surfaceVariant: colors.gray[50],
     onSurfaceVariant: colors.text.secondary,
+
+    beige: colors.beige,
   },
 };

@@ -53,12 +53,12 @@ export default function StartScreen() {
         </View>
         <View className={"p-2"} style={{ width, height: 300 }}>
           <Card.Cover  style={{ width: "100%", height: "100%" }}
-                       resizeMode="cover" source={require("@/assets/images/photos/couple1.jpg")} />
+                       resizeMode="cover" source={require("@/assets/images/photos/couple2.jpg")} />
         </View>
 
         <View className={"p-2"} style={{ width, height: 300 }}>
           <Card.Cover  style={{ width: "100%", height: "100%" }}
-                       resizeMode="cover" source={require("@/assets/images/photos/couple1.jpg")} />
+                       resizeMode="cover" source={require("@/assets/images/photos/couple3.jpg")} />
         </View>
       </Swiper>
 

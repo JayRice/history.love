@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { Calendar, BookOpen, Shield, User, Heart } from 'lucide-react-native';
@@ -6,6 +6,8 @@ import { Screen } from '@/src/components/layout/Screen';
 import { useAuth } from '@/src/hooks/useAuth';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
+import { useUserStore } from '@/src/store/userStore';
+import { useGeneralStore } from '@/src/store/generalStore';
 
 interface DashboardCardProps {
   title: string;
@@ -23,7 +25,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   onPress,
 }) => {
   const colors = useThemeColors();
-  
+
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <Card className="mb-4" style={{ backgroundColor: colors.surface }}>
@@ -51,8 +53,24 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
 };
 
 export default function HomeScreen() {
-  const { user } = useAuth();
+  const user = useUserStore((state) => state.user);
   const colors = useThemeColors();
+
+  const didShowSubscription = useGeneralStore((state) => state.didShowSubscription);
+  const setDidShowSubscription = useGeneralStore((state) => state.setDidShowSubscription);
+
+  useEffect(() => {
+    return router.push('/subscription')
+
+    // Prompt user for subscription when first logged in
+    if (!didShowSubscription && user?.analytics?.num_logged_in && user.analytics.num_logged_in <= 1) {
+
+      setTimeout(() => {
+        setDidShowSubscription(true);
+        router.push('/subscription')
+      }, 1000)
+    }
+  }, []);
 
   const dashboardItems = [
     {
@@ -91,7 +109,7 @@ export default function HomeScreen() {
         <View className="flex-row items-center mb-2">
           <Heart size={24} color={colors.primary} fill={colors.primary} className="mr-2" />
           <Text variant="headlineMedium" className="text-gray-900 font-bold">
-            Welcome back, {user?.firstName}
+            Welcome back, {user?.profile?.first_name}
           </Text>
         </View>
         <Text variant="bodyLarge" className="text-gray-600">

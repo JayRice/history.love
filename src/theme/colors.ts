@@ -1,10 +1,12 @@
 export const colors = {
   primary: '#E63946',
   secondary: '#1D3557',
-  background: '#F8F9FA',
+  background: '#FFFFFF',
   surface: '#FFFFFF',
-  
+  card_surface: '#e7e7e7',
+
   accent: {
+    primary: "#FDEDEE",
     gold: '#FFD700',
     pink: '#FFC0CB',
     softPink: '#F8BBD9',

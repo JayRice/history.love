@@ -37,576 +37,42 @@ import BirthdayPicker from '@/src/components/inputs/BirthdayPicker';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 
 
+
 import Animated, {
   SlideInRight,
   SlideOutLeft,
   FadeIn,
   FadeOut, SlideInLeft, SlideOutRight
 } from 'react-native-reanimated';
-import handleOnboarding from '@/src/server/handleOnboarding';
+import handleOnboarding from '@/src/server/user/handleOnboarding';
+import isUsernameTaken from '@/src/server/user/isUsernameTaken';
 import { BackButton } from '@/src/components/buttons/BackButton';
 import ToggleButtons from '@/src/components/inputs/ToggleButtons';
 import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
+import useDebounce from '@/src/hooks/useDebounce';
 
 
 const { width, height } = Dimensions.get("window");
 
 
 
-interface ScreenProps {
-  updateFormUser: <K extends keyof User>(key: K | string, value: User[K] | string) => void;
-  formUser: User | null;
-}
-
-const DEFAULT_AVATAR = require("@/assets/images/default-avatar.png");
-const MAX_USERNAME_LENGTH = 24;
-const MAX_BIO_LENGTH = 200;
-
-
-const WelcomeForm = () => {
-  return (
-    <View className={"w-full h-full flex items-center justify-center pb-64 "}>
-      <Text variant={"displaySmall"} className={"font-light mb-4 flex justify-center text-center"}> Welcome to  </Text>
-
-      <Logo width={250} height={250}></Logo>
-    </View>
-  )
-}
-const AboutForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-  return (
-    <View className={"w-full h-full space-y-10"}>
-      <Text variant={"displaySmall"} className={"font-bold mb-4"}> Tell us a little about yourself </Text>
-
-      <TextField
-        label="Your full name"
-        value={formUser?.name ?? ""}
-        onChangeText={(input) =>  updateFormUser("name", input)}
-        autoCapitalize="words"
-        autoCorrect={false}
-        maxLength={50}
-      />
-
-      <View>
-        <Text>Your Birthday: </Text>
-
-        <BirthdayPicker date={formUser?.profile?.birthday ?? null} onChangeDate={(date) => {
-          updateFormUser("profile.birthday", date);
-        }}></BirthdayPicker>
-
-      </View>
-
-
-    </View>
-  )
-}
-const GenderForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-  const [showOtherInput, setShowOtherInput] = useState<boolean>();
-  return (
-    <View className={"w-full h-full space-y-10"}>
-      <Text variant={"displaySmall"} className={"font-bold mb-4"}> What gender describes you best? </Text>
-
-      <ToggleButtons selected={formUser?.profile?.gender ?? ""} parentClassName={"mt-10"} dict={{
-        "female": "Female",
-        "male": "Male",
-        "non-binary": "Gender queer / Non-binary",
-        "other": "Other",
-      }} commands={{
-        "default": (gender) => {
-          setShowOtherInput(false)
-          updateFormUser("profile.gender", gender)
-        },
-        "other": () => {
-          console.log(formUser)
-          updateFormUser("profile.gender", "")
-          setShowOtherInput(true)
-        }
-
-      }}
-
-      ></ToggleButtons>
-
-      {showOtherInput && (
-        <View>
-          <TextField
-            label="Your gender"
-            value={formUser?.profile?.gender ?? ""}
-            onChangeText={(input) =>  updateFormUser("profile.gender", input)}
-            autoCapitalize="words"
-            autoCorrect={false}
-            maxLength={50}
-          ></TextField>
-        </View>
-      )}
-
-    </View>
-  )
-}
-const ProfileForm: React.FC<ScreenProps> = ({ formUser, updateFormUser }) => {
-  const [requestingPerms, setRequestingPerms] = useState(false);
-
-  // Seed Google photoURL exactly once if user has none set yet
-  useEffect(() => {
-    const photoURL = auth.currentUser?.photoURL;
-    const hasUserImage = !!formUser?.profile?.profileImage?.url;
-
-    if (!hasUserImage && photoURL) {
-      updateFormUser("profile.profileImage", { type: "google", url: photoURL } as ProfileImage);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // current image URL or fallback
-  const currentImageSource = useMemo(() => {
-    const url = formUser?.profile?.profileImage?.url;
-    if (url) return { uri: url };
-    return DEFAULT_AVATAR;
-  }, [formUser?.profile?.profileImage?.url]);
-
-  const bioLength = formUser?.profile?.bio?.length ?? 0;
-  const remainingBio = Math.max(0, MAX_BIO_LENGTH - bioLength);
-
-  const pickFromLibrary = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") return;
-    const res = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.9,
-    });
-    if (!res.canceled && res.assets?.[0]?.uri) {
-      updateFormUser("profile.profileImage", { type: "stored", url: res.assets[0].uri });
-    }
-  };
-
-  const takePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== "granted") return;
-    const res = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.9,
-      cameraType: ImagePicker.CameraType.front, // selfie
-    });
-    if (!res.canceled && res.assets?.[0]?.uri) {
-      updateFormUser("profile.profileImage", { type: "stored", url: res.assets[0].uri });
-    }
-  };
-
-// Call this from your avatar Pressable
-  const changePhoto = () => {
-    if (Platform.OS === "ios") {
-      Alert.alert("Profile photo", "Choose a source", [
-        { text: "Take Photo", onPress: takePhoto },
-        { text: "Choose from Library", onPress: pickFromLibrary },
-        { text: "Cancel", style: "cancel" },
-      ]);
-    } else {
-      Alert.alert("Profile photo", "Choose a source", [
-        { text: "Take Photo", onPress: takePhoto },
-        { text: "Choose from Library", onPress: pickFromLibrary },
-        { text: "Cancel", style: "cancel" },
-      ]);
-    }
-  };
-
-  console.log("reload")
-  return (
-    <View className="w-full h-full">
-      <Text variant="displaySmall" className="font-bold mb-6">
-        Make your profile
-      </Text>
-
-      {/* Avatar + Edit */}
-      <View className="items-center mb-8">
-        <Pressable
-          onPress={changePhoto}
-          disabled={requestingPerms}
-          className="relative"
-          accessibilityRole="button"
-          accessibilityLabel="Change profile photo"
-        >
-          <Image
-            source={currentImageSource}
-            className="w-28 h-28 rounded-full"
-          />
-          <View className="absolute bottom-0 right-0 px-2 py-1 rounded-full bg-black/60">
-            <Text className="text-white text-xs">Edit</Text>
-          </View>
-        </Pressable>
-        <Text className="text-gray-500 mt-2 text-xs">
-          Tap to choose a photo
-        </Text>
-      </View>
-
-      {/* Username */}
-      <View className="mb-6">
-        <Text className="mb-1 font-medium">Your Username</Text>
-        <TextField
-          placeholder="e.g., jayden"
-          value={formUser?.profile?.username ?? ""}
-          onChangeText={(input) => updateFormUser("profile.username", input)}
-          autoCapitalize="none"
-          autoCorrect={false}
-          maxLength={MAX_USERNAME_LENGTH}
-        />
-        <Text className="text-gray-500 mt-1 text-xs">
-          {`${(formUser?.profile?.username?.length ?? 0)}/${MAX_USERNAME_LENGTH}`}
-        </Text>
-      </View>
-
-      {/* Bio */}
-      <View className="mb-4">
-        <Text className="mb-1 font-medium">Bio</Text>
-        <TextField
-          placeholder="Tell people a little about you..."
-          value={formUser?.profile?.bio ?? ""}
-          onChangeText={(input) => updateFormUser("profile.bio", input)}
-          multiline
-          maxLength={MAX_BIO_LENGTH}
-        />
-        <Text className={`mt-1 text-xs ${remainingBio <= 20 ? "text-red-500" : "text-gray-500"}`}>
-          {remainingBio} characters left
-        </Text>
-      </View>
-    </View>
-  );
-};
-
-const AskIfInRelationshipForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-  return (
-    <View className={"w-full h-full space-y-10"}>
-      <Text variant={"displaySmall"} className={"font-bold mb-4"}> Are you currently in a relationship? </Text>
-
-
-
-      <ToggleButtons
-        scrollable
-        selected={formUser?.partner?.goals ?? ""}
-        parentClassName=""
-        dict={{
-          "yes": "Yes",
-          "no": "No",
-        }}
-        commands={{
-          "default": (answer) => {
-            const relationship  = answer == "yes" ? "in-relationship":"single";
-            updateFormUser("partner.relationship", relationship);
-          }
-        }}
-      />
-
-    </View>
-  )
-}
-const PartnerForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-
-
-  return (
-    <View className={"w-full h-[100%] space-y-10 pb-10"}>
-      <Text variant={"displaySmall"} className={"font-bold mb-4"}>Tell me about your partner!</Text>
-
-
-      <TextField
-        label="Your Partner's name"
-        value={formUser?.partner?.name ?? ""}
-        onChangeText={(input) =>  updateFormUser("partner.name", input)}
-        autoCapitalize="words"
-        autoCorrect={false}
-        maxLength={50}
-      />
-
-      <View>
-        <Text>When did you start dating: </Text>
-
-        <BirthdayPicker date={formUser?.partner?.together_since ?? null} onChangeDate={(date) => {
-          updateFormUser("partner.together_since", date);
-        }}></BirthdayPicker>
-
-      </View>
-
-
-
-    </View>
-  )
-}
-const RelationshipForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-  const [showOtherInput, setShowOtherInput] = useState<boolean>(false);
-
-  let partnerName = formUser?.partner?.name?.split(" ")[0] ?? "Your Partner";
-
-  if (formUser?.partner?.name) {
-    partnerName = partnerName[0].toUpperCase().trim() + partnerName.substring(1);
-
-  }
-  return (
-    <View className={"w-full h-[100%] space-y-10 pb-10"}>
-      <Text  variant={"displaySmall"} className={"font-bold mb-4"}> {`Which best describes your relationship with ${partnerName}?`} </Text>
-
-
-
-      <ToggleButtons scrollable={true} selected={formUser?.partner?.relationship ?? ""} parentClassName={""} dict={{
-        "in-relationship": "I'm in a relationship",
-        "engaged": "I'm engaged",
-        "married": "I'm married",
-        "civil-partnership": "I'm in a civil partnership",
-        "situation": "It's complicated"
-      }} commands={{
-        "default": (gender) => {
-          setShowOtherInput(false)
-          updateFormUser("partner.relationship", gender)
-        }
-      }}
-
-      ></ToggleButtons>
-
-
-      {showOtherInput && (
-        <View>
-          <TextField
-            label="Your gender"
-            value={formUser?.partner?.relationship ?? ""}
-            onChangeText={(input) =>  updateFormUser("partner.relationship", input)}
-            autoCapitalize="words"
-            autoCorrect={false}
-          ></TextField>
-        </View>
-      )}
-
-
-    </View>
-  )
-}
-const GoalForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-
-
-  return (
-    <View className={"w-full h-[100%] space-y-10 pb-10"}>
-      <Text variant={"displaySmall"} className={"font-bold mb-4"}> What are your goals on History.love </Text>
-
-
-      <ToggleButtons
-        scrollable
-        multipleChoice={true}
-        selected={formUser?.partner?.goals ?? []}
-        parentClassName=""
-        dict={{
-          "better-communication": "Improve communication",
-          "quality-time": "Spend more quality time",
-          "conflict-resolution": "Resolve conflicts better",
-          "deeper-intimacy": "Deepen emotional/physical intimacy",
-          "trust-building": "Build/repair trust",
-          "shared-habits": "Build healthy shared habits",
-          "milestone-planning": "Plan milestones (move in, engagement, etc.)",
-          "gratitude-practice": "Practice daily appreciation",
-          "fun-and-play": "Have more fun together",
-          "dating-new": "Explore dating/new connections",
-        }}
-        commands={{
-          "default": (goal) => {
-            let newGoals : RelationshipGoal[] = formUser?.partner?.goals ?? [];
-            if (formUser?.partner?.goals?.includes(goal)){
-              newGoals.filter((g) => goal !== g)
-            }else{
-              newGoals.push(goal)
-            }
-            updateFormUser("partner.goals", newGoals );
-          }
-        }}
-      />
-
-
-
-    </View>
-  )
-}
-const CohabitationForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-
-
-  return (
-    <View className={"w-full h-[100%] space-y-10 pb-10"}>
-      <Text variant={"displaySmall"} className={"font-bold mb-4"}>Do you live together? </Text>
-
-
-      <ToggleButtons
-        scrollable
-        selected={formUser?.partner?.cohabitation ?? ""}
-        parentClassName=""
-        dict={{
-          "together": "Together",
-          "separately-nearby": "Separately nearby",
-          "separately-far": "Separately far",
-        } as Record<Cohabitation, string>}
-        commands={{
-          "default": (answer) => {
-            updateFormUser("partner.cohabitation",  answer);
-          }
-        }}
-      />
-
-
-
-    </View>
-  )
-}
-const KidsForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-
-
-  return (
-    <View className={"w-full h-[100%] space-y-10 pb-10"}>
-      <Text variant={"displaySmall"} className={"font-bold mb-4"}> Do either of you have kids? </Text>
-
-      <Text variant={"bodyLarge"} className={"mb-10"}>This can be from past relationships as well.</Text>
-
-      <ToggleButtons
-        scrollable
-        selected={formUser?.partner?.kids ? "yes":"no"}
-        parentClassName=""
-        dict={{
-          "yes": "Yes",
-          "no": "No",
-        }}
-        commands={{
-          "default": (answer) => {
-            updateFormUser("kids",  answer == "yes" ? true:false);
-          }
-        }}
-      />
-
-
-
-    </View>
-  )
-}
-const NotificationsForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-  let partnerName = formUser?.partner?.name?.split(" ")[0] ?? "Your Partner";
-
-  if (formUser?.partner?.name) {
-    partnerName = partnerName[0].toUpperCase().trim() + partnerName.substring(1);
-  }
-  return (
-    <View className={"w-full h-[100%] space-y-10 pb-10"}>
-      <Card.Cover className={""}  style={{ width: "100%", height: "60%" }}
-                   resizeMode="cover" source={require("@/assets/images/photos/couple2.jpg")} />
-      <View >
-        <Text variant={"displaySmall"} className={"font-bold mb-4 text-center"}> {`Recieve notifications from ${partnerName}`}? </Text>
-
-        <Text variant={"bodyLarge"} className={"mb-10 text-center"}>We'll send you notifcations whenever your partner does something`.</Text>
-
-      </View>
-
-
-
-
-
-    </View>
-  )
-}
-const SourceForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-  const colors = useThemeColors()
-
-  const sourceDict: Record<UserSource, string> = {
-    "facebook/instagram": "Facebook / Instagram",
-    "blog/article": "Blogs & Articles",
-    "youtube": "YouTube",
-    "chatgpt-or-similar": "ChatGPT or similar",
-    "therapist/counselor": "Therapist / Counselor",
-    "app/play-store": "Apps (Play/App Store)",
-    "partner": "Partner",
-    "streaming": "Streaming (TV, etc.)",
-    "tiktok": "TikTok",
-    "podcast": "Podcast",
-    "friend/family": "Friend / Family",
-  };
-
-  return (
-    <View className={"w-full h-[100%] space-y-10 pb-10"}>
-      <Text variant={"displaySmall"} className={"font-bold mb-4"}>Where did you hear about History.love </Text>
-
-
-      <ToggleButtons
-        scrollable
-        selected={(formUser?.analytics?.source) ?? []}
-        parentClassName=""
-        dict={sourceDict}
-        commands={{
-          default: (source) => {
-
-            updateFormUser("analytics.source", source);
-          },
-        }}
-      />
-
-
-    </View>
-  )
-}
-
-
-const FunFactForm = ({formUser, updateFormUser}: ScreenProps) => {
-
-  const colors = useThemeColors()
-
-
-
-  const badSentences = ["Stuck in the day to day routine",
-  "Feeling detached", "Avoiding deeper conversations", "Not sure what steps to take to improve your relationship"]
-
-  const goodSentences = ["Getting to know each other on a deeper level", "Feeling connected every day",
-    "Talking openly about sex, finances, conflict", "Reaching your relationship goals together"]
-
-  const cardClasses = "absolute flex-1 w-[50%] h-[50vh] p-0"
-  const sentencesClases = "h-16 flex flex-row gap-2 items-center "
-  return (
-    <View className={"w-full h-[100%]  pb-10"}>
-      <Text variant={"displaySmall"} className={"font-bold mb-4"}> History.love helps couples stay in love </Text>
-
-
-      <View className={"mt-10"}>
-        <Card className={`${cardClasses} mt-10 bg-gray-500  rounded-md opacity-70 p-10 `}>
-
-          <Text variant={"bodyLarge"} className={"font-bold"}>Without {"\n"}History.love</Text>
-
-          { badSentences.map((sentence) =>
-
-            <View key={sentence} className={sentencesClases}>
-              <CircleMinus className={"text-gray-600"}></CircleMinus>
-              <Text>{sentence}</Text>
-            </View>)}
-        </Card>
-
-        <Card style={{ backgroundColor: colors.primary }} className={`${cardClasses} z-50 left-[50%] rounded-md  p-10`}>
-
-          <Text variant={"bodyLarge"} className={"font-bold text-white "}>With {"\n"}History.love</Text>
-
-          { goodSentences.map((sentence) =>
-            <View key={sentence} className={sentencesClases}>
-              <CircleCheck className={"text-white"}></CircleCheck>
-              <Text className={"text-white "}>{sentence}</Text>
-            </View>)}
-        </Card>
-      </View>
-
-
-
-
-    </View>
-  )
-}
-
-
-
-
+import AboutForm from '@/src/pages/Onboarding/forms/AboutForm';
+import AskIfInRelationshipForm from '@/src/pages/Onboarding/forms/AskIfInRelationshipForm';
+import CohabitationForm from '@/src/pages/Onboarding/forms/CohabitationForm';
+import FunFactForm from '@/src/pages/Onboarding/forms/FunFactForm';
+import GenderForm from '@/src/pages/Onboarding/forms/GenderForm';
+import GoalForm from '@/src/pages/Onboarding/forms/GoalForm';
+import KidsForm from '@/src/pages/Onboarding/forms/KidsForm';
+import NotificationsForm from '@/src/pages/Onboarding/forms/NotificationsForm';
+import PartnerForm from '@/src/pages/Onboarding/forms/PartnerForm';
+import ProfileForm from '@/src/pages/Onboarding/forms/ProfileForm';
+import RelationshipForm from '@/src/pages/Onboarding/forms/RelationshipForm';
+import SourceForm from '@/src/pages/Onboarding/forms/SourceForm';
+import WelcomeForm from '@/src/pages/Onboarding/forms/WelcomeForm';
+import FormProps from '@/src/types/props/FormProps';
+
+
+import * as CONSTANTS from "../../../constants/index"
 
 export default function OnboardingScreen() {
 
@@ -614,22 +80,91 @@ export default function OnboardingScreen() {
 
   const [screenFormIndex, setScreenFormIndex] = useState<number>(0);
 
+
   const { authUser } = useAuth();
 
   const [formUser, setFormUser] = useState<User | null>({
     id:  authUser?.uid ?? "",
-    email: authUser?.email ?? "",
-    name: authUser?.displayName ?? "",
+    email: authUser?.email ?? ""
   });
+
+
+  useEffect(() => {
+    if  (!authUser) {return}
+    updateFormUser("name", authUser?.displayName);
+    updateFormUser("email", authUser?.email);
+    updateFormUser("id", authUser?.uid)
+
+    if (CONSTANTS.DEV_MODE){
+      const exampleUser: User = {
+        id: authUser?.uid,
+        email: "sarah.martinez@example.com",
+
+        settings: {
+          send_notifications: true,
+        },
+
+        profile: {
+          first_name: "Sarah",
+          last_name: "Martinez",
+          username: "sarahm_92",
+          birthday: new Date("1992-08-14"),
+          gender: "female",
+          profileImage: {
+            type: "google",
+            local_uri: "https://lh3.googleusercontent.com/a-/AOh14GgExamplePhoto", // google photo link
+          },
+          bio: "Book lover 📚, runner 🏃‍♀️, and always up for trying new recipes. Excited to grow together!",
+          verified: true,
+          match_code: "LOVE1234",
+        },
+
+        location: {
+          latitude: 40.7128,
+          longitude: -74.006,
+          city: "New York",
+          state: "NY",
+          country: "USA",
+        },
+
+        partner: {
+          name: "Daniel",
+          together_since: new Date("2020-03-15"),
+          relationship: "in-relationship",
+          cohabitation: "together",
+          kids: false,
+          goals: [
+            "quality-time",
+            "better-communication",
+            "fun-and-play",
+            "milestone-planning",
+          ],
+        },
+
+        analytics: {
+          created_at: new Date(),
+          num_logged_in: 37,
+          source: "app/play-store",
+        },
+
+        data: {
+          // reserved for future app-specific fields
+        },
+      };
+
+      setFormUser(exampleUser);
+    }
+
+  }, [authUser, CONSTANTS.DEV_MODE]);
 
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
 
 
+  const [usernameTaken, setUsernameTaken] = useState<boolean>(true);
 
 
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
-  const setUserProperty = useUserStore((state) => state.setUserProperty);
 
   type ScreenComponent = React.ComponentType<any>;
 
@@ -638,7 +173,6 @@ export default function OnboardingScreen() {
 
 
 
-// ----- Implementation: works for "email" and "profile.birthday" -----
   function updateFormUser(key: string, value: any) {
     setFormUser(prev => {
       if (!prev) return prev;
@@ -668,7 +202,7 @@ export default function OnboardingScreen() {
     welcome: WelcomeForm,
     about: AboutForm,
     gender: GenderForm,
-    profile: ProfileForm,
+    profile:ProfileForm,
     askIfInRelationship: AskIfInRelationshipForm,
     partner: PartnerForm,
     relationship: RelationshipForm,
@@ -685,21 +219,48 @@ export default function OnboardingScreen() {
 // Now keys are typed as the actual union, not string[]
   const formKeys = Object.keys(forms) as FormKey[];
 
-  const currentForm = formKeys[screenFormIndex];        // FormKey | undefined
-  const ActiveForm = currentForm && forms[currentForm] ;
+  const currentForm = formKeys[screenFormIndex];
+  const ActiveForm = currentForm && forms[currentForm];
+
+
+  /*
+  *  partner: PartnerForm,
+    relationship: RelationshipForm,
+    goals: GoalForm,
+    cohabitation: CohabitationForm,
+    kids: KidsForm,
+    notifications: NotificationsForm,
+    source: SourceForm,
+    funfact: FunFactForm
+  * */
+
 
   const isDisabled = (): boolean => {
+    const username = formUser?.profile?.username?.trim();
+    const partner_name = formUser?.partner?.name
+    const first_name = formUser?.profile?.first_name;
+    const last_name = formUser?.profile?.last_name;
     switch (currentForm) {
       case "welcome":
         return false;
       case "about":
-        return !(formUser?.name != null && formUser?.name.trim() != "" && formUser?.name.length >= 3 && formUser?.profile?.birthday != null) ;
+        return !( (first_name != null && first_name.trim() != "" && first_name.length >= 3) && (last_name != null && last_name.trim() != "" && last_name.length >= 3) && formUser?.profile?.birthday != null) ;
       case "gender":
         return !(formUser?.profile?.gender != null && formUser?.profile?.gender.trim() != "")
+      case "profile":
+        return !(username != null && username != "" && username.length >= 3 && formUser?.profile?.profileImage != null && !usernameTaken )
       case "askIfInRelationship":
         return !(formUser?.partner?.relationship != null)
+      case "partner":
+        return !(partner_name != null && partner_name.trim() != "" && partner_name.length >= 3 && formUser?.partner?.together_since != null)
       case "cohabitation":
         return !(formUser?.partner?.cohabitation != null);
+      case "kids":
+        return false;
+      case "notifications":
+        return false;
+      case "source":
+        return !(formUser?.analytics?.source != null);
 
       default:
         return false
@@ -713,18 +274,24 @@ export default function OnboardingScreen() {
   const goToForm = (form: FormKey) => {
     const formIndex = formKeys.indexOf(form);
 
+
+
     if (formIndex === -1) {return}
 
-    setScreenFormIndex(formIndex);
+    setDirection(formIndex > screenFormIndex? "forward":"backward")
 
+    setScreenFormIndex(formIndex);
   }
 
   const onPressContinue = () => {
 
     switch (currentForm) {
+      case "askIfInRelationship":
 
+        return formUser?.partner?.relationship == "single" ? goToForm("source"):nextScreen()
       case "notifications":
         updateFormUser("settings.send_notifications", true);
+
     }
     nextScreen()
 
@@ -751,28 +318,42 @@ export default function OnboardingScreen() {
 
   async function handleFormSubmit() {
     if (!formUser){return}
-    await handleOnboarding(formUser)
+    const response = await handleOnboarding(formUser);
+    if (response.success){
+      setUser(response.user)
+    }else if (response.error) {
+      setScreenFormIndex(0)
+      return Alert.alert("Error", response.error);
+    }
     router.replace("/home")
   }
 
   const nextScreen = () => {
     setDirection("forward")
-
-
-    if (screenFormIndex >= formKeys.length-1 || ((screenFormIndex >= 3) && formUser?.partner?.relationship == "single")) {
+    if (screenFormIndex >= formKeys.length-1 ) {
       return handleFormSubmit()
     }
     setScreenFormIndex((prev) => prev + 1);
   }
   const lastScreen = () => {
     setDirection("backward")
+
+    // if single skip the partner onboarding setup
+    if (currentForm == "source" && formUser?.partner?.relationship == "single" ){
+      return goToForm("askIfInRelationship");
+    }
     setScreenFormIndex((prev) => prev - 1);
   }
+
+  const sharedProps: FormProps = {
+    formUser,
+    updateFormUser: updateFormUser
+  };
 
   return (
     <Screen className={"relative"} backgroundColor={colors.surface} padding>
 
-      { (currentForm == "source" || currentForm == "notifications") && (
+      { (currentForm == "source" || currentForm == "notifications" || true) && (
         <PrimaryButton onPress={() => {
           onPressContinue()
         }} variant={"text"} className={`absolute mb-4 z-50 top-4 right-2 text-${colors.primary} `}>Skip</PrimaryButton>
@@ -791,7 +372,12 @@ export default function OnboardingScreen() {
           ? SlideOutLeft.duration(220)
           : SlideOutRight.duration(220)}
       >
-        {<ActiveForm formUser={formUser} updateFormUser={updateFormUser}  />  }
+        <ActiveForm
+          {...sharedProps}
+          {...(currentForm === "profile"
+            ? { usernameTaken, setUsernameTaken }
+            : {})}
+        />
 
 
 

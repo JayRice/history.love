@@ -1,12 +1,14 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 import Constants from "expo-constants";
 
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
-const firebaseConfig = {
+
+let firebaseConfig = {
   apiKey:  Constants.expoConfig?.extra?.firebaseApiKey,
   authDomain: "history-love-b75cd.firebaseapp.com",
   projectId: "history-love-b75cd",
@@ -16,9 +18,13 @@ const firebaseConfig = {
   measurementId: "G-6G8S25R3F4"
 };
 
+
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-export const auth = getAuth(app);
+export const auth =
+  initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+  });
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 

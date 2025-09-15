@@ -8,6 +8,7 @@ import { useUserStore } from '@/src/store/userStore';
 import { doc, onSnapshot } from "firebase/firestore";
 import {db, storage} from "@/src/config/firebase";
 import {getDoc} from "firebase/firestore"
+import {DEV_MODE} from '@/constants';
 
 import User from "../src/types/User"
 import { AuthProvider, useAuth } from "@/src/contexts/AuthContext";
@@ -60,7 +61,7 @@ function InnerLayout() {
       router.replace("/start"); // public auth screens
     } else if (authUser && !user && !inOnboarding) {
       router.replace("/onboarding");
-    } else if (authUser && user && (inAuth || inOnboarding)) {
+    } else if (authUser && user && (inAuth || inOnboarding || group == undefined) ) {
       router.replace("/home");
     }
   }, [segments, authUser, user, authUserLoading, profileLoading, router]);

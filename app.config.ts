@@ -13,9 +13,12 @@ export default () => ({
     newArchEnabled: true,
     ios: {
       supportsTablet: true,
+
       infoPlist: {
         NSCameraUsageDescription: "Allow taking a profile photo.",
         NSPhotoLibraryUsageDescription: "Allow choosing a profile photo.",
+        NSAppTransportSecurity: { NSAllowsArbitraryLoads: true },
+
       }
     },
     web: {
@@ -30,6 +33,7 @@ export default () => ({
 
     android: {
       package: "com.historylove.app",
+      usesCleartextTraffic: true
     },
     extra: {
       router: {},
@@ -39,6 +43,7 @@ export default () => ({
       firebaseApiKey: process.env.FIREBASE_API_KEY,
       webClientId: process.env.WEB_CLIENT_ID,
       androidClientId: process.env.androidClientId,
+      api_url: "http://10.0.2.2:5000"
     },
   },
 });

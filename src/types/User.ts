@@ -36,14 +36,14 @@ export type UserSource = | "facebook/instagram"
 
 
 export type ProfileImage = {
-    type: "google" | "stored",
-    url: string;
+  type: "google" | "stored",
+  local_uri: string;
+  name?: string;
 }
 
 export default interface User {
   id: string;
   email: string;
-  name: string;
 
 
   settings?: {
@@ -51,12 +51,24 @@ export default interface User {
   }
 
   profile?: {
+    first_name: string;
+    last_name: string;
     username?: string;
     birthday?: Date;
     gender?: Gender | string;
     profileImage?: ProfileImage | null;
     bio: string;
+    verified?: boolean;
+    match_code: string;
   }
+
+  location?: {
+    latitude: number;
+    longitude: number;
+    city?: string;
+    state?: string;
+    country?: string;
+  };
 
   partner?: {
     name?: string;
@@ -68,9 +80,10 @@ export default interface User {
   }
 
   analytics?: {
+    created_at?: Date;
+    num_logged_in?: number;
     source?: UserSource | null;
   }
-
 
   data? : {
 

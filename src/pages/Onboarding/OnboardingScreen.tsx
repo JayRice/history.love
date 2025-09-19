@@ -32,7 +32,7 @@ import { TextField } from '@/src/components/inputs/TextField';
 import User, { Cohabitation, ProfileImage, RelationshipGoal, UserSource } from '@/src/types/User';
 
 import { auth } from "@/src/config/firebase"
-import { useAuth } from '@/src/hooks/useAuth';
+import { useAuth } from '@/src/contexts/AuthContext';
 import BirthdayPicker from '@/src/components/inputs/BirthdayPicker';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 
@@ -73,6 +73,7 @@ import FormProps from '@/src/types/props/FormProps';
 
 
 import * as CONSTANTS from "../../../constants/index"
+import getMatchCode from '@/src/server/getMatchCode';
 
 export default function OnboardingScreen() {
 
@@ -85,77 +86,94 @@ export default function OnboardingScreen() {
 
   const [formUser, setFormUser] = useState<User | null>({
     id:  authUser?.uid ?? "",
-    email: authUser?.email ?? ""
+    email: authUser?.email ?? "",
   });
+
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+
+
+
+
 
 
   useEffect(() => {
     if  (!authUser) {return}
-    updateFormUser("name", authUser?.displayName);
     updateFormUser("email", authUser?.email);
-    updateFormUser("id", authUser?.uid)
+    updateFormUser("id", authUser?.uid);
 
-    if (CONSTANTS.DEV_MODE){
-      const exampleUser: User = {
-        id: authUser?.uid,
-        email: "sarah.martinez@example.com",
 
-        settings: {
-          send_notifications: true,
-        },
+    init_user()
+    async function init_user(){
+      if  (!authUser) {return}
 
-        profile: {
-          first_name: "Sarah",
-          last_name: "Martinez",
-          username: "sarahm_92",
-          birthday: new Date("1992-08-14"),
-          gender: "female",
-          profileImage: {
-            type: "google",
-            local_uri: "https://lh3.googleusercontent.com/a-/AOh14GgExamplePhoto", // google photo link
+      const match_code = await getMatchCode();
+
+      updateFormUser("profile.matchCode", match_code);
+
+      if (CONSTANTS.DEV_MODE){
+
+        const exampleUser: User = {
+          id: authUser?.uid,
+          email: "sarah.martinez@example.com",
+
+          settings: {
+            send_notifications: true,
           },
-          bio: "Book lover 📚, runner 🏃‍♀️, and always up for trying new recipes. Excited to grow together!",
-          verified: true,
-          match_code: "LOVE1234",
-        },
 
-        location: {
-          latitude: 40.7128,
-          longitude: -74.006,
-          city: "New York",
-          state: "NY",
-          country: "USA",
-        },
+          profile: {
+            first_name: "Sarah",
+            last_name: "Martinez",
+            username: "sarahm_92",
+            birthday: new Date("1992-08-14"),
+            gender: "female",
+            profileImage: {
+              type: "google",
+              local_uri: "https://lh3.googleusercontent.com/a-/AOh14GgExamplePhoto", // google photo link
+            },
+            bio: "Book lover 📚, runner 🏃‍♀️, and always up for trying new recipes. Excited to grow together!",
+            verified: true,
+          },
 
-        partner: {
-          name: "Daniel",
-          together_since: new Date("2020-03-15"),
-          relationship: "in-relationship",
-          cohabitation: "together",
-          kids: false,
-          goals: [
-            "quality-time",
-            "better-communication",
-            "fun-and-play",
-            "milestone-planning",
-          ],
-        },
+          location: {
+            latitude: 40.7128,
+            longitude: -74.006,
+            city: "New York",
+            state: "NY",
+            country: "USA",
+          },
 
-        analytics: {
-          created_at: new Date(),
-          num_logged_in: 37,
-          source: "app/play-store",
-        },
+          partner: {
+            name: "Daniel",
+            together_since: new Date("2020-03-15"),
+            relationship: "in-relationship",
+            cohabitation: "together",
+            kids: false,
+            goals: [
+              "quality-time",
+              "better-communication",
+              "fun-and-play",
+              "milestone-planning",
+            ],
+          },
 
-        data: {
-          // reserved for future app-specific fields
-        },
-      };
+          analytics: {
+            created_at: new Date(),
+            num_logged_in: 37,
+            source: "app/play-store",
+          },
 
-      setFormUser(exampleUser);
+          data: {
+            // reserved for future app-specific fields
+          },
+        };
+
+        setFormUser(exampleUser);
+      }
     }
 
-  }, [authUser, CONSTANTS.DEV_MODE]);
+
+  }, [authUser]);
 
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
 
@@ -163,8 +181,7 @@ export default function OnboardingScreen() {
   const [usernameTaken, setUsernameTaken] = useState<boolean>(true);
 
 
-  const user = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser);
+
 
   type ScreenComponent = React.ComponentType<any>;
 
@@ -320,7 +337,7 @@ export default function OnboardingScreen() {
     if (!formUser){return}
     const response = await handleOnboarding(formUser);
     if (response.success){
-      setUser(response.user)
+      setUser(response.user);
     }else if (response.error) {
       setScreenFormIndex(0)
       return Alert.alert("Error", response.error);
@@ -375,8 +392,7 @@ export default function OnboardingScreen() {
         <ActiveForm
           {...sharedProps}
           {...(currentForm === "profile"
-            ? { usernameTaken, setUsernameTaken }
-            : {})}
+            ? { usernameTaken, setUsernameTaken } : {})}
         />
 
 

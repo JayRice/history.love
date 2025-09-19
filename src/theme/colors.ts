@@ -6,7 +6,11 @@ export const colors = {
   card_surface: '#e7e7e7',
 
   accent: {
-    primary: "#FDEDEE",
+    primary: "#F08089",  // lighter, softer red
+    primary2: "#F9B3B9", // very light accent red/pink
+
+    secondary: "#457B9D",  // lighter steel-blue
+    secondary2: "#A8D0E6",
     gold: '#FFD700',
     pink: '#FFC0CB',
     softPink: '#F8BBD9',

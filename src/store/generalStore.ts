@@ -7,17 +7,29 @@ import User from "../types/User";
 type GeneralStore = {
   didShowSubscription: boolean;
   setDidShowSubscription: (didShowSubscription: boolean) => void;
+  didShowPairScreen: boolean;
+  setDidShowPairScreen: (didShowPairScreen: boolean) => void;
 };
 
+const initialState : GeneralStore =  {
+  didShowSubscription: false,
+  didShowPairScreen: false,
+  setDidShowSubscription: () => {},
+  setDidShowPairScreen: () => {},
+
+}
+
 export const useGeneralStore = create<GeneralStore>()(
-  persist(
     (set) => ({
-      didShowSubscription: false,
-      setDidShowSubscription: (didShowSubscription: boolean) => set({didShowSubscription})
+      ...initialState,
+
+      setDidShowSubscription: (didShowSubscription: boolean) => set({didShowSubscription}),
+
+      setDidShowPairScreen: (didShowPairScreen: boolean) => set({didShowPairScreen}),
     }),
-    {
-      name: "general-storage",
-      storage: createJSONStorage(() => AsyncStorage),
-    }
-  )
+
 );
+// {
+//   name: "general-storage",
+//     storage: createJSONStorage(() => AsyncStorage),
+// }

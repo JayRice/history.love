@@ -3,11 +3,13 @@ import { View, TouchableOpacity } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { Calendar, BookOpen, Shield, User, Heart } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
-import { useAuth } from '@/src/hooks/useAuth';
+import { useAuth } from '@/src/contexts/AuthContext';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/userStore';
 import { useGeneralStore } from '@/src/store/generalStore';
+import PairScreen from '@/src/pages/Pair/PairScreen';
+
 
 interface DashboardCardProps {
   title: string;
@@ -25,6 +27,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   onPress,
 }) => {
   const colors = useThemeColors();
+
 
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
@@ -59,12 +62,18 @@ export default function HomeScreen() {
   const didShowSubscription = useGeneralStore((state) => state.didShowSubscription);
   const setDidShowSubscription = useGeneralStore((state) => state.setDidShowSubscription);
 
+  const didShowPairScreen = useGeneralStore((state) => state.didShowPairScreen)
+  const setDidShowPairScreen = useGeneralStore((state) => state.setDidShowPairScreen)
+
   useEffect(() => {
-    return router.push('/subscription')
+
+    if ( user?.partner?.relationship != "single"){
+      setDidShowPairScreen(true)
+      router.push("/pair")
+    }
 
     // Prompt user for subscription when first logged in
     if (!didShowSubscription && user?.analytics?.num_logged_in && user.analytics.num_logged_in <= 1) {
-
       setTimeout(() => {
         setDidShowSubscription(true);
         router.push('/subscription')

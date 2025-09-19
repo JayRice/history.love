@@ -46,7 +46,7 @@ function SubscriptionBlock({ isYearly, perMonth, selected, setSelected}: SB_PROP
           <View className={"flex flex-row gap-2  items-center"}>
             <Text variant={"headlineSmall"} numberOfLines={1} ellipsizeMode="clip" className={"font-bold px-1 "}>{isYearly? "Yearly":"Monthly"}</Text>
             {isYearly && <Text variant={'bodySmall'} style={{ backgroundColor: colors.primary }}
-                   className={'p-[4px] text-white rounded-md'}>Save 77%</Text>}
+                               className={'p-[4px] text-white rounded-md'}>Save 77%</Text>}
           </View>
 
           {isYearly &&
@@ -79,10 +79,10 @@ export default function SubscriptionScreen() {
     <Screen  className={`bg-[${colors.background}]`} padding={true} >
 
       <Animated.View className={"text-center space-y-6"}
-        entering={FadeInUp.duration(300)}
-        exiting={FadeOutDown.duration(200)}
+                     entering={FadeInUp.duration(300)}
+                     exiting={FadeOutDown.duration(200)}
       >
-        <CloseButton  size={16} onPress={() => {
+        <CloseButton position={"right"}  size={16} onPress={() => {
           router.replace("/home")
         }}></CloseButton>
         <Text variant={"displaySmall"} className={"font-bold text-center"}>Choose your plan</Text>

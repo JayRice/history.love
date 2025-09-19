@@ -1,6 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/src/config/firebase";
+import {
+  signOut as firebaseSignOut,
+} from 'firebase/auth'
+import { useUserStore } from '@/src/store/userStore';
 
 type AuthContextType = {
   authUser: User | null;
@@ -12,14 +16,19 @@ const AuthContext = createContext<AuthContextType>({
   authUserLoading: true,
 });
 
+
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
+      const { reset } = useUserStore.getState()
+
       setAuthUser(user);
       setLoading(false);
+
     });
     return unsub;
   }, []);

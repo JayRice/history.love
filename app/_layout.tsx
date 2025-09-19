@@ -10,6 +10,10 @@ import {db, storage} from "@/src/config/firebase";
 import {getDoc} from "firebase/firestore"
 import {DEV_MODE} from '@/constants';
 
+import Toast from "react-native-toast-message";
+
+
+
 import User from "../src/types/User"
 import { AuthProvider, useAuth } from "@/src/contexts/AuthContext";
 
@@ -25,11 +29,13 @@ function InnerLayout() {
   const { authUser, authUserLoading } = useAuth();
 
 
-  const user = useUserStore((s) => s.user);
+  const user = useUserStore((state) => state.user);
+
   const setUser = useUserStore((s) => s.setUser);
 
   const [profileLoading, setProfileLoading] = useState(true);
   const segments = useSegments();
+
 
   // Live subscribe to the user doc when signed in
   useEffect(() => {
@@ -42,13 +48,16 @@ function InnerLayout() {
     }
     setProfileLoading(true);
     const unsub = onSnapshot(doc(db, "users", authUser.uid), (snap) => {
-      setUser(snap.exists() ? (snap.data() as any) : undefined);
+      setUser(snap.exists() ? (snap.data() as any) : null);
       console.log("user exists: ", snap.exists());
       setProfileLoading(false);
     });
     return unsub;
   }, [authUser, authUserLoading, setUser]);
 
+  useEffect(() => {
+    console.log("user:", user)
+  }, [user]);
   // Route guard (runs on every nav)
   useEffect(() => {
     if (authUserLoading || profileLoading) return;
@@ -56,6 +65,8 @@ function InnerLayout() {
     const group = segments[0]; // e.g. "(auth)", "(onboarding)", "(app)"
     const inAuth = group === "(auth)";
     const inOnboarding = group === "onboarding";
+
+
 
     if (!authUser && !inAuth) {
       router.replace("/start"); // public auth screens
@@ -73,6 +84,8 @@ function InnerLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
+      <Toast />
+
     </PaperProvider>
   );
 }

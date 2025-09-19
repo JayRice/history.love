@@ -6,9 +6,11 @@ import { Screen } from '@/src/components/layout/Screen';
 import { SectionHeader } from '@/src/components/layout/SectionHeader';
 import { ToggleField } from '@/src/components/inputs/ToggleField';
 import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
-import { useAuth } from '@/src/hooks/useAuth';
+import { useAuth } from '@/src/contexts/AuthContext';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
+import logout from '@/src/database/auth/logout';
+import { useUserStore } from '@/src/store/userStore';
 
 interface SettingItemProps {
   title: string;
@@ -50,14 +52,18 @@ const SettingItem: React.FC<SettingItemProps> = ({
 };
 
 export default function SettingsScreen() {
-  const { user, logout } = useAuth();
+
   const colors = useThemeColors();
   const [notifications, setNotifications] = useState(true);
   const [biometrics, setBiometrics] = useState(false);
   const [analytics, setAnalytics] = useState(true);
 
+  const user = useUserStore(state => state.user)
+
   const handleLogout = async () => {
-    await logout();
+    if (logout){
+      await logout();
+    }
     router.replace('/(auth)/login');
   };
 

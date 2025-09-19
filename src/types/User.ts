@@ -45,21 +45,21 @@ export default interface User {
   id: string;
   email: string;
 
-
   settings?: {
     send_notifications?: boolean;
   }
 
   profile?: {
-    first_name: string;
-    last_name: string;
+    first_name?: string;
+    last_name?: string;
     username?: string;
     birthday?: Date;
     gender?: Gender | string;
     profileImage?: ProfileImage | null;
-    bio: string;
+    bio?: string;
     verified?: boolean;
-    match_code: string;
+    match_code?: string;
+
   }
 
   location?: {

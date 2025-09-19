@@ -7,25 +7,29 @@ import { SectionHeader } from '@/src/components/layout/SectionHeader';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
 import { ToggleField } from '@/src/components/inputs/ToggleField';
-import { useAuth } from '@/src/hooks/useAuth';
+import { useAuth } from '@/src/contexts/AuthContext';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { useUserStore } from '@/src/store/userStore';
+import getAgeFromDate from '@/src/logic/getAgeFromDate';
 
 export default function ProfileScreen() {
-  const { user } = useAuth();
+  const user = useUserStore((state) => state.user)
   const colors = useThemeColors();
   const [isPublic, setIsPublic] = useState(true);
   const [showAge, setShowAge] = useState(true);
   const [showLocation, setShowLocation] = useState(false);
 
+
+
   // Mock profile data
   const profileData = {
-    displayName: `${user?.firstName} ${user?.lastName}`,
+    displayName: `${user?.profile?.first_name} ${user?.profile?.last_name}`,
     bio: "Love is not about finding the perfect person, but learning to see an imperfect person perfectly ✨",
-    age: 28,
+    age: getAgeFromDate(user?.profile?.birthday ?? new Date()),
     location: "San Francisco, CA",
     relationshipStatus: 'in-relationship',
     interests: ['Travel', 'Photography', 'Cooking', 'Hiking', 'Music'],
-    joinedDate: '2024-01-15',
+    joinedDate: user?.analytics?.created_at,
   };
 
   const relationshipStats = [
@@ -51,7 +55,7 @@ export default function ProfileScreen() {
           <View className="items-center">
             <Avatar.Text 
               size={80} 
-              label={`${user?.firstName?.[0]}${user?.lastName?.[0]}`}
+              label={`${user?.profile?.first_name?.[0]}${user?.profile?.last_name?.[0]}`}
               style={{ backgroundColor: colors.primary }}
             />
             <Text variant="headlineSmall" className="text-gray-900 font-semibold mt-4">

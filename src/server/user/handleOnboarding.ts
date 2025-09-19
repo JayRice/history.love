@@ -27,10 +27,6 @@ export default async function handleOnboarding(user: User){
   formData.append("user", JSON.stringify(user))
 
 
-
-  if (!Constants.expoConfig?.extra) {
-    throw Error('Expo config constants required - Cannot find constants in app.config');
-  }
   const authUser = getAuthUser();
   if(!authUser) throw new Error("Not signed in");
 

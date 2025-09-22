@@ -1,38 +1,66 @@
-export interface Relationship {
-  id: string;
-  userId: string;
-  partnerName: string;
-  startDate: string;
-  endDate?: string;
-  status: 'active' | 'ended' | 'complicated';
-  relationshipType: 'dating' | 'serious' | 'married' | 'casual';
-  events: RelationshipEvent[];
-  notes: string;
-  isPrivate: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+// Relationship Event
+import { RelationshipType } from './User';
 
 export interface RelationshipEvent {
   id: string;
   relationshipId: string;
   title: string;
   description: string;
-  eventType: 'milestone' | 'memory' | 'conflict' | 'resolution' | 'special-date' | 'breakup';
-  date: string;
+  eventType:
+    | 'milestone'
+    | 'memory'
+    | 'conflict'
+    | 'resolution'
+    | 'special-date'
+    | 'breakup';
+  date: string; // ISO string or toISOString()
   location?: string;
   photos?: string[];
   tags: string[];
-  mood: 'happy' | 'sad' | 'angry' | 'excited' | 'nervous' | 'content' | 'confused';
+  mood:
+    | 'happy'
+    | 'sad'
+    | 'angry'
+    | 'excited'
+    | 'nervous'
+    | 'content'
+    | 'confused';
   privateNotes?: string;
   createdAt: string;
   updatedAt: string;
 }
 
+// Relationship Doc
+export default interface Relationship {
+  id: string; // document ID, often = pairKey
+  users: [string, string]; // both user UIDs
+  pairKey: string; // e.g. [uid, otherUid].sort().join("_")
+
+  // Core partner info
+  goals: string[];
+  status: 'active' | 'ended' | 'complicated';
+  relationshipType: RelationshipType;
+
+  // Dates
+  updatedAt?: string;
+  startDate: string;
+  endDate?: string;
+
+  // Content
+  events?: RelationshipEvent[];
+  notes?: string;
+  isPrivate?: boolean;
+
+  profileImageIds: Record<string, string | null>;
+
+
+}
+
+// Filters for querying timelines
 export interface TimelineFilter {
   startDate?: string;
   endDate?: string;
-  eventTypes?: string[];
+  eventTypes?: RelationshipEvent['eventType'][];
   relationshipIds?: string[];
-  moods?: string[];
+  moods?: RelationshipEvent['mood'][];
 }

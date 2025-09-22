@@ -178,7 +178,9 @@ export default function OnboardingScreen() {
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
 
 
-  const [usernameTaken, setUsernameTaken] = useState<boolean>(true);
+  const [usernameTaken, setUsernameTaken] = useState<boolean>(true)
+
+  const [isOnboarding, setIsOnboarding] = useState<boolean>(false)
 
 
 
@@ -288,6 +290,20 @@ export default function OnboardingScreen() {
 
   }
 
+  const isLoading = () => {
+    switch (currentForm) {
+
+      case "funfact":
+        return isOnboarding;
+
+      default:
+        return false
+
+
+    }
+
+  }
+
   const goToForm = (form: FormKey) => {
     const formIndex = formKeys.indexOf(form);
 
@@ -304,11 +320,9 @@ export default function OnboardingScreen() {
 
     switch (currentForm) {
       case "askIfInRelationship":
-
         return formUser?.partner?.relationship == "single" ? goToForm("source"):nextScreen()
       case "notifications":
         updateFormUser("settings.send_notifications", true);
-
     }
     nextScreen()
 
@@ -335,6 +349,8 @@ export default function OnboardingScreen() {
 
   async function handleFormSubmit() {
     if (!formUser){return}
+
+    setIsOnboarding(true)
     const response = await handleOnboarding(formUser);
     if (response.success){
       setUser(response.user);
@@ -342,6 +358,7 @@ export default function OnboardingScreen() {
       setScreenFormIndex(0)
       return Alert.alert("Error", response.error);
     }
+    setIsOnboarding(false)
     router.replace("/home")
   }
 
@@ -398,9 +415,7 @@ export default function OnboardingScreen() {
 
 
       </Animated.View>
-      <PrimaryButton  disabled={isDisabled()} className={"absolute w-full h-12 bottom-4 flex items-center justify-center"} onPress={() => {
-        onPressContinue()
-      }}>
+      <PrimaryButton onPress={onPressContinue} loading={isLoading()}  disabled={isDisabled()} className={"absolute w-full h-12 bottom-4 flex items-center justify-center"}>
         <Text className={"text-white"}>{continueButtonTitle()}</Text>
       </PrimaryButton>
     </Screen>

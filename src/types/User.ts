@@ -15,7 +15,7 @@ export type Cohabitation = "together" | "separately-nearby" | "separately-far";
 
 export type Gender = "female" | "male" | "non-binary" | "other";
 
-export type Relationship = | "in-relationship"
+export type RelationshipType = | "in-relationship"
   | "engaged"
   | "married"
   | "civil-partnership"
@@ -73,10 +73,12 @@ export default interface User {
   partner?: {
     name?: string;
     together_since?: Date;
-    relationship?: Relationship;
+    relationship?: RelationshipType;
     cohabitation?: Cohabitation;
     kids?: boolean;
     goals?: RelationshipGoal[] | null;
+    partner_id?: string;
+    relationship_id?: string;
   }
 
   analytics?: {

@@ -9,6 +9,8 @@ import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/userStore';
 import { useGeneralStore } from '@/src/store/generalStore';
 import PairScreen from '@/src/pages/Pair/PairScreen';
+import { useRelationshipStore } from '@/src/store/relationshipStore';
+import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
 
 interface DashboardCardProps {
@@ -59,6 +61,8 @@ export default function HomeScreen() {
   const user = useUserStore((state) => state.user);
   const colors = useThemeColors();
 
+  const relationship = useRelationshipStore((state) => state.relationship)
+
   const didShowSubscription = useGeneralStore((state) => state.didShowSubscription);
   const setDidShowSubscription = useGeneralStore((state) => state.setDidShowSubscription);
 
@@ -67,12 +71,14 @@ export default function HomeScreen() {
 
   useEffect(() => {
 
-    if ( user?.partner?.relationship != "single"){
-      setDidShowPairScreen(true)
-      router.push("/pair")
+
+    console.log("relationship: ", relationship)
+    if ( user?.partner?.relationship != "single" && !relationship){
+      setDidShowPairScreen(true);
+      router.push("/pair");
     }
 
-    // Prompt user for subscription when first logged in
+    // Prompt user for subscription  when first logged in
     if (!didShowSubscription && user?.analytics?.num_logged_in && user.analytics.num_logged_in <= 1) {
       setTimeout(() => {
         setDidShowSubscription(true);
@@ -115,6 +121,10 @@ export default function HomeScreen() {
   return (
     <Screen scrollable>
       <View className="mb-8">
+        <PrimaryButton onPress={() => router.push("/pair")}>/pair</PrimaryButton>
+        <PrimaryButton onPress={() => router.push("/pair_congratulations")}>/pair-congratulations</PrimaryButton>
+
+
         <View className="flex-row items-center mb-2">
           <Heart size={24} color={colors.primary} fill={colors.primary} className="mr-2" />
           <Text variant="headlineMedium" className="text-gray-900 font-bold">

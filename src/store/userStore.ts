@@ -14,17 +14,12 @@ type Store = {
   reset: () => void;
 };
 
-const initialState: Store = {
+const dataInitial: Pick<Store, "isUserInitialized" | "user"> = {
   isUserInitialized: false,
   user: null,
-  setIsUserInitialized: () => {},
-  setUser: () => {},
-  setUserProperty: () => {},
-  reset: () => {},
 };
-
 export const useUserStore = create<Store>()((set, get) => ({
-  ...initialState,
+  ...dataInitial,
 
   setIsUserInitialized: (isUserInitialized) => set({ isUserInitialized }),
 
@@ -32,7 +27,7 @@ export const useUserStore = create<Store>()((set, get) => ({
     const prev = get().user;
     // Switching accounts or logging out → replace whole store with fresh state + new user
     if (!prev || !u || prev.id !== u.id) {
-      set({ ...initialState, user: u });
+      set({ ...dataInitial, user: u });
     } else {
       // Same account → regular update
       set({ user: u });
@@ -45,6 +40,6 @@ export const useUserStore = create<Store>()((set, get) => ({
     set({ user: { ...u, [key]: value } as User });
   },
 
-  reset: () => set(initialState, true), // "true" = replace, not merge
+  reset: () => set(() => ({ ...dataInitial })),
 }));
 

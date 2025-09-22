@@ -20,7 +20,7 @@ export default function TapToCopy({ text }: { text: string }) {
   return (
     <Pressable
       onPress={() => copyToClipboard(text)}
-      className={"flex flex-row gap-1 p-2 border border-black rounded-md items-center inline-block"}
+      className={"flex flex-row gap-1 p-1 border border-black rounded-md items-center inline-block"}
       style={{
         alignItems: "center",
       }}

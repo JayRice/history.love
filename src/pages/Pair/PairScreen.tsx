@@ -14,6 +14,9 @@ import { isValidMatchCode } from '@/src/logic/isValidMatchCode';
 import { Screen } from '@/src/components/layout/Screen';
 import { CloseButton } from '@/src/components/buttons/CloseButton';
 import { router } from 'expo-router';
+import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
+
+
 export default function PairScreen ()  {
 
   const colors = useThemeColors();
@@ -25,16 +28,14 @@ export default function PairScreen ()  {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
 
-  useEffect(() => {
-    console.log("match code: ", user?.profile?.match_code)
-  }, []);
+
+
   useEffect(() => {
 
     asyncGetMatchCode()
     async function asyncGetMatchCode(){
       if (user && !user?.profile?.match_code){
         const match_code = await getMatchCode();
-        console.log("got match code: ", match_code);
         setUser({
           ...user,
           profile: {
@@ -45,7 +46,8 @@ export default function PairScreen ()  {
       }
     }
 
-  }, [user?.profile?.match_code]);
+  }, []);
+  const first_name = user?.partner?.name?.trim().split(" ")[0]
   return (
     <Screen className={"relative"} backgroundColor={colors.surface} padding>
 
@@ -54,19 +56,26 @@ export default function PairScreen ()  {
       }}></CloseButton>
       <View className={"relative w-full h-full space-y-4"}>
 
-        <Text variant={"displaySmall"} className={"font-bold"}>Pair with your Partner</Text>
+        <Text variant={"displaySmall"} className={"font-bold"}>Pair with {user?.partner?.relationship != "single" ? first_name:"your Partner"}</Text>
 
         <Text variant={"bodyLarge"} className={"font-light"}>Share your pin code or ask them for theirs!</Text>
 
-        <View style={{backgroundColor: colors.secondaryAccent2}} className={"relative w-full text-white flex flex-col justify-center p-4 "}>
+        <View  style={{backgroundColor: colors.secondaryAccent2 ?? "", gap: 8}} className={"relative w-full text-white flex flex-col justify-center p-4 "}>
 
-          <Text variant={"headlineSmall"} className={"font-bold text-center"}>I want to invite {user?.partner?.name?.split(" ")[0]}</Text>
+          <Text variant={"headlineSmall"} className={"font-bold "}>I want to invite {first_name}</Text>
 
-          <Text variant={'bodySmall'} className={"m-1"}>Tap to copy</Text>
+          <View className={"flex flex-row items-center"} style={{gap: 4}}>
+            <Text variant={'bodySmall'} className={""}>Your code: </Text>
 
-          { user?.profile?.match_code && <TapToCopy text={user?.profile?.match_code}></TapToCopy>}
+            { user?.profile?.match_code && <TapToCopy text={user?.profile?.match_code}></TapToCopy>}
+          </View>
+
 
           <PinInput disabled  length={6} value={user?.profile?.match_code ?? "000000"} ></PinInput>
+
+          <SecondaryButton variant={"filled"} onPress={() => {
+
+          }}>Share your invite code</SecondaryButton>
 
           <View  style={{
             backgroundColor: colors.background,
@@ -76,19 +85,23 @@ export default function PairScreen ()  {
           </View>
         </View>
 
-        <View style={{backgroundColor: colors.primaryAccent2}} className={"relative w-full text-white flex justify-center p-4 "}>
-          <Text variant={"headlineSmall"} className={"font-bold text-center"}>I have a code from {user?.partner?.name?.split(" ")[0]} </Text>
+        <View style={{backgroundColor: colors.primaryAccent2 ?? "", gap: 8}} className={"relative w-full text-white flex justify-center p-4 "}>
+          <Text variant={"headlineSmall"} className={"font-bold"}>I have a code from {user?.partner?.name?.split(" ")[0]} </Text>
 
           <PinInput   length={6} value={pinValue}  setValue={setPinValue}></PinInput>
 
 
-          <PrimaryButton disabled={!isValidMatchCode(pinValue)} onPress={async () => {
+          <PrimaryButton loading={isPairing} disabled={!isValidMatchCode(pinValue)} onPress={async () => {
 
 
+            setIsPairing(true)
             const response = await pairUsers(pinValue)
+            setIsPairing(false)
 
-            console.log("response", response)
-
+            console.log("pair response: ", response)
+            if (response.success){
+              router.replace("/pair_congratulations")
+            }
           }}>Pair</PrimaryButton>
         </View>
 

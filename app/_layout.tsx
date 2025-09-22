@@ -16,6 +16,10 @@ import Toast from "react-native-toast-message";
 
 import User from "../src/types/User"
 import { AuthProvider, useAuth } from "@/src/contexts/AuthContext";
+import { useRelationshipStore } from '@/src/store/relationshipStore';
+import { ref, getDownloadURL } from "firebase/storage";
+import getImages from '@/src/database/getImages';
+import { useImagesStore } from '@/src/store/imagesStore';
 
 export default function RootLayout() {
   return (
@@ -30,13 +34,71 @@ function InnerLayout() {
 
 
   const user = useUserStore((state) => state.user);
-
   const setUser = useUserStore((s) => s.setUser);
+
+  const relationship = useRelationshipStore((s) => s.relationship);
+
+  const setRelationship = useRelationshipStore((s) => s.setRelationship);
+
+  const setProfileImage = useImagesStore((s) => s.setProfileImage);
+  const setPartnerProfileImage = useImagesStore((s) => s.setPartnerProfileImage);
+
 
   const [profileLoading, setProfileLoading] = useState(true);
   const segments = useSegments();
 
 
+  async function fetchProfileImage(imageId: string, uid: string) {
+    if (!authUser || !user?.profile?.profileImage?.name) return null;
+    const urls = await getImages(`profile-images/${uid}`, [imageId]);
+    console.log("Fetched profile image: ", urls[0])
+    return urls[0];
+  }
+
+  useEffect(() => {
+    console.log("Reloading Instance")
+  }, []);
+
+  // Get partners profile image
+  useEffect(() => {
+    if (!relationship || !authUser) return;
+
+    const partnerUID = relationship.users.filter((u) => u!=authUser.uid)[0]
+
+    console.log("relationship profile Image ids: ", relationship?.profileImageIds)
+    const partnerImage = relationship?.profileImageIds[partnerUID];
+    console.log(partnerImage)
+    if (!partnerImage) return;
+
+    fetchProfileImage(partnerImage, partnerUID).then((profileImage) => {
+      setPartnerProfileImage(profileImage );
+    })
+  }, [relationship]);
+
+  // Get users profile image
+  useEffect(() => {
+    if (!authUser || !user?.profile?.profileImage || !user?.profile?.profileImage?.name) return;
+
+    fetchProfileImage(user?.profile?.profileImage?.name, authUser.uid).then((profileImage) => {
+      setProfileImage(profileImage );
+    })
+  }, [user?.id, user?.profile?.profileImage])
+
+  useEffect(() => {
+   const relationship_id = user?.partner?.relationship_id;
+
+   if (!relationship_id) return;
+
+   console.log("Listening to relationship object: ", relationship_id);
+
+    const unsub = onSnapshot(doc(db, "relationships", relationship_id), (snap) => {
+      console.log("relationship changed")
+      setRelationship(snap.exists() ? (snap.data() as any) : null);
+      console.log("relationship exists: ", snap.exists());
+    });
+    return unsub;
+
+  }, [authUser, user?.partner, user?.partner?.relationship_id]);
   // Live subscribe to the user doc when signed in
   useEffect(() => {
     if (authUserLoading) return;
@@ -48,6 +110,7 @@ function InnerLayout() {
     }
     setProfileLoading(true);
     const unsub = onSnapshot(doc(db, "users", authUser.uid), (snap) => {
+      console.log("user changed")
       setUser(snap.exists() ? (snap.data() as any) : null);
       console.log("user exists: ", snap.exists());
       setProfileLoading(false);
@@ -55,9 +118,7 @@ function InnerLayout() {
     return unsub;
   }, [authUser, authUserLoading, setUser]);
 
-  useEffect(() => {
-    console.log("user:", user)
-  }, [user]);
+
   // Route guard (runs on every nav)
   useEffect(() => {
     if (authUserLoading || profileLoading) return;
@@ -65,8 +126,6 @@ function InnerLayout() {
     const group = segments[0]; // e.g. "(auth)", "(onboarding)", "(app)"
     const inAuth = group === "(auth)";
     const inOnboarding = group === "onboarding";
-
-
 
     if (!authUser && !inAuth) {
       router.replace("/start"); // public auth screens

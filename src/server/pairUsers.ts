@@ -2,8 +2,7 @@ import fetchServer from '@/src/server/fetchServer';
 import Toast from 'react-native-toast-message';
 import { isValidMatchCode } from '@/src/logic/isValidMatchCode';
 
-
-export default async function pairUsers(matchCode: string) {
+export default async function pairUsers(matchCode: string) : Promise <any | null>{
 
 
   if (!isValidMatchCode(matchCode)){
@@ -17,9 +16,6 @@ export default async function pairUsers(matchCode: string) {
 
   const response = await fetchServer("/matches/pair_users", {matchCode: matchCode}, "POST");
 
-  if (response && response.success){
-    return response.relationship;
-  }
-  return null;
+  return response;
 
 }

@@ -1,57 +1,70 @@
-import { Audio, AVPlaybackStatusSuccess, InterruptionModeAndroid, InterruptionModeIOS } from "expo-av";
+// SFX manager using expo-audio (SDK 52+)
+import {
+  createAudioPlayer,
+  setAudioModeAsync,
+  type AudioPlayer,
+} from 'expo-audio';
 
-type SoundKey = "success" | "yay";
+export type SoundKey = 'success' | 'yay';
+
 const sources: Record<SoundKey, any> = {
-  "success": require("@/assets/sounds/success.mp3"),
-  "yay": require("@/assets/sounds/yay.mp3"),
+  success: require('@/assets/sounds/success.mp3'),
+  yay: require('@/assets/sounds/yay.mp3'),
 };
 
-const cache = new Map<SoundKey, Audio.Sound>();
+const cache = new Map<SoundKey, AudioPlayer>();
 
 let configured = false;
 async function ensureConfigured() {
   if (configured) return;
   configured = true;
-  await Audio.setAudioModeAsync({
-    playsInSilentModeIOS: true, // set to false if you want to respect the mute switch
-    staysActiveInBackground: false,
-    allowsRecordingIOS: false,
-    interruptionModeIOS: InterruptionModeIOS.MixWithOthers,
-    shouldDuckAndroid: true,
-    interruptionModeAndroid: InterruptionModeAndroid.DuckOthers,
-    playThroughEarpieceAndroid: false,
+
+  // Minimal playback config (new API)
+  // - playsInSilentMode: allow UI clicks to play on iOS mute switch
+  // - allowsRecording: false since these are SFX
+  await setAudioModeAsync({
+    playsInSilentMode: true,
+    allowsRecording: false,
   });
 }
 
-export async function preload(keys: SoundKey[] = ["success", "yay"]) {
+export async function preload(keys: SoundKey[] = ['success', 'yay']) {
   await ensureConfigured();
-  await Promise.all(
-    keys.map(async (k) => {
-      if (cache.has(k)) return;
-      const sound = new Audio.Sound();
-      await sound.loadAsync(sources[k], { volume: 1.0, isLooping: false }, undefined);
-      cache.set(k, sound);
-    })
-  );
+
+  keys.forEach((k) => {
+    if (!cache.has(k)) {
+      const player = createAudioPlayer(sources[k]); // loads immediately
+      // Optional: set initial volume per sound
+      // player.volume = 1.0;
+      cache.set(k, player);
+    }
+  });
 }
 
 export async function play(key: SoundKey) {
   await ensureConfigured();
-  if (!cache.has(key)) await preload([key]);
-  const sound = cache.get(key)!;
-
-  // ensure instant replays (no lag on repeated taps)
-  const status = (await sound.getStatusAsync()) as AVPlaybackStatusSuccess;
-  if (status.isLoaded) {
-    if (status.isPlaying) {
-      await sound.stopAsync();
-    }
-    await sound.setPositionAsync(0);
-    await sound.playAsync();
+  if (!cache.has(key)) {
+    await preload([key]);
   }
+
+  const player = cache.get(key)!;
+  // Instant retrigger: rewind to start, then play
+  await player.seekTo(0);
+  player.play(); // fire-and-forget
 }
 
-export async function unloadAll() {
-  await Promise.all(Array.from(cache.values()).map((s) => s.unloadAsync()));
+export function setVolume(key: SoundKey, volume: number) {
+  const p = cache.get(key);
+  if (p) p.volume = Math.max(0, Math.min(1, volume));
+}
+
+export function unloadAll() {
+  cache.forEach((p) => {
+    try {
+      // Remove from memory per docs
+      p.remove();
+      // Some versions expose release(); remove() is the documented method.
+    } catch {}
+  });
   cache.clear();
 }

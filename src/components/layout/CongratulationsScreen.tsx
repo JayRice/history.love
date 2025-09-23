@@ -4,8 +4,9 @@ import { View, Pressable, Text } from 'react-native';
 import LottieView from 'lottie-react-native';
 
 import * as Haptics from "expo-haptics";
-import useSfx from "@/src/lib/useSfx";
+import useSfx from "@/src/hooks/useSfx";
 import * as SFX from "@/src/lib/sfx";
+
 
 // Adjust these imports to your paths:
 import {Screen} from '@/src/components/layout/Screen';
@@ -35,21 +36,21 @@ export default function CongratulationsScreen({
                                                 delay = 0,
                                               }: CongratulationsScreenProps) {
 
-  useSfx(["success"]);
+
+
+  const { playSuccess } = useSfx();
+
 
   const anim = useRef<LottieView>(null);
 
   const [show, setShow] = useState(false);
 
 
-  const playSound = async () => {
-    await SFX.play("success");
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-  };
+
 
 
   useEffect(() => {
-    playSound()
+    playSuccess()
 
     const timer = setTimeout(() => setShow(true), delay);
     return () => {

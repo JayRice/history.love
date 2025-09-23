@@ -89,12 +89,9 @@ function InnerLayout() {
 
    if (!relationship_id) return;
 
-   console.log("Listening to relationship object: ", relationship_id);
 
     const unsub = onSnapshot(doc(db, "relationships", relationship_id), (snap) => {
-      console.log("relationship changed")
       setRelationship(snap.exists() ? (snap.data() as any) : null);
-      console.log("relationship exists: ", snap.exists());
     });
     return unsub;
 
@@ -110,9 +107,7 @@ function InnerLayout() {
     }
     setProfileLoading(true);
     const unsub = onSnapshot(doc(db, "users", authUser.uid), (snap) => {
-      console.log("user changed")
       setUser(snap.exists() ? (snap.data() as any) : null);
-      console.log("user exists: ", snap.exists());
       setProfileLoading(false);
     });
     return unsub;

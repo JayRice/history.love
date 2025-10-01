@@ -50,9 +50,10 @@ export default function CongratulationsScreen({
 
 
   useEffect(() => {
-    playSuccess()
+    playSuccess();
 
     const timer = setTimeout(() => setShow(true), delay);
+
     return () => {
       clearTimeout(timer)
     };

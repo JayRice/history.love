@@ -11,6 +11,8 @@ import { useGeneralStore } from '@/src/store/generalStore';
 import PairScreen from '@/src/pages/Pair/PairScreen';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
+import { useNotificationsStore } from '@/src/store/notificationsStore';
+import markRead from '@/src/database/notifications/markRead';
 
 
 interface DashboardCardProps {
@@ -22,12 +24,12 @@ interface DashboardCardProps {
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
-  title,
-  description,
-  icon,
-  color,
-  onPress,
-}) => {
+                                                       title,
+                                                       description,
+                                                       icon,
+                                                       color,
+                                                       onPress,
+                                                     }) => {
   const colors = useThemeColors();
 
 
@@ -36,7 +38,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
       <Card className="mb-4" style={{ backgroundColor: colors.surface }}>
         <Card.Content className="p-6">
           <View className="flex-row items-start">
-            <View 
+            <View
               className="p-3 rounded-full mr-4"
               style={{ backgroundColor: color + '20' }}
             >
@@ -69,12 +71,19 @@ export default function HomeScreen() {
   const didShowPairScreen = useGeneralStore((state) => state.didShowPairScreen)
   const setDidShowPairScreen = useGeneralStore((state) => state.setDidShowPairScreen)
 
+  const notifications = useNotificationsStore(s => s.notifications);
   useEffect(() => {
+    if (!relationship || !user ) return;
+    let paired_notification =  notifications?.filter(n => n.type == "paired")[0];
 
+    if ( paired_notification ){
+      router.push("/pair_congratulations")
+      markRead(user.id, paired_notification.id);
+    }
 
-    console.log("relationship: ", relationship)
+  }, [user, relationship]);
+  useEffect(() => {
     if ( user?.partner?.relationship != "single" && !relationship){
-      setDidShowPairScreen(true);
       router.push("/pair");
     }
 
@@ -154,7 +163,7 @@ export default function HomeScreen() {
           💡 Did you know?
         </Text>
         <Text variant="bodyMedium" className="text-gray-700 leading-6">
-          Studies show that couples who regularly reflect on their relationship together 
+          Studies show that couples who regularly reflect on their relationship together
           report higher satisfaction and stronger emotional bonds.
         </Text>
       </View>

@@ -53,7 +53,7 @@ export function useGoogleLogin(): UseGoogleLogin {
       const cred = GoogleAuthProvider.credential(idToken);
       const userCred = await signInWithCredential(auth, cred);
       setLoading(false);
-      return userCred;
+      return { success: true, user: userCred.user };
     } catch (e: any) {
       setError(e?.message ?? "Google login failed");
       setLoading(false);

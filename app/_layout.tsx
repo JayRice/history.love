@@ -5,7 +5,7 @@ import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { PaperProvider } from 'react-native-paper';
 import { paperTheme } from '@/src/theme/paperTheme';
 import { useUserStore } from '@/src/store/userStore';
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, limit, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import {db, storage} from "@/src/config/firebase";
 import {getDoc} from "firebase/firestore"
 import {DEV_MODE} from '@/constants';
@@ -20,6 +20,8 @@ import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { ref, getDownloadURL } from "firebase/storage";
 import getImages from '@/src/database/getImages';
 import { useImagesStore } from '@/src/store/imagesStore';
+import { useNotificationsStore } from '@/src/store/notificationsStore';
+import { Notification } from '@/src/types/Notification';
 
 export default function RootLayout() {
   return (
@@ -37,11 +39,13 @@ function InnerLayout() {
   const setUser = useUserStore((s) => s.setUser);
 
   const relationship = useRelationshipStore((s) => s.relationship);
-
   const setRelationship = useRelationshipStore((s) => s.setRelationship);
 
   const setProfileImage = useImagesStore((s) => s.setProfileImage);
   const setPartnerProfileImage = useImagesStore((s) => s.setPartnerProfileImage);
+
+  const notifications = useNotificationsStore(s => s.notifications);
+  const setNotifications = useNotificationsStore(s => s.setNotifications)
 
 
   const [profileLoading, setProfileLoading] = useState(true);
@@ -51,7 +55,6 @@ function InnerLayout() {
   async function fetchProfileImage(imageId: string, uid: string) {
     if (!authUser || !user?.profile?.profileImage?.name) return null;
     const urls = await getImages(`profile-images/${uid}`, [imageId]);
-    console.log("Fetched profile image: ", urls[0])
     return urls[0];
   }
 
@@ -59,15 +62,32 @@ function InnerLayout() {
     console.log("Reloading Instance")
   }, []);
 
+  useEffect(() => {
+    if (!user ) return;
+    const q = query(
+      collection(db, "users", user.id, "notifications"),
+      where("readAt", "==", null),
+      orderBy("createdAt", "desc"),
+      limit(10)
+    );
+    const unsub = onSnapshot(q, (snap) => {
+      const notifs = snap.docs.map(d => ({  ...d.data() } as Notification));
+
+      console.log("Notifications: ", notifs);
+
+      setNotifications(notifs);
+    });
+    return unsub;
+  }, [user?.id]);
+
+
   // Get partners profile image
   useEffect(() => {
     if (!relationship || !authUser) return;
 
     const partnerUID = relationship.users.filter((u) => u!=authUser.uid)[0]
 
-    console.log("relationship profile Image ids: ", relationship?.profileImageIds)
     const partnerImage = relationship?.profileImageIds[partnerUID];
-    console.log(partnerImage)
     if (!partnerImage) return;
 
     fetchProfileImage(partnerImage, partnerUID).then((profileImage) => {
@@ -136,6 +156,16 @@ function InnerLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="+not-found" />
+
+        <Stack.Screen
+          name="location_search"
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            animation: 'slide_from_bottom',
+          }}
+        />
+
       </Stack>
       <StatusBar style="auto" />
       <Toast />

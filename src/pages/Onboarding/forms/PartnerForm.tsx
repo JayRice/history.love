@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { TextField } from '@/src/components/inputs/TextField';
-import BirthdayPicker from '@/src/components/inputs/BirthdayPicker';
+import DatePicker from '@/src/components/inputs/DatePicker';
 import React from 'react';
 import FormProps from '@/src/types/props/FormProps';
 
@@ -27,9 +27,9 @@ const PartnerForm = ({formUser, updateFormUser}: FormProps) => {
       <View>
         <Text>When did you start dating: </Text>
 
-        <BirthdayPicker date={formUser?.partner?.together_since ?? null} onChangeDate={(date) => {
+        <DatePicker date={formUser?.partner?.together_since ?? null} onChangeDate={(date) => {
           updateFormUser("partner.together_since", date);
-        }}></BirthdayPicker>
+        }}></DatePicker>
 
       </View>
 

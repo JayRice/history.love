@@ -36,6 +36,7 @@ export default interface Relationship {
   users: [string, string]; // both user UIDs
   pairKey: string; // e.g. [uid, otherUid].sort().join("_")
 
+
   // Core partner info
   goals: string[];
   status: 'active' | 'ended' | 'complicated';
@@ -52,6 +53,7 @@ export default interface Relationship {
   isPrivate?: boolean;
 
   profileImageIds: Record<string, string | null>;
+
 
 
 }

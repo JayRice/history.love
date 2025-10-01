@@ -1,7 +1,7 @@
 import { Image } from 'react-native';
 import React from 'react';
 
-export default function ProfileImage({source, size, style, className}: {source: string, size: number, style:  StyleP, className?: string}){
+export default function ProfileImage({source, size, className}: {source: string, size: number, className?: string}){
   const sizeInt = parseInt(`${size}`)
   return (
     <Image

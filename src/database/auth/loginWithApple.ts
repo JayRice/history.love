@@ -12,7 +12,7 @@ function randomString(length = 32) {
   return result;
 }
 
-export default async function loginWithGoogle() {
+export default async function loginWithApple() {
   // 1) Create a raw nonce and its SHA-256 hash
   const rawNonce = randomString(32);
   const hashedNonce = await Crypto.digestStringAsync(
@@ -42,5 +42,5 @@ export default async function loginWithGoogle() {
   // Apple only provides name/email the FIRST time.
   // If available, persist to your user profile now.
   const { fullName, email } = appleCred;
-  return { userCred, fullName, email };
+  return { success: true , user: userCred.user, fullName, email };
 }

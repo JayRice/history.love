@@ -33,7 +33,7 @@ import User, { Cohabitation, ProfileImage, RelationshipGoal, UserSource } from '
 
 import { auth } from "@/src/config/firebase"
 import { useAuth } from '@/src/contexts/AuthContext';
-import BirthdayPicker from '@/src/components/inputs/BirthdayPicker';
+import DatePicker from '@/src/components/inputs/DatePicker';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 
 

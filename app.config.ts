@@ -40,9 +40,10 @@ export default () => ({
       "eas": {
         "projectId": "bd3fcdab-b533-42b8-8275-54aee70ef587"
       },
-      firebaseApiKey: process.env.FIREBASE_API_KEY,
-      webClientId: process.env.WEB_CLIENT_ID,
-      androidClientId: process.env.androidClientId,
+      firebaseApiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+      webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
+      androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
+      locationIQKey: process.env.EXPO_PUBLIC_LOCATIONIQ_KEY,
       api_url: "http://10.0.2.2:5000"
     },
   },

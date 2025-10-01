@@ -6,7 +6,6 @@ import { Screen } from '@/src/components/layout/Screen';
 import { TextField } from '@/src/components/inputs/TextField';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
-import { useAuth } from '@/src/hooks/useAuth';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
 import { useUserStore } from '../../store/userStore';

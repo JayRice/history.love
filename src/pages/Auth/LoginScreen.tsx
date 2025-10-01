@@ -6,13 +6,13 @@ import { Screen } from '@/src/components/layout/Screen';
 import { TextField } from '@/src/components/inputs/TextField';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
-import { useAuth } from '@/src/hooks/useAuth';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
 import { useUserStore } from '../../store/userStore';
 import { BackButton } from '@/src/components/buttons/BackButton';
 import loginWithEmail from '@/src/database/auth/loginWithEmail';
 import Logo from '@/assets/images/logo.svg';
+import useLogin from '@/src/hooks/useLogin';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -27,12 +27,18 @@ export default function LoginScreen() {
 
 
 
+  const {login} = useLogin()
+  console.log("logging in")
+
+
+
+
   const handleLogin = async () => {
     if (!email || !password) return;
     
     setSubmitLoading(true);
-    const response = await loginWithEmail(email, password);
-    
+    const response = await login("email-login",email, password);
+
     if (!response.success) {
       setFormError(response.error)
       setSubmitLoading(false)

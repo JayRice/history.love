@@ -10,6 +10,7 @@ interface ScreenProps {
   safeArea?: boolean;
   backgroundColor?: string;
   className?: string;
+  style?: any;
 }
 
 export const Screen: React.FC<ScreenProps> = ({
@@ -19,15 +20,17 @@ export const Screen: React.FC<ScreenProps> = ({
   safeArea = true,
   backgroundColor,
   className = '',
+  style,
 }) => {
   const colors = useThemeColors();
   
-  const style = {
+  const addedStyle = {
+    ...style,
     backgroundColor: backgroundColor || colors.background,
   };
 
   const content = (
-    <View style={[styles.container, style]} className={className}>
+    <View style={[styles.container, addedStyle]} className={className}>
       {children}
     </View>
   );

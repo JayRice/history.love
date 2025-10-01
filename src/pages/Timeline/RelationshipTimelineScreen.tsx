@@ -10,14 +10,21 @@ import { EmptyState } from '@/src/components/feedback/EmptyState';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { getTimeline } from '@/src/server/getTimeline';
-import { Relationship, RelationshipEvent } from '@/src/types';
+import Memory from "../../types/Memory"
+import  Relationship  from '@/src/types/Relationship';
+import { router } from 'expo-router';
+import { useUserStore } from '@/src/store/userStore';
+import { getPartnerName } from '@/src/utils/getPartnerName.tsx';
+
 
 
 export default function RelationshipTimelineScreen() {
   const [relationships, setRelationships] = useState<Relationship[]>([]);
-  const [events, setEvents] = useState<RelationshipEvent[]>([]);
+  const [memories, setMemories] = useState<Memory[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'relationships' | 'timeline'>('timeline');
+
+  const user = useUserStore(s => s.user);
   const colors = useThemeColors();
 
   useEffect(() => {
@@ -27,9 +34,9 @@ export default function RelationshipTimelineScreen() {
   const loadTimelineData = async () => {
     setLoading(true);
     try {
-      const data = await getTimeline();
+      const data = await getTimeline(0);
       setRelationships(data.relationships);
-      setEvents(data.events);
+      setMemories(data.memories);
     } catch (error) {
       console.error('Failed to load timeline:', error);
     } finally {
@@ -40,13 +47,16 @@ export default function RelationshipTimelineScreen() {
   const handleRelationshipPress = (relationship: Relationship) => {
     console.log('View relationship:', relationship.id);
   };
+  const handleAddRelationship = () => {
+    router.push("/pair")
+  }
 
-  const handleEventPress = (event: RelationshipEvent) => {
-    console.log('View event:', event.id);
+  const handleMemoryPress = (memory: Memory) => {
+    console.log('View event:', memory.id);
   };
 
-  const handleAddNew = () => {
-    console.log('Add new relationship or event');
+  const handleAddMemory = () => {
+    router.push("/add_memory")
   };
 
   if (loading) {
@@ -58,26 +68,26 @@ export default function RelationshipTimelineScreen() {
   }
 
   const renderTimelineContent = () => {
-    if (events.length === 0) {
+    if (memories.length === 0) {
       return (
         <EmptyState
-          title="No Timeline Events Yet"
+          title="No Timeline memories Yet"
           description="Start documenting your relationship journey by adding your first milestone, memory, or special moment."
           icon={<Heart size={48} color={colors.onSurfaceVariant} />}
           actionText="Add Your First Event"
-          onAction={handleAddNew}
+          onAction={handleAddMemory}
         />
       );
     }
 
     return (
       <FlatList
-        data={events}
+        data={memories}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TimelineEventCard 
-            event={item} 
-            onPress={() => handleEventPress(item)} 
+            event={item}
+            onPress={() => handleMemoryPress(item)}
           />
         )}
         showsVerticalScrollIndicator={false}
@@ -91,10 +101,10 @@ export default function RelationshipTimelineScreen() {
       return (
         <EmptyState
           title="No Relationships Yet"
-          description="Begin your journey by adding your first relationship. Document the special people who have been part of your story."
+          description="Begin your journey by pairing with your first partner. Document the special people who have been part of your story."
           icon={<Heart size={48} color={colors.onSurfaceVariant} />}
-          actionText="Add First Relationship"
-          onAction={handleAddNew}
+          actionText={`${user?.partner?.name ? `Pair with ${getPartnerName(user?.partner?.name)}`: "Add First Relationship"}`}
+          onAction={handleAddRelationship}
         />
       );
     }
@@ -119,7 +129,7 @@ export default function RelationshipTimelineScreen() {
     <Screen>
       <SectionHeader 
         title="Relationship Timeline"
-        subtitle={`${events.length} events across ${relationships.length} relationships`}
+        subtitle={`${memories.length} memories across ${relationships.length} relationships`}
       />
 
       <View className="flex-row mb-6">
@@ -161,7 +171,8 @@ export default function RelationshipTimelineScreen() {
 
       <FAB
         icon={() => <Plus size={24} color="white" />}
-        onPress={handleAddNew}
+        className={"rounded-full"}
+        onPress={handleAddMemory}
         style={{
           position: 'absolute',
           margin: 16,

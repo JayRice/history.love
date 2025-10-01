@@ -51,7 +51,7 @@ export default function PairCongratulationsScreen() {
 
   const relType = user?.partner?.relationship;
   const cohab = user?.partner?.cohabitation;
-  console.log("together since: ", user?.partner?.together_since)
+  console.log("together sinceee: ", user?.partner?.together_since)
   const since = fmtMonthYear(user?.partner?.together_since);
 
   const goals = (user?.partner?.goals || []) as string[];

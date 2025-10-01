@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import ToggleButtons from '@/src/components/inputs/ToggleButtons';
 import { TextField } from '@/src/components/inputs/TextField';
+import {getPartnerName} from "@/src/utils/getPartnerName.tsx"
 
 const RelationshipForm = ({formUser, updateFormUser}: ScreenProps) => {
 
@@ -12,7 +13,6 @@ const RelationshipForm = ({formUser, updateFormUser}: ScreenProps) => {
 
   if (formUser?.partner?.name) {
     partnerName = partnerName[0].toUpperCase().trim() + partnerName.substring(1);
-
   }
   return (
     <View className={"w-full h-[100%] space-y-10 pb-10"}>

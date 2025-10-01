@@ -5,9 +5,12 @@ import { Calendar, MapPin, Tag } from 'lucide-react-native';
 import { RelationshipEvent } from '@/src/types/Relationship';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { formatDate } from '@/src/utils/formatDate';
+import Memory from '@/src/types/Memory';
+
+
 
 interface TimelineEventCardProps {
-  event: RelationshipEvent;
+  event: Memory;
   onPress: () => void;
   showRelationship?: boolean;
 }
@@ -18,7 +21,7 @@ export const TimelineEventCard: React.FC<TimelineEventCardProps> = ({
 }) => {
   const colors = useThemeColors();
 
-  const getEventTypeColor = (type: string) => {
+  const getMemoryTypeColor = (type: string) => {
     switch (type) {
       case 'milestone': return colors.primary;
       case 'memory': return '#FF9500';
@@ -78,11 +81,11 @@ export const TimelineEventCard: React.FC<TimelineEventCardProps> = ({
               mode="flat"
               textStyle={{ 
                 fontSize: 12, 
-                color: getEventTypeColor(event.eventType),
+                color: getMemoryTypeColor(event.eventType),
                 fontWeight: '500'
               }}
               style={{ 
-                backgroundColor: getEventTypeColor(event.eventType) + '20',
+                backgroundColor: getMemoryTypeColor(event.eventType) + '20',
                 marginLeft: 8
               }}
             >

@@ -52,7 +52,6 @@ export default function RegisterScreen() {
       return;
     }
 
-    router.replace('/onboarding');
 
     setSubmitLoading(false);
   };

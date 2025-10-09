@@ -1,3 +1,3 @@
-import RelationshipTimelineScreen from '@/src/pages/Timeline/RelationshipTimelineScreen';
+import TimelineScreen from '@/src/pages/Timeline/TimelineScreen';
 
-export default RelationshipTimelineScreen;
+export default TimelineScreen;

@@ -4,8 +4,8 @@
 // components/location/LocationPicker.tsx
 import React, { useMemo, useState } from 'react';
 import { Pressable, View, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
-import { MapPin as MapPinIcon } from 'lucide-react-native';
+import { Text, TextInput } from 'react-native-paper';
+import { MapPin as MapPinIcon, X as XIcon } from 'lucide-react-native';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { GeoLocation } from '@/src/types/GeoLocation';
 import { LocationSearchModal } from '@/src/components/modals/LocationSearchModal';
@@ -38,8 +38,8 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
   const handleOpenLocationSearch = async () => {
     console.log("in location search modal")
 
-    router.push("/(modals)/location_search")
-    const picked = await open();           // waits until modal resolves
+
+    const picked = await open();
     if (picked) onChange(picked);
   };
 
@@ -47,6 +47,10 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
     if (!value) return placeholder;
     return value.label || placeholder;
   }, [value, placeholder]);
+
+  const clear = () => {
+    onChange(null)
+  }
 
   return (
     <>
@@ -75,9 +79,12 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
                 opacity: value ? 1 : 0.7, // “dimly in its background”
               }}
             >
-              {caption}
+                {caption}
             </Text>
           </View>
+          {(value && (
+             <XIcon onPress={clear} size={18} color={colors.onSurfaceVariant} />
+          ))}
         </Pressable>
 
         {!!error && (

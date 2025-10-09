@@ -18,9 +18,11 @@ import { getPartnerName } from '@/src/utils/getPartnerName.tsx';
 
 
 
-export default function RelationshipTimelineScreen() {
+export default function TimelineScreen() {
   const [relationships, setRelationships] = useState<Relationship[]>([]);
   const [memories, setMemories] = useState<Memory[]>([]);
+
+
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'relationships' | 'timeline'>('timeline');
 

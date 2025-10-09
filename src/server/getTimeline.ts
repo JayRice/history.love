@@ -7,9 +7,9 @@ export default async function getTimeline(scrollIndex: number) {
   // Mock delay to simulate API call
 
 
-  const response = await fetchServer("/timeline", {
-    scrollIndex: scrollIndex,
-  }, "GET");
+  // const response = await fetchServer("/timeline", {
+  //   scrollIndex: scrollIndex,
+  // }, "GET");
 
 
   // Sort events by date (most recent first)

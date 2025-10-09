@@ -9,11 +9,11 @@ import { useThemeColors } from '@/src/hooks/useThemeColors';
 // Your PrimaryButton signature (already in your codebase)
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
-import PickedPhoto from '@/src/types/PickedPhoto';
+import Photo from "../../types/Photo"
 
 type PhotoInputProps = {
-  photos: PickedPhoto[];
-  setPhotos: (next: PickedPhoto[]) => void;
+  photos: Photo[];
+  setPhotos: (next: Photo[]) => void;
   maxPhotos?: number; // default = unlimited
   title?: string;
   // If true, when picking "Change photos" replaces the whole list; otherwise it appends (respecting max)
@@ -39,9 +39,12 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
     return status === 'granted';
   }, []);
 
-  const mapAssets = (assets: ImagePicker.ImagePickerAsset[]): PickedPhoto[] =>
+  const mapAssets = (assets: ImagePicker.ImagePickerAsset[]): Photo[] =>
     assets.map(a => ({
-      uri: a.uri
+      uri: a.uri,
+      width: a.width ?? 0,
+      height: a.height ?? 0,
+      type: a.type ?? 'image',
     }));
 
   const pickImages = useCallback(
@@ -137,7 +140,7 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
         ) : (
           <FlatList
             data={photos}
-            keyExtractor={(item) => item.uri}
+            keyExtractor={(item) => item?.uri}
             numColumns={3}
             contentContainerStyle={{ gap: 8 }}
             columnWrapperStyle={{ gap: 8 }}

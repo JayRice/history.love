@@ -102,7 +102,7 @@ export default function DateInput({
           left={
             <TextInput.Icon
               forceTextInputFocus={false}
-              icon={() => <CalendarIcon size={18} color={colors.onSurfaceVariant} />}
+              icon={() => <CalendarIcon size={18} color={valueText ? colors.primary:colors.onSurfaceVariant} />}
             />
           }
           pointerEvents="none" // prevents caret

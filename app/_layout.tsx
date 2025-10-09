@@ -41,6 +41,10 @@ function InnerLayout() {
   const relationship = useRelationshipStore((s) => s.relationship);
   const setRelationship = useRelationshipStore((s) => s.setRelationship);
 
+  const memories = useRelationshipStore((s) => s.memories);
+  const setMemories = useRelationshipStore((s) => s.setMemories);
+
+
   const setProfileImage = useImagesStore((s) => s.setProfileImage);
   const setPartnerProfileImage = useImagesStore((s) => s.setPartnerProfileImage);
 
@@ -77,7 +81,11 @@ function InnerLayout() {
 
       setNotifications(notifs);
     });
+
+
     return unsub;
+
+
   }, [user?.id]);
 
 

@@ -17,60 +17,25 @@ import { GeoLocation } from '@/src/types/GeoLocation';
 import { TextInput } from 'react-native-paper';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { LoadingSpinner } from "@/src/components/feedback/LoadingSpinner"
+import fetchLocations from '@/src/server/fetchLocations';
+
+import { BackButton } from "../buttons/BackButton"
+import { useLocationModalStore } from '@/src/store/useLocationModalStore';
 
 type LocationSearchModalProps = {
   visible: boolean;
   onClose: () => void;
   onSelect: (loc: GeoLocation) => void;
   initialQuery?: string;
-  // Optional: override fetcher for tests or different providers
-  fetchLocations?: (query: string) => Promise<GeoLocation[]>;
+
 };
 
-const defaultFetch = async (query: string): Promise<GeoLocation[]> => {
-  if (!query?.trim()) return [];
-  // OpenStreetMap Nominatim (no key). Respect their usage policy in production (email UA, proper throttling).
-  const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=8&q=${encodeURIComponent(
-    query.trim()
-  )}`;
-  const res = await fetch(url, {
-    headers: {
-      'Accept': 'application/json',
-      // In production, set a descriptive UA string with contact per Nominatim policy.
-      'User-Agent': 'history.love/1.0 (contact: app@example.com)',
-    },
-  });
-  if (!res.ok) return [];
-  const json: any[] = await res.json();
-  console.log("fetchLocations", json);
-  return json.map((item) => {
-    const addr = item.address ?? {};
-    const pieces = [
-      addr.city || addr.town || addr.village || addr.hamlet || addr.municipality,
-      addr.state || addr.region || addr.county,
-      addr.country_code ? String(addr.country_code).toUpperCase() : addr.country,
-    ].filter(Boolean);
-    console.log("pieces = ", pieces);
-    const label = pieces.join(', ') || item.display_name || query;
-    return {
-      id: String(item.place_id),
-      label,
-      latitude: item.lat ? Number(item.lat) : undefined,
-      longitude: item.lon ? Number(item.lon) : undefined,
-      city: addr.city || addr.town || addr.village || addr.hamlet || addr.municipality || null,
-      state: addr.state || addr.region || addr.county || null,
-      country: addr.country || null,
-      countryCode: addr.countryCode || null,
-    } as GeoLocation;
-  });
-};
 
 export const LocationSearchModal: React.FC<LocationSearchModalProps> = ({
                                                                           visible,
                                                                           onClose,
                                                                           onSelect,
-                                                                          initialQuery = '',
-                                                                          fetchLocations = defaultFetch,
+                                                                          initialQuery = ''
                                                                         }) => {
   const colors = useThemeColors();
   const [query, setQuery] = useState(initialQuery);
@@ -79,6 +44,7 @@ export const LocationSearchModal: React.FC<LocationSearchModalProps> = ({
   const [touched, setTouched] = useState(false);
   const debouncer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const resolve = useLocationModalStore(s => s.resolve)
 
   useEffect(() => {
     if (!visible) return;
@@ -86,12 +52,19 @@ export const LocationSearchModal: React.FC<LocationSearchModalProps> = ({
     setTouched(false);
   }, [visible, initialQuery]);
 
+  const onPressLocation = (location: GeoLocation) => {
+    resolve(location)
+  }
+
   const runSearch = useCallback(
     async (q: string) => {
+
       setLoading(true);
       try {
         const list = await fetchLocations(q);
-        setResults(list);
+        if (list){
+          setResults(list);
+        }
       } catch {
         setResults([]);
       } finally {
@@ -103,6 +76,10 @@ export const LocationSearchModal: React.FC<LocationSearchModalProps> = ({
 
   useEffect(() => {
     if (!visible) return;
+    if (!query.trim() || query.trim().length < 3) {
+      setResults([])
+      return;
+    }
     if (debouncer.current) clearTimeout(debouncer.current);
     debouncer.current = setTimeout(() => {
       runSearch(query);
@@ -131,6 +108,7 @@ export const LocationSearchModal: React.FC<LocationSearchModalProps> = ({
     return list;
   }, [results, echoedFirst]);
 
+
   const renderItem = ({ item }: { item: GeoLocation }) => (
     <Pressable
       onPress={() => onSelect(item)}
@@ -152,34 +130,42 @@ export const LocationSearchModal: React.FC<LocationSearchModalProps> = ({
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose} transparent>
       <KeyboardAvoidingView
+        className={"h-full"}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={[styles.full, { backgroundColor: colors.backdrop?.concat('66') ?? '#00000066' }]}
+        style={[styles.full, { backgroundColor: colors.surfaceVariant }]}
       >
         <View style={[styles.sheet, { backgroundColor: colors.surface }]}>
-          <View className={"flex  "} style={[styles.topBar, { borderBottomColor: colors.outlineVariant }]}>
+          <View className={"flex"} style={[styles.topBar, { borderBottomColor: colors.outlineVariant }]}>
 
 
-            <View className={"flex-0"} style={[styles.searchWrap, { backgroundColor: colors.surfaceVariant, borderColor: colors.outline }]}>
-              <SearchIcon size={18} color={colors.onSurfaceVariant} />
-              <TextInput
-                value={query}
-                onChangeText={(t) => {
-                  if (!touched) setTouched(true);
-                  setQuery(t);
-                }}
-                placeholder="Search city"
-                mode="flat"
-                dense
-                underlineColor="transparent"
-                activeUnderlineColor="transparent"
-                style={{ flex: 1, backgroundColor: 'transparent' }}
-                theme={{ colors: { onSurfaceVariant: colors.onSurfaceVariant } } as any}
-                autoFocus
-                autoCapitalize="words"
-                autoCorrect={false}
-                returnKeyType="search"
-                onSubmitEditing={() => runSearch(query)}
-              />
+            <View className={"flex flex-row items-center justify-center "}>
+              <View className={"w-3/4"} style={[styles.searchWrap, { backgroundColor: colors.surfaceVariant, borderColor: colors.outline }]}>
+                <SearchIcon size={18} color={colors.onSurfaceVariant} />
+                <TextInput
+                  value={query}
+                  onChangeText={(t) => {
+                    if (!touched) setTouched(true);
+                    setQuery(t);
+                  }}
+                  placeholder="Search city"
+                  mode="flat"
+                  dense
+                  underlineColor="transparent"
+                  activeUnderlineColor="transparent"
+                  style={{ flex: 1, backgroundColor: 'transparent' }}
+                  theme={{ colors: { onSurfaceVariant: colors.onSurfaceVariant } } as any}
+                  autoFocus
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  returnKeyType="search"
+                  onSubmitEditing={() => runSearch(query)}
+                />
+              </View>
+              <View className={"w-1/4"}>
+                <BackButton  addedClasses={"relative top-2 left-0 "}></BackButton>
+
+              </View>
+
             </View>
             <PrimaryButton className={"flex-1"}
               variant="text"
@@ -191,19 +177,29 @@ export const LocationSearchModal: React.FC<LocationSearchModalProps> = ({
             </PrimaryButton>
           </View>
 
+          {(!loading && results.length == 0) && (
+            <View className={"w-full px-8 h-full flex  items-center space-y-8 mt-8"}>
+              <MapPinIcon width={80} height={80}></MapPinIcon>
+              <Text className={"font-light"} variant={"bodyLarge"}>Type something in to search for your location.</Text>
+            </View>
+          )}
           {loading ? (
             <View style={[styles.loadingWrap, { backgroundColor: colors.surface }]}>
               <LoadingSpinner />
             </View>
-          ) : (
-            <FlatList
-              data={data}
-              keyExtractor={(item) => item.id}
-              renderItem={renderItem}
-              keyboardShouldPersistTaps="handled"
-              style={{ flex: 1 }}
-            />
-          )}
+          ) :
+            <View className={"px-8"}>
+              {
+              data.map((item, i) => (
+              <Pressable onPress={() => {
+                onPressLocation(item)
+              }} className={"w-full h-16 bg-white flex flex-row items-center gap-2"}>
+                <MapPinIcon></MapPinIcon>
+                <Text variant={"bodyLarge"}>{item.label ?? item?.rawQuery}</Text>
+              </Pressable>
+              ))
+              }
+          </View> }
         </View>
       </KeyboardAvoidingView>
     </Modal>
@@ -211,11 +207,9 @@ export const LocationSearchModal: React.FC<LocationSearchModalProps> = ({
 };
 
 const styles = StyleSheet.create({
-  full: { flex: 1, justifyContent: 'flex-end' },
+  full: { flex: 1 },
   sheet: {
-    maxHeight: '85%',
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
+
     overflow: 'hidden',
   },
   topBar: {

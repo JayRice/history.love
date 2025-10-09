@@ -1,17 +1,23 @@
-import PickedPhoto from '../../types/PickedPhoto';
-//
-// const [title, setTitle] = React.useState('');
-//
-// const [date, setDate] = React.useState<Date | null>(null);
-//
-// const [photos, setPhotos] = useState<PickedPhoto[]>([])
-//
-// const [location, setLocation] = React.useState<GeoLocation | null>(null);
 
 import Memory from "../../types/Memory"
 import { GeoLocation } from '../../types/GeoLocation';
 import fetchServer from "../fetchServer"
-export function addMemory(memory: Omit<Memory, "id" | "">) {
+import Photo from '@/src/types/Photo';
 
-  const response = fetchServer("/timeline/add_memory")
+export async function addMemory(memoryData: Omit<Memory, "id" | "">) {
+
+  const formData = new FormData();
+
+  memoryData.photos?.forEach((photo, index) => {
+    formData.append("memory_photos", {
+      uri: photo.uri,
+      type: "image/jpeg",
+      name: `photo_${index}.jpg`,
+    } as any);
+  });
+
+  formData.append("memoryData", JSON.stringify(memoryData))
+
+  return await fetchServer("/timeline/add_memory", formData, "POST")
+
 }

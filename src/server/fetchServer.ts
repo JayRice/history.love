@@ -19,7 +19,8 @@ function joinUrl(base: string, ...parts: string[]) {
 export default async function fetchServer(
   route: string,
   payload?: any,
-  method?: HttpMethod
+  method?: HttpMethod,
+  errorMessage?: string
 ) {
   if (!Constants.expoConfig?.extra?.api_url) {
     throw new Error("Missing expo extra.api_url");
@@ -40,7 +41,7 @@ export default async function fetchServer(
   };
   let body: string | undefined = undefined;
 
-  if (finalMethod !== "GET" && finalMethod !== "HEAD") {
+  if ( !(payload instanceof FormData) && finalMethod !== "GET" && finalMethod !== "HEAD") {
     headers["Content-Type"] = "application/json";
     body = payload != null ? JSON.stringify(payload) : "{}";
   }
@@ -49,8 +50,10 @@ export default async function fetchServer(
     const res = await fetch(url, {
       method: finalMethod,
       headers,
-      body,
+      body: (payload instanceof FormData) ? payload:body,
     });
+
+    console.log("fetch server response", res);
 
     // Try to detect non-JSON responses safely
     const contentType = res.headers.get("content-type") || "";

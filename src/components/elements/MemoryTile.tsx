@@ -1,23 +1,14 @@
 // components/MemoryTile.tsx
-import React from "react";
+import React, { useMemo } from 'react';
 import { View } from "react-native";
 import { Text, Chip, useTheme } from "react-native-paper";
 import { Image } from "expo-image";
 import { Lock } from "lucide-react-native";
 import Memory, { MemoryMood } from '@/src/types/Memory';
 
-const MOOD_EMOJI: Record<MemoryMood, string> = {
-  happy: "😊",
-  sad: "😢",
-  excited: "🤩",
-  relaxed: "😌",
-  angry: "😠",
-  anxious: "😬",
-  "in love": "🥰",
-  nostalgic: "🕰️",
-  tired: "🥱",
-  peaceful: "🕊️",
-};
+
+import { MOOD_EMOJI } from '@/constants';
+import { useMemoryImageStore } from '../../store/memoryImageStore';
 
 type Props = {
   memory: Memory;
@@ -26,6 +17,15 @@ type Props = {
 export function MemoryTile({ memory }: Props) {
   const theme = useTheme();
   const cover = memory.photos?.[0];
+
+  const memoryImages = useMemoryImageStore(s => s.memoryImages);
+
+  const coverURL = useMemo(() => {
+    if (!cover?.name) {return}
+    return memoryImages[cover.name]
+  }, [memoryImages, cover]);
+
+  console.log("coverURL", coverURL);
 
   // Compute aspect ratio for correct masonry sizing.
   // Fallback to 4:3 if unknown.
@@ -45,7 +45,7 @@ export function MemoryTile({ memory }: Props) {
   {/* ---------- IMAGE ---------- */}
   <Image
     // 👇 PLACE YOUR SRC HERE (prefer thumbUri first, then full):
-    source={{ uri: cover?.uri ?? "" }}
+    source={{ uri: coverURL }}
   style={{ width: "100%", aspectRatio }}
   contentFit="cover"
   cachePolicy="disk"

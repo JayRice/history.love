@@ -6,6 +6,8 @@ import { RelationshipEvent } from '@/src/types/Relationship';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { formatDate } from '@/src/utils/formatDate';
 import Memory from '@/src/types/Memory';
+import { MemoryCategory } from '@/src/types/Memory';
+
 
 
 
@@ -21,14 +23,14 @@ export const TimelineEventCard: React.FC<TimelineEventCardProps> = ({
 }) => {
   const colors = useThemeColors();
 
-  const getMemoryTypeColor = (type: string) => {
+  const getMemoryTypeColor = (type: MemoryCategory) => {
     switch (type) {
       case 'milestone': return colors.primary;
-      case 'memory': return '#FF9500';
-      case 'conflict': return colors.error;
-      case 'resolution': return '#34A853';
-      case 'special-date': return '#8E24AA';
-      case 'breakup': return colors.error;
+      case 'quality-time': return '#FF9500';
+      case 'challenge': return colors.error;
+      case 'gift': return '#34A853';
+      case 'family': return '#8E24AA';
+      case 'holiday': return colors.error;
       default: return colors.onSurfaceVariant;
     }
   };
@@ -54,7 +56,7 @@ export const TimelineEventCard: React.FC<TimelineEventCardProps> = ({
             <View className="flex-1">
               <View className="flex-row items-center mb-1">
                 <Text className="text-2xl mr-2">
-                  {getMoodEmoji(event.mood)}
+                  {getMoodEmoji(event.mood ?? "")}
                 </Text>
                 <Text variant="titleMedium" className="text-gray-900 font-semibold flex-1">
                   {event.title}
@@ -70,34 +72,20 @@ export const TimelineEventCard: React.FC<TimelineEventCardProps> = ({
                   <>
                     <MapPin size={14} color={colors.onSurfaceVariant} className="ml-3" />
                     <Text variant="bodySmall" className="text-gray-600 ml-1">
-                      {event.location}
+                      {event.location.label}
                     </Text>
                   </>
                 )}
               </View>
             </View>
-            
-            <Chip 
-              mode="flat"
-              textStyle={{ 
-                fontSize: 12, 
-                color: getMemoryTypeColor(event.eventType),
-                fontWeight: '500'
-              }}
-              style={{ 
-                backgroundColor: getMemoryTypeColor(event.eventType) + '20',
-                marginLeft: 8
-              }}
-            >
-              {event.eventType.replace('-', ' ')}
-            </Chip>
+
           </View>
 
           <Text variant="bodyMedium" className="text-gray-700 mb-3" numberOfLines={3}>
-            {event.description}
+            {event.note}
           </Text>
 
-          {event.tags.length > 0 && (
+          {event?.categories.length > 0 && (
             <View className="flex-row items-center flex-wrap">
               <Tag size={14} color={colors.onSurfaceVariant} />
               {event.tags.slice(0, 3).map((tag, index) => (

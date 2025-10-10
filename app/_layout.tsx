@@ -22,6 +22,8 @@ import getImages from '@/src/database/getImages';
 import { useImagesStore } from '@/src/store/imagesStore';
 import { useNotificationsStore } from '@/src/store/notificationsStore';
 import { Notification } from '@/src/types/Notification';
+import Memory from '@/src/types/Memory';
+import { useMemoryImageStore } from '@/src/store/memoryImageStore';
 
 export default function RootLayout() {
   return (
@@ -51,6 +53,9 @@ function InnerLayout() {
   const notifications = useNotificationsStore(s => s.notifications);
   const setNotifications = useNotificationsStore(s => s.setNotifications)
 
+  const memoryImages = useMemoryImageStore(s => s.memoryImages);
+  const setMemoryImage = useMemoryImageStore(s => s.setMemoryImage);
+
 
   const [profileLoading, setProfileLoading] = useState(true);
   const segments = useSegments();
@@ -61,20 +66,54 @@ function InnerLayout() {
     const urls = await getImages(`profile-images/${uid}`, [imageId]);
     return urls[0];
   }
+  async function fetchMemoryImages(memories: Memory[]) {
+    if (!authUser || !memories || !user) return null;
+    memories.forEach((memory) => {
+      if (!memory.photos) {return}
 
+      memory.photos.forEach(async (photo) => {
+        if (!photo.name) {return}
+
+        // already cached
+        if (memoryImages[photo.name]) {return;}
+
+        const urls = await getImages(`memory-images/${user?.partner?.relationship_id}/${memory.id}`, [photo.name])
+        const downloadURL = urls?.[0]
+        if (downloadURL){
+          setMemoryImage(photo.name, downloadURL);
+        }
+      })
+    })
+
+  }
+
+  useEffect(() => {
+    console.log("memory Images: ", memoryImages)
+  }, [memoryImages]);
   useEffect(() => {
     console.log("Reloading Instance")
   }, []);
 
   useEffect(() => {
-    if (!user ) return;
+    if (!user || !authUser || !user?.partner?.relationship_id ) return;
+
+
+    const unsubMemory = onSnapshot(collection(db, "relationships", user?.partner?.relationship_id, "memories"), (snap) => {
+      const memories = snap.docs.map(d => ({  ...d.data() } as Memory));
+
+      console.log("Memories: ", memories);
+
+      fetchMemoryImages(memories)
+      setMemories(memories);
+    });
+
     const q = query(
       collection(db, "users", user.id, "notifications"),
       where("readAt", "==", null),
       orderBy("createdAt", "desc"),
       limit(10)
     );
-    const unsub = onSnapshot(q, (snap) => {
+    const unsubNoti = onSnapshot(q, (snap) => {
       const notifs = snap.docs.map(d => ({  ...d.data() } as Notification));
 
       console.log("Notifications: ", notifs);
@@ -83,10 +122,14 @@ function InnerLayout() {
     });
 
 
-    return unsub;
+
+    return () => {
+      unsubNoti();
+      unsubMemory();
+    };
 
 
-  }, [user?.id]);
+  }, [user?.id, authUser]);
 
 
   // Get partners profile image

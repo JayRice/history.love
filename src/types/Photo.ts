@@ -1,7 +1,10 @@
 export default interface Photo {
-  url_name?: string;
+  name?: string;
   uri?: string;
   width: number;
   height: number;
   type: string;
+
+  // Data
+  downloadURL?: string;
 };

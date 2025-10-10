@@ -15,12 +15,15 @@ import  Relationship  from '@/src/types/Relationship';
 import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/userStore';
 import { getPartnerName } from '@/src/utils/getPartnerName.tsx';
-
+import { useRelationshipStore } from '@/src/store/relationshipStore';
+import {GalleryScreen} from "../../components/elements/GalleryScreen"
 
 
 export default function TimelineScreen() {
   const [relationships, setRelationships] = useState<Relationship[]>([]);
-  const [memories, setMemories] = useState<Memory[]>([]);
+
+  const memories = useRelationshipStore((s) => s.memories);
+
 
 
   const [loading, setLoading] = useState(true);
@@ -34,16 +37,7 @@ export default function TimelineScreen() {
   }, []);
 
   const loadTimelineData = async () => {
-    setLoading(true);
-    try {
-      const data = await getTimeline(0);
-      setRelationships(data.relationships);
-      setMemories(data.memories);
-    } catch (error) {
-      console.error('Failed to load timeline:', error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(false);
   };
 
   const handleRelationshipPress = (relationship: Relationship) => {
@@ -70,7 +64,7 @@ export default function TimelineScreen() {
   }
 
   const renderTimelineContent = () => {
-    if (memories.length === 0) {
+    if (memories?.length === 0) {
       return (
         <EmptyState
           title="No Timeline memories Yet"
@@ -83,18 +77,7 @@ export default function TimelineScreen() {
     }
 
     return (
-      <FlatList
-        data={memories}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TimelineEventCard 
-            event={item}
-            onPress={() => handleMemoryPress(item)}
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      />
+      ( memories ? <GalleryScreen items={memories}></GalleryScreen> : <LoadingSpinner></LoadingSpinner> )
     );
   };
 
@@ -131,7 +114,7 @@ export default function TimelineScreen() {
     <Screen>
       <SectionHeader 
         title="Relationship Timeline"
-        subtitle={`${memories.length} memories across ${relationships.length} relationships`}
+        subtitle={`${memories?.length} memories across ${relationships.length} relationships`}
       />
 
       <View className="flex-row mb-6">

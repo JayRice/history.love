@@ -45,7 +45,7 @@ export default function AddMemoryScreen() {
   const [privateNote, setPrivateNote] = React.useState('');
 
   const isDisabled = useCallback(() => {
-    return !title.trim() || !date || !location || !categories || !mood || !note;
+    return !title || !date || !location || !categories || !mood || !note;
   }, [title, date, photos, location])
 
   const handlePress = async () => {

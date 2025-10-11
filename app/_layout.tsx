@@ -24,11 +24,14 @@ import { useNotificationsStore } from '@/src/store/notificationsStore';
 import { Notification } from '@/src/types/Notification';
 import Memory from '@/src/types/Memory';
 import { useMemoryImageStore } from '@/src/store/memoryImageStore';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <InnerLayout />
+      <GestureHandlerRootView style={{flex:1}}>
+        <InnerLayout />
+      </GestureHandlerRootView>
     </AuthProvider>
   );
 }
@@ -88,9 +91,6 @@ function InnerLayout() {
   }
 
   useEffect(() => {
-    console.log("memory Images: ", memoryImages)
-  }, [memoryImages]);
-  useEffect(() => {
     console.log("Reloading Instance")
   }, []);
 
@@ -101,7 +101,6 @@ function InnerLayout() {
     const unsubMemory = onSnapshot(collection(db, "relationships", user?.partner?.relationship_id, "memories"), (snap) => {
       const memories = snap.docs.map(d => ({  ...d.data() } as Memory));
 
-      console.log("Memories: ", memories);
 
       fetchMemoryImages(memories)
       setMemories(memories);
@@ -116,7 +115,6 @@ function InnerLayout() {
     const unsubNoti = onSnapshot(q, (snap) => {
       const notifs = snap.docs.map(d => ({  ...d.data() } as Notification));
 
-      console.log("Notifications: ", notifs);
 
       setNotifications(notifs);
     });

@@ -1,6 +1,6 @@
 // components/MemoryTile.tsx
 import React, { useMemo } from 'react';
-import { View } from "react-native";
+import { Pressable, View } from 'react-native';
 import { Text, Chip, useTheme } from "react-native-paper";
 import { Image } from "expo-image";
 import { Lock } from "lucide-react-native";
@@ -41,7 +41,11 @@ export function MemoryTile({ memory }: Props) {
       backgroundColor: theme.colors.surface,
       borderWidth: 1,
       borderColor: theme.colors.outlineVariant ?? theme.colors.outline,
-  }} >
+  }}
+    onPress={() => {
+
+    }}
+    >
   {/* ---------- IMAGE ---------- */}
   <Image
     // 👇 PLACE YOUR SRC HERE (prefer thumbUri first, then full):

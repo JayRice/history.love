@@ -36,9 +36,6 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
   const open = useLocationModalStore(s => s.open)
 
   const handleOpenLocationSearch = async () => {
-    console.log("in location search modal")
-
-
     const picked = await open();
     if (picked) onChange(picked);
   };

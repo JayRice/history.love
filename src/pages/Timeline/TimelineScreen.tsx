@@ -14,9 +14,10 @@ import Memory from "../../types/Memory"
 import  Relationship  from '@/src/types/Relationship';
 import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/userStore';
-import { getPartnerName } from '@/src/utils/getPartnerName.tsx';
+import { getPartnerName } from '@/src/utils/getPartnerName';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import {GalleryScreen} from "../../components/elements/GalleryScreen"
+import { useStoryModeStore } from '@/src/store/useStoryModeStore';
 
 
 export default function TimelineScreen() {
@@ -28,6 +29,12 @@ export default function TimelineScreen() {
 
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'relationships' | 'timeline'>('timeline');
+
+  const open = useStoryModeStore(s => s.open);
+
+  const onPressItem = async (index: number) => {
+    await open();
+  }
 
   const user = useUserStore(s => s.user);
   const colors = useThemeColors();
@@ -77,7 +84,7 @@ export default function TimelineScreen() {
     }
 
     return (
-      ( memories ? <GalleryScreen items={memories}></GalleryScreen> : <LoadingSpinner></LoadingSpinner> )
+      ( memories ? <GalleryScreen items={memories} onPressItem={onPressItem}></GalleryScreen> : <LoadingSpinner></LoadingSpinner> )
     );
   };
 
@@ -112,6 +119,8 @@ export default function TimelineScreen() {
 
   return (
     <Screen>
+
+
       <SectionHeader 
         title="Relationship Timeline"
         subtitle={`${memories?.length} memories across ${relationships.length} relationships`}

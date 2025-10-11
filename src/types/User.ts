@@ -88,6 +88,6 @@ export default interface User {
   }
 
   data? : {
-
+    streak: number;
   }
 }

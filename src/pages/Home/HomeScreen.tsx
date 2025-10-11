@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Pressable } from 'react-native';
 import { Text, Card } from 'react-native-paper';
-import { Calendar, BookOpen, Shield, User, Heart } from 'lucide-react-native';
+import { Calendar, BookOpen, Shield, User, Heart, Icon } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
 import { useAuth } from '@/src/contexts/AuthContext';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
@@ -13,6 +13,9 @@ import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { useNotificationsStore } from '@/src/store/notificationsStore';
 import markRead from '@/src/database/notifications/markRead';
+import { Ionicons } from "@expo/vector-icons";
+import { HorizontalScrollList } from '@/src/components/layout/HorizontalScrollList';
+
 
 
 interface DashboardCardProps {
@@ -59,6 +62,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   );
 };
 
+function NavigationButtons({onPress} : {onPress}) {
+  return (
+    <Pressable onPress={() => onPress} className={"rounded-full h-8 w-h"}>
+
+    </Pressable>
+  )
+}
+
 export default function HomeScreen() {
   const user = useUserStore((state) => state.user);
   const colors = useThemeColors();
@@ -96,66 +107,50 @@ export default function HomeScreen() {
     }
   }, []);
 
-  const dashboardItems = [
-    {
-      title: 'Relationship Timeline',
-      description: 'Document and explore your relationship journey with interactive timelines',
-      icon: <Calendar size={24} color={colors.primary} />,
-      color: colors.primary,
-      onPress: () => router.push('/(app)/timeline'),
-    },
-    {
-      title: 'Journal & Reflections',
-      description: 'Capture thoughts, feelings, and memories with AI-powered prompts',
-      icon: <BookOpen size={24} color="#FF9500" />,
-      color: '#FF9500',
-      onPress: () => router.push('/(app)/journal'),
-    },
-    {
-      title: 'Consent Verification',
-      description: 'Secure, timestamped consent records for important moments',
-      icon: <Shield size={24} color="#34A853" />,
-      color: '#34A853',
-      onPress: () => router.push('/consent'),
-    },
-    {
-      title: 'Profile & Privacy',
-      description: 'Manage your profile, privacy settings, and relationship status',
-      icon: <User size={24} color={colors.secondary} />,
-      color: colors.secondary,
-      onPress: () => router.push('/(app)/profile'),
-    },
-  ];
+  const navigationButtonData = [
+    {name: "Quizzes",
+
+    }
+  ]
 
   return (
     <Screen scrollable>
       <View className="mb-8">
-        <PrimaryButton onPress={() => router.push("/pair")}>/pair</PrimaryButton>
-        <PrimaryButton onPress={() => router.push("/pair_congratulations")}>/pair-congratulations</PrimaryButton>
 
 
-        <View className="flex-row items-center mb-2">
-          <Heart size={24} color={colors.primary} fill={colors.primary} className="mr-2" />
+        <View className="flex-row w-full justify-between items-center mb-2">
           <Text variant="headlineMedium" className="text-gray-900 font-bold">
-            Welcome back, {user?.profile?.first_name}
+            Home
           </Text>
+
+          <View style={{backgroundColor: colors.card_surface}} className={"flex-row gap-1 px-2 py-1 rounded-lg justify-center items-center "}>
+            <Ionicons name="flame" size={28} color="#ff5a1f" />
+            <Text className={"font-bold"} variant={"bodyMedium"}>{user?.data?.streak || 0}</Text>
+          </View>
+
         </View>
         <Text variant="bodyLarge" className="text-gray-600">
           Your relationship journey awaits. What would you like to explore today?
         </Text>
+
+        {/*<HorizontalScrollList  data={items}*/}
+        {/*                       renderItem={({ item }) => (*/}
+        {/*                         <View*/}
+        {/*                           style={{*/}
+        {/*                             backgroundColor: "#333",*/}
+        {/*                             padding: 20,*/}
+        {/*                             borderRadius: 16,*/}
+        {/*                             width: 120,*/}
+        {/*                             alignItems: "center",*/}
+        {/*                           }}*/}
+        {/*                         >*/}
+        {/*                           <Text style={{ color: "white" }}>{item.title}</Text>*/}
+        {/*                         </View>*/}
+        {/*                       )}/>*/}
       </View>
 
       <View>
-        {dashboardItems.map((item, index) => (
-          <DashboardCard
-            key={index}
-            title={item.title}
-            description={item.description}
-            icon={item.icon}
-            color={item.color}
-            onPress={item.onPress}
-          />
-        ))}
+
       </View>
 
       <View className="mt-8 p-6 bg-gradient-to-r from-primary/10 to-accent-pink/10 rounded-2xl">

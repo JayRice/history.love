@@ -167,6 +167,8 @@ export default function DateInput({
 
 // MM/DD/YYYY with leading zeros
 function fmt(d: Date) {
+  console.log("d:", d)
+  if(!d) {return}
   const mm = String(d.getMonth() + 1).padStart(2, '0');
   const dd = String(d.getDate()).padStart(2, '0');
   const yyyy = d.getFullYear();

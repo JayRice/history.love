@@ -7,4 +7,7 @@ export default interface Photo {
 
   // Data
   downloadURL?: string;
+
+  storedOn?: string;
+
 };

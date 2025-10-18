@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Image, Dimensions, Platform } from 'react-native';
+import { View, Dimensions, Platform } from 'react-native';
 import { Text, Card, Avatar, Divider } from 'react-native-paper';
-import { CreditCard as Edit3, MapPin, Heart, Users, Eye, EyeOff, Apple } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
-import { SectionHeader } from '@/src/components/layout/SectionHeader';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
-import { ToggleField } from '@/src/components/inputs/ToggleField';
-import { useAuth } from '@/src/hooks/useAuth';
+
 import { useThemeColors } from '@/src/hooks/useThemeColors';
-import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 import Swiper from "react-native-swiper";
 import Logo from "@/assets/images/logo.svg";
 

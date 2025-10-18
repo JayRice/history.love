@@ -1,3 +1,3 @@
-import LocationSearchScreen from '@/src/pages/Location/LocationSearchScreen';
+import { LocationSearchScreen } from '@/src/pages/Location/LocationSearchScreen';
 
 export default LocationSearchScreen

@@ -1,5 +1,5 @@
 // PhotoInput.tsx
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View, Image, Pressable, FlatList, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Text } from 'react-native-paper';
@@ -10,29 +10,40 @@ import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
 import Photo from "../../types/Photo"
+import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 
 type PhotoInputProps = {
   photos: Photo[];
   setPhotos: (next: Photo[]) => void;
   maxPhotos?: number; // default = unlimited
+  minPhotos?: number;
   title?: string;
   // If true, when picking "Change photos" replaces the whole list; otherwise it appends (respecting max)
   replaceOnChange?: boolean;
+  displayPhotos?: Photo[];
+  onDelete?: (photo: Photo) => void;
 };
 
 export const PhotoInput: React.FC<PhotoInputProps> = ({
                                                         photos,
                                                         setPhotos,
                                                         maxPhotos,
+                                                        minPhotos=1,
                                                         title = 'Photos',
                                                         replaceOnChange = true,
+                                                        displayPhotos = [],
+                                                        onDelete = () => {},
+
+
                                                       }) => {
   const colors = useThemeColors();
 
+  const [loading, setLoading ] = useState<boolean>(false);
+
   const remaining = useMemo(() => {
     if (typeof maxPhotos !== 'number') return Number.MAX_SAFE_INTEGER;
-    return Math.max(0, maxPhotos - photos.length);
-  }, [maxPhotos, photos.length]);
+    return Math.max(0, maxPhotos - (photos.length + displayPhotos.length || 0));
+  }, [maxPhotos, photos.length, displayPhotos.length]);
 
   const requestMediaPermission = useCallback(async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -61,6 +72,7 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
           ? (typeof maxPhotos === 'number' ? maxPhotos : 0) || 0 // 0 means "platform default unlimited"
           : (remaining === Number.MAX_SAFE_INTEGER ? 0 : remaining);
 
+      setLoading(true)
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
@@ -69,7 +81,7 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
         selectionLimit, // 0 = no explicit cap (platform default). On iOS 14+, Android recent Expo SDKs this is supported.
       });
 
-      if (result.canceled) return;
+      if (result.canceled) return setLoading(false);
 
       const selected = mapAssets(result.assets ?? []);
 
@@ -85,8 +97,9 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
 
         setPhotos(capped);
       }
+      setLoading(false);
     },
-    [maxPhotos, photos, remaining, replaceOnChange, requestMediaPermission, setPhotos]
+    [maxPhotos, photos, remaining, replaceOnChange, requestMediaPermission, setPhotos, displayPhotos]
   );
 
   const removeAt = useCallback(
@@ -95,10 +108,14 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
       next.splice(idx, 1);
       setPhotos(next);
     },
-    [photos, setPhotos]
+    [photos, setPhotos, displayPhotos]
   );
 
   const reachedMax = typeof maxPhotos === 'number' && photos.length >= maxPhotos;
+
+  const reachedMin = useMemo(() => {
+    return typeof minPhotos === "number" && (photos.length + displayPhotos.length) === minPhotos;
+  }, [photos.length, displayPhotos.length])
 
   return (
     <View style={[styles.container, { borderColor: colors.outline }]}>
@@ -130,8 +147,8 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
           },
         ]}
       >
-        {photos.length === 0 ? (
-          <View style={styles.emptyState}>
+        { loading ?  <LoadingSpinner /> : (photos.length === 0 && displayPhotos.length === 0 ) ? (
+           <View style={styles.emptyState}>
             <ImageIcon size={28} color={colors.onSurfaceVariant} />
             <Text style={{ color: colors.onSurfaceVariant, marginTop: 8 }}>
               No photos yet. Tap “Add photos”.
@@ -139,30 +156,41 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
           </View>
         ) : (
           <FlatList
-            data={photos}
+            data={[...displayPhotos, ...photos]}
             keyExtractor={(item) => item?.uri}
             numColumns={3}
             contentContainerStyle={{ gap: 8 }}
             columnWrapperStyle={{ gap: 8 }}
-            renderItem={({ item, index }) => (
-              <View style={[styles.thumbWrap, { backgroundColor: colors.surface }]}>
-                <Image
-                  source={{ uri: item.uri }}
-                  style={styles.thumb}
-                  resizeMode="cover"
-                />
-                <Pressable
-                  onPress={() => removeAt(index)}
-                  style={[
-                    styles.removeBtn,
-                    { backgroundColor: colors.surface, borderColor: colors.outlineVariant },
-                  ]}
-                  android_ripple={{ borderless: true }}
-                >
-                  <XIcon size={14} color={colors.onSurface} />
-                </Pressable>
-              </View>
-            )}
+            renderItem={({ item, index }) => {
+
+              const isDisplayPhoto = displayPhotos.filter((photo) => photo.name === item?.name).length > 0;
+              return (
+                <View style={[styles.thumbWrap, { backgroundColor: colors.surface }]}>
+                  <Image
+                    source={{ uri: item.uri }}
+                    style={[styles.thumb,
+                      isDisplayPhoto ? {borderColor: colors.primary, borderWidth: 6 }:{}
+                    ]}
+                    resizeMode="cover"
+                  />
+                  {!reachedMin && <Pressable
+                    onPress={() => {
+                      onDelete(item);
+                      removeAt(index)
+
+                    }}
+                    style={[
+                      styles.removeBtn,
+                      { backgroundColor: colors.surface, borderColor: colors.outlineVariant },
+                    ]}
+                    android_ripple={{ borderless: true }}
+                  >
+                    <XIcon size={14} color={colors.onSurface} />
+                  </Pressable>}
+                </View>
+              )
+            }
+            }
           />
         )}
       </View>
@@ -181,9 +209,10 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
       {/* Helper text: remaining counter if max provided */}
       {typeof maxPhotos === 'number' && (
         <Text style={{ marginTop: 8, color: colors.onSurfaceVariant }}>
-          {photos.length}/{maxPhotos} selected
+          {maxPhotos - remaining}/{maxPhotos} selected
         </Text>
       )}
+
     </View>
   );
 };

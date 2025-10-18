@@ -11,6 +11,7 @@ import { GeoLocation } from '@/src/types/GeoLocation';
 import { LocationSearchModal } from '@/src/components/modals/LocationSearchModal';
 import { useLocationModalStore } from '@/src/store/useLocationModalStore';
 import { router } from 'expo-router';
+import { useModal } from '../../contexts/ModalContext';
 
 type LocationPickerProps = {
   value: GeoLocation | null;
@@ -20,6 +21,8 @@ type LocationPickerProps = {
   disabled?: boolean;
   error?: string;
 };
+
+
 
 export const LocationPicker: React.FC<LocationPickerProps> = ({
                                                                 value,
@@ -33,11 +36,12 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
 
 
 
-  const open = useLocationModalStore(s => s.open)
+  const { openModal } = useModal();
+
 
   const handleOpenLocationSearch = async () => {
-    const picked = await open();
-    if (picked) onChange(picked);
+    const loc = await openModal<GeoLocation>('location_search');
+    if (loc) onChange(loc);
   };
 
   const caption = useMemo(() => {

@@ -15,12 +15,12 @@ import { BackButton } from '@/src/components/buttons/BackButton';
 import DatePicker from '@/src/components/inputs/DatePicker';
 import { PhotoInput } from '@/src/components/inputs/PhotoInput';
 import { LocationPicker } from '@/src/components/inputs/LocationPicker';
-import { useLocationModalStore } from '../../store/useLocationModalStore';
 import { GeoLocation } from '@/src/types/GeoLocation';
 import { addMemory } from '../../server/set/addMemory';
 import Memory, { MemoryCategory, MemoryCategoryList, MemoryMood, MemoryMoodList } from '../../types/Memory';
 import { CategoryPicker } from '@/src/components/inputs/CategoryPicker';
 import Photo from "../../types/Photo"
+import {useAuth} from '@/src/contexts/AuthContext';
 
 export default function AddMemoryScreen() {
 
@@ -38,30 +38,30 @@ export default function AddMemoryScreen() {
 
   const [categories, setCategories] = React.useState<MemoryCategory[] | null>(null);
 
-  const [mood, setMood] = React.useState<MemoryMood | null>();
+  const [mood, setMood] = React.useState<MemoryMood | null>()
 
+
+  const {authUser}  = useAuth();
 
   const [note, setNote] = React.useState('');
   const [privateNote, setPrivateNote] = React.useState('');
 
-  const isDisabled = useCallback(() => {
-    return !title || !date || !location || !categories || !mood || !note;
-  }, [title, date, photos, location])
-
+  const isDisabled = () => {
+    return !(title && date && location && categories && mood && note);
+  }
   const handlePress = async () => {
-    if (isDisabled()) {return}
+    if (isDisabled() || !authUser) {return}
 
 
     const memoryData: Omit<Memory, "id"> = {
       title: title,
-      date: date!,
+      date: date!.toISOString(),
       location: location,
       mood: mood!,
       categories:  categories,
-      note: note,
-      private_note: privateNote,
+      notes: [{ createdBy: authUser.uid, note: note }],
+      privateNotes: [{ createdBy: authUser.uid, note: privateNote }],
       photos: photos,
-
     }
     setLoading(true);
     const response = await addMemory(memoryData)
@@ -77,7 +77,7 @@ export default function AddMemoryScreen() {
 
 
         <View className={"h-20 sticky"}>
-          <BackButton></BackButton>
+          <BackButton />
         </View>
         <Text   variant={"headlineMedium"} className={"font-bold"}>Add a memory to your timeline</Text>
 

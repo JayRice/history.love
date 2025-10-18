@@ -17,7 +17,7 @@ import { useUserStore } from '@/src/store/userStore';
 import { getPartnerName } from '@/src/utils/getPartnerName';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import {GalleryScreen} from "../../components/elements/GalleryScreen"
-import { useStoryModeStore } from '@/src/store/useStoryModeStore';
+import { useModal } from '../../contexts/ModalContext';
 
 
 export default function TimelineScreen() {
@@ -30,10 +30,14 @@ export default function TimelineScreen() {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'relationships' | 'timeline'>('timeline');
 
-  const open = useStoryModeStore(s => s.open);
+  const { openModal, closeModal, modals } = useModal();
+  const currentModal = modals[modals.length - 1];
+
 
   const onPressItem = async (index: number) => {
-    await open();
+    await openModal("story_mode", {memories: memories, initialIndex: index, onClose: () => {
+      closeModal(currentModal.id);
+    } });
   }
 
   const user = useUserStore(s => s.user);

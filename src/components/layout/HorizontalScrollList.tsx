@@ -9,6 +9,7 @@ type HorizontalScrollListProps<T> = {
   horizontalSpacing?: number; // gap between items
   showsScrollIndicator?: boolean;
   snapToInterval?: number; // optional for snapping behavior
+  className?: string;
 };
 
 /**
@@ -23,25 +24,29 @@ export function HorizontalScrollList<T>({
                                           horizontalSpacing = 12,
                                           showsScrollIndicator = false,
                                           snapToInterval,
+                                          className=""
                                         }: HorizontalScrollListProps<T>) {
   return (
-    <FlatList
-      data={data}
-      horizontal
-      showsHorizontalScrollIndicator={showsScrollIndicator}
-      keyExtractor={keyExtractor ?? ((_, i) => i.toString())}
-      renderItem={({ item, index }) => (
-        <View style={{ marginRight: index === data.length - 1 ? 0 : horizontalSpacing }}>
-          {renderItem({ item, index })}
-        </View>
-      )}
-      contentContainerStyle={[
-        { paddingHorizontal: 16 },
-        contentContainerStyle,
-      ]}
-      decelerationRate="fast"
-      snapToInterval={snapToInterval}
-      snapToAlignment="center"
-    />
+    <View className={className}>
+      <FlatList
+        data={data}
+        horizontal
+        showsHorizontalScrollIndicator={showsScrollIndicator}
+        keyExtractor={keyExtractor ?? ((_, i) => i.toString())}
+        renderItem={({ item, index }) => (
+          <View style={{ marginRight: index === data.length - 1 ? 0 : horizontalSpacing }}>
+            {renderItem({ item, index })}
+          </View>
+        )}
+        contentContainerStyle={[
+          { paddingHorizontal: 4 },
+          contentContainerStyle,
+        ]}
+        decelerationRate="fast"
+        snapToInterval={snapToInterval}
+        snapToAlignment="center"
+      />
+    </View>
+
   );
 }

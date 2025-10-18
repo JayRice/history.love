@@ -1,203 +1,277 @@
 // CloudText.tsx
-import React, { memo, useEffect } from 'react';
-import { View, Text, Pressable, StyleSheet, ViewStyle } from 'react-native';
+import React, { memo, useEffect, useMemo, useState } from 'react';
+import { View, Text, Pressable, StyleSheet, ViewStyle, ScrollView } from 'react-native';
 import Animated, {
   useSharedValue,
+  useAnimatedStyle,
   withRepeat,
   withTiming,
-  useAnimatedStyle,
-  interpolate, Extrapolate
+  interpolate,
+  Extrapolate,
+  runOnJS,
 } from 'react-native-reanimated';
+import Svg, { Path, G } from 'react-native-svg';
 
 type CloudTextProps = {
+  id?: string
   text: string;
-  onPress?: () => void;
-  /** Optional: tweak sizes/colors/position */
+  onPress?: (id: string) => void;
+  /** position the anchor: (0,0) is the **start of the tail** */
   style?: ViewStyle;
-  maxWidth?: number;     // max width of the bubble
-  bubblePaddingH?: number;
-  bubblePaddingV?: number;
-  bubbleColor?: string;
+
+  /** visuals */
+  bubbleColor?: string;       // fill
+  outlineColor?: string;      // stroke
   textColor?: string;
-  tailDotCount?: number; // number of dots in the tail line
-  tailLength?: number;   // total length (px) of tail from anchor to bubble
-  tailSpread?: number;   // lateral spread arc (px)
-  durationMs?: number;   // pulse duration for one wave
+
+  /** layout for collapsed state */
+  width?: number;             // cloud width (collapsed)
+  height?: number;            // cloud height (collapsed)
+  tailLength?: number;        // px along x from anchor to cloud
+  tailRise?: number;          // how high (negative is up)
+
+  /** interactivity */
+  closable?: boolean;         // show "X" button
+  onClose?: () => void;
+  flip?: boolean;             // mirror horizontally (tail goes the other way)
+  expandOnPress?: boolean;
+  expandWidth?: number;
+  expandHeight?: number;
+
+  scale?: number;
 };
 
 export const CloudText = memo(function CloudText({
+                                                   id ,
                                                    text,
                                                    onPress,
                                                    style,
-                                                   maxWidth = 260,
-                                                   bubblePaddingH = 14,
-                                                   bubblePaddingV = 10,
-                                                   bubbleColor = '#fff',
-                                                   textColor = '#000',
-                                                   tailDotCount = 8,
-                                                   tailLength = 90,
-                                                   tailSpread = 28,
-                                                   durationMs = 1400,
+                                                   bubbleColor = '#ffffff',
+                                                   outlineColor = '#000000',
+                                                   textColor = '#000000',
+
+                                                   width = 220,
+                                                   height = 130,
+                                                   tailLength = 72,
+                                                   tailRise = -28,
+
+                                                   closable = false,
+                                                   onClose,
+                                                   flip = false,
+                                                   expandOnPress = true,
+                                                   expandWidth = 320,
+                                                   expandHeight = 420,
+
+                                                  scale = 1
                                                  }: CloudTextProps) {
-  /**
-   * Absolute component with (0,0) as the tail start (anchor).
-   * Bubble is positioned up/right from the anchor; tail dots curve from anchor to bubble.
-   */
+  // animation driver (0..1 repeating)
   const t = useSharedValue(0);
+  useEffect(() => {
+    t.value = withRepeat(withTiming(1, { duration: 1600 }), -1, false);
+  }, []);
+
+  // expansion state
+  const [expanded, setExpanded] = useState(false);
+
+  // animate size & position
+  const w = useSharedValue(width);
+  const h = useSharedValue(height);
+  const bx = useSharedValue(tailLength * (flip ? -1 : 1));
+  const by = useSharedValue(tailRise);
 
   useEffect(() => {
-    // drive a looping time value [0..1]
-    t.value = withRepeat(withTiming(1, { duration: durationMs }), -1, false);
-  }, [durationMs]);
+    // keep base positions synced with props (in case parent re-renders with different values)
+    if (!expanded) {
+      w.value = width;
+      h.value = height;
+      bx.value = tailLength * (flip ? -1 : 1);
+      by.value = tailRise;
+    }
+  }, [width, height, tailLength, tailRise, flip, expanded]);
 
-  // Bubble position relative to anchor:
-  // place the bubble “end” of the tail at (tailLength, -tailSpread)
-  const bubbleOffsetX = tailLength;
-  const bubbleOffsetY = -tailSpread;
-
-  // Tail dots positions along a simple curve y = -tailSpread * (s)^0.9, x = tailLength * s
-  const dots = new Array(tailDotCount).fill(0).map((_, i) => {
-    const s = (i + 1) / (tailDotCount + 1); // 0..1 (avoid 0 exactly so first dot appears)
-    const x = tailLength * s;
-    const y = -Math.pow(s, 0.9) * tailSpread;
-    const size = 6 + 4 * s; // dots get a little larger as they approach the bubble
-    const delayPhase = s;   // used to stagger the wave
-    return { x, y, size, delayPhase, key: `d${i}` };
+  const breathe = useAnimatedStyle(() => {
+    const scale = interpolate(t.value, [0, 0.5, 1], [1, 1.025, 1], Extrapolate.CLAMP);
+    return { transform: [{ scale }] };
   });
 
-  const Bubble = () => {
-    // Make the bubble itself gently breathe
-    const bubbleAnim = useAnimatedStyle(() => {
-      const scale = interpolate(
-        t.value,
-        [0, 0.5, 1],
-        [1, 1.03, 1],
-        Extrapolate.CLAMP
-      );
-      return { transform: [{ scale }] };
+  const bubbleStyle = useAnimatedStyle(() => ({
+    position: 'absolute',
+    left: bx.value,
+    top: by.value,
+    width: w.value,
+    height: h.value,
+  }));
+
+  // 3 tail dots from anchor (0,0) to bubble
+  const dots = useMemo(() => {
+    // fractions along the path
+    const S = [0.25, 0.55, 0.85];
+    return S.map((s, i) => {
+      const x = (tailLength * (flip ? -1 : 1)) * s;
+      const y = Math.pow(s, 0.9) * Math.abs(tailRise); // curve upward
+      const size = [7, 11, 15][i];
+      return { x, y: Math.sign(tailRise) * y, size, phase: s };
+    });
+  }, [tailLength, tailRise, flip]);
+
+  const tailPulse = (phase: number) =>
+    useAnimatedStyle(() => {
+      const p = (t.value + 1 - phase) % 1;
+      const scale = interpolate(p, [0, 0.5, 1], [0.85, 1.15, 0.85]);
+      const opacity = interpolate(p, [0, 0.25, 0.6, 1], [0.35, 0.95, 0.95, 0.35]);
+      return { opacity, transform: [{ scale }] };
     });
 
-    return (
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            left: bubbleOffsetX,
-            top: bubbleOffsetY,
-          },
-          styles.bubbleShadow,
-          bubbleAnim,
-        ]}
-      >
-        <Pressable
-          onPress={onPress}
-          style={[
-            styles.bubble,
-            {
-              backgroundColor: bubbleColor,
-              maxWidth,
-              paddingHorizontal: bubblePaddingH,
-              paddingVertical: bubblePaddingV,
-            },
-          ]}
-        >
-          <Text
-            style={[styles.text, { color: textColor }]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {text}
-          </Text>
-
-          {/* little bottom “cloudy” fringe to sell the look */}
-          <View style={styles.fringeRow}>
-            {[...Array(5)].map((_, i) => (
-              <View
-                key={`f${i}`}
-                style={[
-                  styles.fringeDot,
-                  { backgroundColor: bubbleColor, marginHorizontal: 3, width: 6 + i % 2, height: 6 + i % 2 },
-                ]}
-              />
-            ))}
-          </View>
-        </Pressable>
-      </Animated.View>
-    );
+  // tap to expand/collapse
+  const handlePress = () => {
+    console.log("pressed")
+    if(!id) {return}
+    onPress?.(id);
   };
 
+  // cloud path: normalized viewBox 200x140, scaled by width/height
+  // (hand-tuned cartoon cloud—puffy + outline)
+  const CloudSVG = () => (
+    <Svg width="100%" height="100%" viewBox="0 0 200 140">
+      <G transform={`translate(${0}, ${0}) ${flip ? 'scale(-1,1) translate(-200,0)' : ''}`}>
+        <Path
+          d="M62 36c8-18 40-22 56-7 18-16 46-5 50 16 18 2 28 18 24 34 6 18-10 36-28 36H58c-22 0-36-16-34-34-19-10-18-38 6-44 6-12 20-14 32-1 0 0 0 0 0 0z"
+          fill={bubbleColor}
+          stroke={outlineColor}
+          strokeWidth={3}
+        />
+      </G>
+    </Svg>
+  );
+
+
+
   return (
-    <View className={"border-1 border-black"} style={[styles.container, style]}>
-      {/* Tail dots from anchor (0,0) to bubble offset */}
-      {dots.map(({ x, y, size, delayPhase, key }) => {
-        const sDot = useAnimatedStyle(() => {
-          // Make a wave that travels forward: we phase-shift by the dot's delay
-          const phase = (t.value + 1 - delayPhase) % 1; // 0..1
-          const scale = interpolate(phase, [0, 0.5, 1], [0.85, 1.15, 0.85]);
-          const opacity = interpolate(phase, [0, 0.3, 0.6, 1], [0.35, 0.9, 0.9, 0.35]);
-          return {
-            opacity,
-            transform: [{ scale }],
-          };
-        });
+    <View style={
+      [style,
+      styles.anchor,
+
+      // scale from the anchor (component origin)
+      { transform: [{ scale }], overflow: 'visible' },
+    ]} pointerEvents="box-none">
+      {/* click-away overlay when expanded */}
+      {expanded && (
+        <Pressable
+          onPress={() => handlePress()}
+          style={StyleSheet.absoluteFill}
+        />
+      )}
+
+      {/* Tail: 3 dots */}
+      {dots.map(({ x, y, size, phase }, idx) => {
+        const s = tailPulse(phase);
         return (
           <Animated.View
-            key={key}
+            key={idx}
             style={[
               styles.dot,
-              sDot,
+              s,
               {
-                left: x - size / 2,
-                top: y - size / 2,
+                left: (x - size / 2) + (flip ? 80 : 40),
+                top: (y - size / 2) + (100),
                 width: size,
                 height: size,
+                backgroundColor: bubbleColor,
+                borderColor: outlineColor,
               },
             ]}
           />
         );
       })}
 
-      <Bubble />
+      {/* Bubble */}
+      <Animated.View style={[bubbleStyle, breathe, styles.bubbleWrap]} pointerEvents="box-none">
+        <Pressable onPress={handlePress} style={[StyleSheet.absoluteFill, {zIndex: 50}]} />
+
+        {/* SVG cloud */}
+        <CloudSVG />
+
+
+
+        {/* inner content layer */}
+        <View style={styles.content} pointerEvents="none">
+          {expanded ? (
+            <ScrollView
+              style={StyleSheet.absoluteFill}
+              contentContainerStyle={{ padding: 14, paddingTop: 16 }}
+              showsVerticalScrollIndicator={false}
+            >
+              <Text style={[styles.textExpanded, { color: textColor }]}>{text}</Text>
+            </ScrollView>
+          ) : (
+            <View style={styles.inlineTextBox}>
+              <Text
+                style={[styles.textInline, { color: textColor }]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {text}
+              </Text>
+            </View>
+          )}
+        </View>
+
+
+      </Animated.View>
     </View>
   );
 });
 
 const styles = StyleSheet.create({
-  container: {
-    position: 'absolute', // anchor: (0,0) is the start of the tail
-    // caller decides where to place this inside a relatively positioned parent
+  anchor: {
+    position: 'absolute', // (0,0) here = start of the tail
+    overflow: 'visible',
   },
   dot: {
     position: 'absolute',
     borderRadius: 999,
-    backgroundColor: '#ffffff',
+    borderWidth: 2,
     shadowColor: '#000',
     shadowOpacity: 0.12,
-    shadowRadius: 4,
+    shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
     elevation: 2,
   },
-  bubble: {
-    borderRadius: 18,
+  bubbleWrap: {
+    overflow: 'visible',
   },
-  bubbleShadow: {
-    shadowColor: '#000',
-    shadowOpacity: 0.18,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 8,
+  content: {
+    position: 'absolute',
+    left: 0, top: 0, right: 0, bottom: 0,
   },
-  text: {
-    fontSize: 16,
+  inlineTextBox: {
+    position: 'absolute',
+    left: 60, top: 50,
+    width: "50%"
+  },
+  textInline: {
+    fontSize: 12,
     fontWeight: '600',
   },
-  fringeRow: {
-    flexDirection: 'row',
-    alignSelf: 'flex-start',
-    marginTop: 6,
-    marginLeft: 2,
+  textExpanded: {
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: '600',
   },
-  fringeDot: {
-    borderRadius: 999,
+  closeBtn: {
+    position: 'absolute',
+    top: 6,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  closeTxt: {
+    fontSize: 18,
+    lineHeight: 18,
+    fontWeight: '800',
   },
 });

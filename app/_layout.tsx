@@ -25,14 +25,18 @@ import { Notification } from '@/src/types/Notification';
 import Memory from '@/src/types/Memory';
 import { useMemoryImageStore } from '@/src/store/memoryImageStore';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ModalProvider } from '../src/contexts/ModalContext';
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <GestureHandlerRootView style={{flex:1}}>
-        <InnerLayout />
-      </GestureHandlerRootView>
-    </AuthProvider>
+    <ModalProvider>
+      <AuthProvider>
+        <GestureHandlerRootView style={{flex:1}}>
+          <InnerLayout />
+        </GestureHandlerRootView>
+      </AuthProvider>
+    </ModalProvider>
+
   );
 }
 function InnerLayout() {

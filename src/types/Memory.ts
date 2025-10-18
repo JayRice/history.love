@@ -31,14 +31,22 @@ export const MemoryCategoryList = [
 
 export type MemoryCategory = (typeof MemoryCategoryList)[number];
 
+export type noteType = {
+  createdBy: string;
+  note: string;
+}
 export default interface Memory {
   id: string;
   title: string;
-  date: Date;
+  date: string;
   location: GeoLocation  | null;
   categories?: MemoryCategory[] | null;
   mood: MemoryMood | null,
-  note: string | null;
-  private_note?: string | null;
+  notes: noteType[] | null;
+  privateNotes?: noteType[] | null;
   photos: Photo[] | null,
+
+  createdBy?: string;
+  createdOn?: Date;
+  updatedAt?: Date;
 }

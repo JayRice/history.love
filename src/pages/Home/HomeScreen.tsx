@@ -15,6 +15,12 @@ import { useNotificationsStore } from '@/src/store/notificationsStore';
 import markRead from '@/src/database/notifications/markRead';
 import { Ionicons } from "@expo/vector-icons";
 import { HorizontalScrollList } from '@/src/components/layout/HorizontalScrollList';
+import ProfileImage from '@/src/components/elements/ProfileImage';
+import RoundedImage from '@/src/components/elements/RoundedImage';
+
+import Questions from "@/assets/images/home-images/questions.svg"
+import Calender from "@/assets/images/home-images/calender.svg"
+import Trophy from "@/assets/images/home-images/trophy.svg"
 
 
 
@@ -62,11 +68,15 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   );
 };
 
-function NavigationButtons({onPress} : {onPress}) {
+function NavigationButton({title, children, onPress, style} : {title: string, children: React.ReactNode, onPress: () => void, style?: any}) {
   return (
-    <Pressable onPress={() => onPress} className={"rounded-full h-8 w-h"}>
+    <View className={"flex gap-2 justify-center items-center"}>
+      <Pressable style={[style]} onPress={() => onPress} className={"rounded-full w-14 h-14 p-2 flex justify-center items-center"}>
+        {children}
+      </Pressable>
+      <Text variant={"bodySmall"}>{title}</Text>
+    </View>
 
-    </Pressable>
   )
 }
 
@@ -108,7 +118,50 @@ export default function HomeScreen() {
   }, []);
 
   const navigationButtonData = [
-    {name: "Quizzes",
+    {
+      id: "questions",
+      icon: Questions,
+      title: "Questions",
+      onPress: () => router.push("/questions"),
+      backgroundColor: colors.primaryAccent,
+    },
+    {
+      id: "calender",
+      icon: Calender,
+      title: "Calender",
+      onPress: () => router.push("/calender"),
+      backgroundColor: colors.secondaryAccent,
+    },
+    {
+      id: "games",
+      icon: Trophy,
+      title: "Games",
+      onPress: () => router.push("/games"),
+      backgroundColor: colors.secondaryAccent,
+
+
+    },
+    {
+      id: "questions",
+      icon: Questions,
+      title: "Questions",
+      onPress: () => router.push("/questions"),
+      backgroundColor: colors.primaryAccent,
+    },
+    {
+      id: "calender",
+      icon: Calender,
+      title: "Calender",
+      onPress: () => router.push("/calender"),
+      backgroundColor: colors.secondaryAccent,
+    },
+    {
+      id: "games",
+      icon: Trophy,
+      title: "Games",
+      onPress: () => router.push("/games"),
+      backgroundColor: colors.primaryAccent,
+
 
     }
   ]
@@ -129,9 +182,24 @@ export default function HomeScreen() {
           </View>
 
         </View>
-        <Text variant="bodyLarge" className="text-gray-600">
+        <Text variant="bodyLarge" className="text-gray-600">a
           Your relationship journey awaits. What would you like to explore today?
         </Text>
+
+
+        <View className={"mt-8"}>
+          <HorizontalScrollList  data={navigationButtonData} renderItem={({ item }) => {
+            const Icon = item.icon;
+            return (
+              <View>
+                <NavigationButton  title={item.title} style={{backgroundColor: item.backgroundColor}} onPress={item.onPress}>
+                  <Icon width={90} height={90} />
+                </NavigationButton>
+              </View>
+            )
+          }}/>
+        </View>
+
 
         {/*<HorizontalScrollList  data={items}*/}
         {/*                       renderItem={({ item }) => (*/}

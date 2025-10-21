@@ -26,6 +26,7 @@ import Memory from '@/src/types/Memory';
 import { useMemoryImageStore } from '@/src/store/memoryImageStore';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ModalProvider } from '../src/contexts/ModalContext';
+import { CalendarEvent } from '@/src/types/Calendar';
 
 export default function RootLayout() {
   return (
@@ -52,6 +53,8 @@ function InnerLayout() {
 
   const memories = useRelationshipStore((s) => s.memories);
   const setMemories = useRelationshipStore((s) => s.setMemories);
+
+  const setCalendarEvents = useRelationshipStore(s => s.setCalendarEvents);
 
 
   const setProfileImage = useImagesStore((s) => s.setProfileImage);
@@ -82,12 +85,14 @@ function InnerLayout() {
         if (!photo.name) {return}
 
         // already cached
-        if (memoryImages[photo.name]) {return;}
+        if (memoryImages[photo.name]) {return}
 
         const urls = await getImages(`memory-images/${user?.partner?.relationship_id}/${memory.id}`, [photo.name])
         const downloadURL = urls?.[0]
         if (downloadURL){
           setMemoryImage(photo.name, downloadURL);
+        }else{
+          delete memoryImages[photo.name]
         }
       })
     })
@@ -105,9 +110,14 @@ function InnerLayout() {
     const unsubMemory = onSnapshot(collection(db, "relationships", user?.partner?.relationship_id, "memories"), (snap) => {
       const memories = snap.docs.map(d => ({  ...d.data() } as Memory));
 
-
       fetchMemoryImages(memories)
       setMemories(memories);
+    });
+
+    const unsubCalendarEvents = onSnapshot(collection(db, "relationships", user?.partner?.relationship_id, "calendarEvents"), (snap) => {
+      const calendarEvents = snap.docs.map(d => ({  ...d.data() } as CalendarEvent));
+
+      setCalendarEvents(calendarEvents);
     });
 
     const q = query(
@@ -118,8 +128,6 @@ function InnerLayout() {
     );
     const unsubNoti = onSnapshot(q, (snap) => {
       const notifs = snap.docs.map(d => ({  ...d.data() } as Notification));
-
-
       setNotifications(notifs);
     });
 
@@ -128,6 +136,7 @@ function InnerLayout() {
     return () => {
       unsubNoti();
       unsubMemory();
+      unsubCalendarEvents();
     };
 
 

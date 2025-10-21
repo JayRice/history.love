@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, ButtonProps, Text } from 'react-native-paper';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { View } from 'react-native';
@@ -19,8 +19,7 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
 }) => {
   const colors = useThemeColors();
 
-  const [pressed, setPressed] = React.useState(false);
-  const debouncedPressed = useDebounce<boolean>(pressed, 3000);
+  const [pressTimeout, setPressTimeout] = React.useState<ReturnType<typeof setTimeout> | null>(null);
 
   const buttonStyle = [
     {
@@ -39,6 +38,15 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     labelStyle,
   ];
 
+  function delayPress(){
+    if (pressTimeout) clearTimeout(pressTimeout);
+
+
+    setPressTimeout(setTimeout(() => {
+      setPressTimeout(null);
+    }, 3000))
+  }
+
   return (
     <View className={"flex flex-col gap-2"}>
       <Button
@@ -48,11 +56,11 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
         textColor={variant === 'filled' ? colors.onPrimary : colors.primary}
         style={buttonStyle}
         labelStyle={textStyle}
-        disabled={debouncedPressed || (props.disabled || props.loading) }
+        disabled={!!pressTimeout || (props.disabled || props.loading) }
         onPress={(e) => {
-          if (debouncedPressed) {return}
+          if (pressTimeout) {return}
           props.onPress?.(e);
-          setPressed(true);
+          delayPress()
         }}
       />
       {error!="" && <Text style={{ color: colors.error }} className={" mb-8 "}>{error}</Text>}

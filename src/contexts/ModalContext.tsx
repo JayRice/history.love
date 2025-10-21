@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { router } from 'expo-router';
 import { nanoid } from 'nanoid/non-secure';
 
@@ -18,7 +18,9 @@ export type ModalPayload = {
 type ModalContextType = {
   openModal: <T = any>(name: string, data?: any) => Promise<T | null>;
   closeModal: <T = any>(id: string, result?: T | null) => void;
+  closeCurrentModal: <T = any>(result?: T | null) => void,
   modals: ModalPayload[];
+  currentModal: ModalPayload;
 };
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -33,11 +35,17 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setModals((prev) => [...prev, modal]);
 
       // push with params so the screen knows which modal instance it is
-      router.push({
-        pathname: `/(modals)/${name}`,
-        params: { id },
-      } as Href);
+      try{
+        router.push({
+          pathname: `/(modals)/${name}`,
+          params: { id },
+        } as Href);
+
+      }catch(e){
+        console.error(`Error while opening modal (${name}): ${e}`)
+      }
     });
+
   }, []);
 
   const closeModal = useCallback(<T,>(id: string, result?: T | null) => {
@@ -57,8 +65,19 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setModals(prev => prev.filter(m => m.id !== id));
     }, 0);
   }, []);
+
+  const closeCurrentModal = useCallback(<T,>( result?: T | null)=> {
+    const currentModal = modals[modals.length - 1];
+
+    closeModal(currentModal.id, result);
+  }, [modals])
+
+  const currentModal = useMemo(() => {
+    return modals[modals.length - 1]
+  }, modals)
+
   return (
-    <ModalContext.Provider value={{ openModal, closeModal, modals }}>
+    <ModalContext.Provider value={{ openModal, closeModal, modals, currentModal, closeCurrentModal }}>
       {children}
     </ModalContext.Provider>
   );

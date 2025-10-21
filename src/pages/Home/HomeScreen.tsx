@@ -19,7 +19,7 @@ import ProfileImage from '@/src/components/elements/ProfileImage';
 import RoundedImage from '@/src/components/elements/RoundedImage';
 
 import Questions from "@/assets/images/home-images/questions.svg"
-import Calender from "@/assets/images/home-images/calender.svg"
+import CalendarImage from "@/assets/images/home-images/calendar.svg"
 import Trophy from "@/assets/images/home-images/trophy.svg"
 
 
@@ -71,7 +71,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
 function NavigationButton({title, children, onPress, style} : {title: string, children: React.ReactNode, onPress: () => void, style?: any}) {
   return (
     <View className={"flex gap-2 justify-center items-center"}>
-      <Pressable style={[style]} onPress={() => onPress} className={"rounded-full w-14 h-14 p-2 flex justify-center items-center"}>
+      <Pressable style={[style]} onPress={onPress} className={"rounded-full w-14 h-14 p-2 flex justify-center items-center"}>
         {children}
       </Pressable>
       <Text variant={"bodySmall"}>{title}</Text>
@@ -122,21 +122,21 @@ export default function HomeScreen() {
       id: "questions",
       icon: Questions,
       title: "Questions",
-      onPress: () => router.push("/questions"),
+      onPress: () => router.push("/(tabs)/questions"),
       backgroundColor: colors.primaryAccent,
     },
     {
       id: "calender",
-      icon: Calender,
+      icon: CalendarImage,
       title: "Calender",
-      onPress: () => router.push("/calender"),
+      onPress: () => router.push("/(tabs)/calendar"),
       backgroundColor: colors.secondaryAccent,
     },
     {
       id: "games",
       icon: Trophy,
       title: "Games",
-      onPress: () => router.push("/games"),
+      onPress: () => router.push("/(tabs)/games"),
       backgroundColor: colors.secondaryAccent,
 
 
@@ -145,21 +145,21 @@ export default function HomeScreen() {
       id: "questions",
       icon: Questions,
       title: "Questions",
-      onPress: () => router.push("/questions"),
+      onPress: () => router.push("/(tabs)/questions"),
       backgroundColor: colors.primaryAccent,
     },
     {
       id: "calender",
-      icon: Calender,
+      icon: CalendarImage,
       title: "Calender",
-      onPress: () => router.push("/calender"),
+      onPress: () => {router.push("/(tabs)/calendar")},
       backgroundColor: colors.secondaryAccent,
     },
     {
       id: "games",
       icon: Trophy,
       title: "Games",
-      onPress: () => router.push("/games"),
+      onPress: () => router.push("/(tabs)/games"),
       backgroundColor: colors.primaryAccent,
 
 

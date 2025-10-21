@@ -4,8 +4,12 @@ import { useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { useModal } from '@/src/contexts/ModalContext';
 
 export function useCurrentModal<TData = any, TResult = any>() {
-  const { id } = useLocalSearchParams<{ id?: string }>();
+  // const { id } = useLocalSearchParams<{ id?: string }>();
   const { modals, closeModal } = useModal();
+
+  const id = modals[modals.length - 1]?.id ?? null;
+
+
 
   // derive modal and flags (no early return!)
   const modal = React.useMemo(
@@ -31,6 +35,7 @@ export function useCurrentModal<TData = any, TResult = any>() {
 
   const close = React.useCallback(
     (result?: TResult | null) => {
+      console.log("close: ", safeId, "modals: ", modals)
       if (safeId) closeModal<TResult>(safeId, result ?? null);
     },
     [safeId, closeModal]

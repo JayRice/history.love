@@ -39,7 +39,7 @@ const AboutForm = ({formUser, updateFormUser}: FormProps) => {
       <View>
         <Text>Your Birthday: </Text>
 
-        <DatePicker date={formUser?.profile?.birthday ?? null} onChangeDate={(date) => {
+        <DatePicker maximumDate={new Date()} date={formUser?.profile?.birthday ?? null}  onChangeDate={(date) => {
           updateFormUser("profile.birthday", date);
         }}></DatePicker>
 

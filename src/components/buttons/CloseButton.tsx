@@ -1,11 +1,12 @@
 import { IconButton } from "react-native-paper";
 import { View } from 'react-native';
+import { router } from 'expo-router';
 
-type CloseButtonProps = { onPress: () => void; size?: number, position?: "left"|"right" };
+type CloseButtonProps = { onPress: () => void; size?: number, position?: "left"|"right", addedClasses?: string };
 
-export function CloseButton({ onPress, size = 24, position="left" }: CloseButtonProps) {
+export function CloseButton({ onPress = () => router.back(), size = 24, position="left", addedClasses="" }: CloseButtonProps) {
   return (
-    <View className={`w-full  flex flex-row ${position === "right" && "justify-end"}`}>
+    <View className={`absolute w-full flex flex-row ${position === "right" && "justify-end"} z-50 ${addedClasses}`}>
       <IconButton
         className={"bg-gray-800/10"}
         icon="close"           // MaterialCommunityIcons name

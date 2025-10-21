@@ -15,11 +15,13 @@ export type CategoryPickerProps = {
   maxSelections?: number;            // Optional cap (only used for multiple)
   label?: string;
   style?: ViewStyle;
-  chipStyle?: ViewStyle;             // Optional per-chip container style
+  chipStyle?: any;             // Optional per-chip container style
   disabled?: boolean;
+  showTitleAndBorder?: boolean;
 };
 
 export function CategoryPicker({
+
                                  categories,
                                  value,
                                  onChange,
@@ -29,6 +31,7 @@ export function CategoryPicker({
                                  style,
                                  chipStyle,
                                  disabled,
+                                 showTitleAndBorder=true
                                }: CategoryPickerProps) {
   const theme = useTheme();
   const colors = useThemeColors ? useThemeColors() : theme.colors;
@@ -67,8 +70,8 @@ export function CategoryPicker({
   };
 
   return (
-    <View  className={" p-2 rounded-lg border-[2px]"} style={{ borderColor: colors.outlineVariant, gap: 8}}>
-      {label ? (
+    <View className={` ${showTitleAndBorder && "p-2 rounded-lg border-[2px]"}`} style={{ borderColor: colors.outlineVariant, gap: 8}}>
+      {(label && showTitleAndBorder) ? (
         <Text variant="labelLarge" style={{ color: colors.onSurface }}>
           {label}
         </Text>
@@ -76,11 +79,11 @@ export function CategoryPicker({
 
       <View
 
-
+        className={"flex justify-center"}
         style={{
           flexDirection: "row",
           flexWrap: "wrap",
-          gap: 8,
+          gap: 4,
         }}
 
 
@@ -95,23 +98,33 @@ export function CategoryPicker({
           return (
             <Chip
               key={c}
+              className={"p-0"}
               selected={selected}
               showSelectedCheck={false} // 👈 removes the checkmark
               onPress={() => toggle(c)}
               mode="outlined"
               style={[
-                {
+                  {
                   borderColor,
                   backgroundColor,
                   borderRadius: 12,
                 },
                 chipStyle,
               ]}
-              textStyle={{ color: textColor }}
               disabled={disabled}
               compact
             >
-              {c}
+              <Text
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                style={{
+                  color: textColor,
+                  fontSize: 12, // base size
+                  textAlign: "center",
+                }}
+              >
+                {c}
+              </Text>
             </Chip>
           );
         })}

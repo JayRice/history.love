@@ -15,6 +15,7 @@ import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
 import { useModal } from '@/src/contexts/ModalContext';
 import { useCurrentModal } from '@/src/hooks/useCurrentModal';
+import { router } from 'expo-router';
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
@@ -40,13 +41,11 @@ export default function StoryModeScreen() {
 
 
   const verticalRef = useRef<FlatList<Memory>>(null);
-  console.log("initial index: ", initialIndex)
 
   const [memoryIndex, setMemoryIndex] = useState<number>(
    initialIndex
   );
 
-  console.log("memory Index: ", memoryIndex)
 
   // Prefetch first images for neighbors so vertical swipe feels instant
   useEffect(() => {
@@ -75,7 +74,7 @@ export default function StoryModeScreen() {
   return (
     <View style={StyleSheet.absoluteFill}>
       <View className={"absolute z-50 m-2"}>
-        <CloseButton onPress={() => close()}  />
+        <CloseButton onPress={() => {close()}}  />
 
       </View>
       <FlatList

@@ -32,7 +32,7 @@ export default function DateInput({
                                     label = 'Date',
                                     placeholder = 'MM/DD/YYYY',
                                     minimumDate,
-                                    maximumDate = new Date(), // e.g., no future birthdays
+                                    maximumDate,
                                     disabled = false,
                                     error,
                                     style,

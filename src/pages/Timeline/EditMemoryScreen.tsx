@@ -104,7 +104,7 @@ export default function EditMemoryScreen() {
 
 
   return (
-    <Screen safeArea scrollable style={{backgroundColor: colors.background}}>
+    <Screen  padding safeArea scrollable style={{backgroundColor: colors.background}}>
 
 
 

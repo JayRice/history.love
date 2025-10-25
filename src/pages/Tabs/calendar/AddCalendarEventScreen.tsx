@@ -186,7 +186,7 @@ export default function AddCalendarEventScreen() {
 
   const isAMPM = detectUsesAMPM()
   return (
-    <Screen safeArea scrollable style={{ backgroundColor: colors.background }}>
+    <Screen modal={true}  scrollable style={{ backgroundColor: colors.background }}>
       <View className="h-20 sticky">
         <BackButton onPress={() => close()} />
       </View>

@@ -11,6 +11,7 @@ import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
 import Photo from "../../types/Photo"
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
+import { convertToJpeg } from '@/src/utils/convertToJpeg';
 
 type PhotoInputProps = {
   photos: Photo[];
@@ -85,11 +86,22 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
 
       const selected = mapAssets(result.assets ?? []);
 
+      const converted = (
+        await Promise.all(
+          selected.map(async (image) =>
+            image?.uri ? { ...image, uri: await convertToJpeg(image.uri) } as Photo : null
+          )
+        )
+      ).filter((img): img is Photo => img !== null);
+
+      console.log("converted: ", converted)
+
+
       if (mode === 'replace' || replaceOnChange) {
-        const next = typeof maxPhotos === 'number' ? selected.slice(0, maxPhotos) : selected;
+        const next = typeof maxPhotos === 'number' ? selected.slice(0, maxPhotos) : converted;
         setPhotos(next);
       } else {
-        const merged = [...photos, ...selected];
+        const merged = [...photos, ...converted];
 
         // Deduplicate by uri
         const uniqueByUri = Array.from(new Map(merged.map(p => [p.uri, p])).values());

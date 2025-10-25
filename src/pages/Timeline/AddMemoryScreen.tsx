@@ -72,7 +72,7 @@ export default function AddMemoryScreen() {
   }
 
   return (
-    <Screen safeArea scrollable style={{backgroundColor: colors.background}}>
+    <Screen  padding safeArea scrollable style={{backgroundColor: colors.background}}>
 
 
 

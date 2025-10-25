@@ -39,7 +39,7 @@ export function HorizontalScrollList<T>({
           </View>
         )}
         contentContainerStyle={[
-          { paddingHorizontal: 4 },
+          { paddingHorizontal: 0 },
           contentContainerStyle,
         ]}
         decelerationRate="fast"

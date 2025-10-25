@@ -54,6 +54,8 @@ export default interface Relationship {
 
   profileImageIds: Record<string, string | null>;
 
+  activeGame?: string;
+
 
 
 }

@@ -10,6 +10,6 @@ import { removeFcmToken } from '@/src/database/messaging/handleFcmMessaging';
 
 export default async function logout(){
 
-  await removeFcmToken()
+  //await removeFcmToken()
   await firebaseSignOut(auth)
 }

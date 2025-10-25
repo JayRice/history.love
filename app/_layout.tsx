@@ -27,6 +27,7 @@ import { useMemoryImageStore } from '@/src/store/memoryImageStore';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ModalProvider } from '../src/contexts/ModalContext';
 import { CalendarEvent } from '@/src/types/Calendar';
+import { Game } from '@/src/types/Game';
 
 export default function RootLayout() {
   return (
@@ -70,6 +71,11 @@ function InnerLayout() {
   const [profileLoading, setProfileLoading] = useState(true);
   const segments = useSegments();
 
+  const setCurrentGame = useRelationshipStore(s => s.setCurrentGame);
+
+
+
+
 
   async function fetchProfileImage(imageId: string, uid: string) {
     if (!authUser || !user?.profile?.profileImage?.name) return null;
@@ -102,6 +108,30 @@ function InnerLayout() {
   useEffect(() => {
     console.log("Reloading Instance")
   }, []);
+
+
+  useEffect(() => {
+
+    if (!relationship || !relationship?.activeGame) {return}
+
+    const activeGameId = relationship.activeGame;
+    console.log("listening to active game: ", activeGameId)
+    const unsubGame = onSnapshot(doc(db, "relationships", relationship.id, "games", activeGameId), (snap) => {
+      if (snap.exists()) {
+        const game = snap.data() as Game;
+        setCurrentGame(game);
+        console.log("Game updated:", game);
+      } else {
+        setCurrentGame(null)
+        console.log("Game document does not exist");
+      }
+
+
+    });
+
+    return unsubGame;
+
+  }, [relationship?.activeGame]);
 
   useEffect(() => {
     if (!user || !authUser || !user?.partner?.relationship_id ) return;
@@ -146,6 +176,8 @@ function InnerLayout() {
   // Get partners profile image
   useEffect(() => {
     if (!relationship || !authUser) return;
+
+
 
     const partnerUID = relationship.users.filter((u) => u!=authUser.uid)[0]
 
@@ -219,14 +251,17 @@ function InnerLayout() {
         <Stack.Screen name="index" />
         <Stack.Screen name="+not-found" />
 
-        <Stack.Screen
-          name="location_search"
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            animation: 'slide_from_bottom',
-          }}
-        />
+
+
+        {/*<Stack.Screen*/}
+        {/*  name="(modals)"*/}
+        {/*  options={{*/}
+        {/*    presentation: "modal",           // <- important*/}
+        {/*    headerShown: false,*/}
+        {/*    gestureEnabled: true,            // iOS swipe down*/}
+        {/*    animation: "slide_from_bottom",  // iOS nicely slides up*/}
+        {/*  }}*/}
+        {/*/>*/}
 
       </Stack>
       <StatusBar style="auto" />

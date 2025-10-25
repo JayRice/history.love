@@ -3,6 +3,7 @@ import { create } from "zustand";
 import Relationship from '@/src/types/Relationship';
 import Memory from '@/src/types/Memory';
 import { CalendarEvent } from "@/src/types/Calendar"
+import { Game } from '@/src/types/Game';
 
 type Store = {
   relationship: Relationship | null;
@@ -13,12 +14,16 @@ type Store = {
 
   calendarEvents: CalendarEvent[] | null;
   setCalendarEvents: (calendarEvents: CalendarEvent[]) => void;
+
+  currentGame: Game | null;
+  setCurrentGame: (game: Game | null) => void;
 };
 
-const dataInitial: Pick<Store, "relationship" | "memories" | "calendarEvents"> = {
+const dataInitial: Pick<Store, "relationship" | "memories" | "calendarEvents" | "currentGame"> = {
   relationship: null,
   memories: null,
   calendarEvents: null,
+  currentGame: null,
 
 };
 export const useRelationshipStore = create<Store>()((set, get) => ({
@@ -27,6 +32,7 @@ export const useRelationshipStore = create<Store>()((set, get) => ({
   setRelationship: (relationship: Relationship) => set({relationship}),
   setMemories: (memories: Memory[]) => set({memories}),
   setCalendarEvents: (calendarEvents: CalendarEvent[]) => set({calendarEvents}),
+  setCurrentGame: (currentGame: Game | null) => set({currentGame}),
 
   reset: () => set(() => ({ ...dataInitial })),
 }));

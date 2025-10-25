@@ -1,5 +1,5 @@
 // GameFlipCard.tsx
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Pressable, Image, Text, ScrollView } from 'react-native';
 import { Card } from "react-native-paper";
 import Animated, {
@@ -13,7 +13,7 @@ import Animated, {
 type Props = {
   id?: string;
   currentFlipped?: string,
-  className?: string;                 // e.g. "h-80 w-[45%] m-[1.5%]"
+  addedClasses?: string;                 // e.g. "h-80 w-[45%] m-[1.5%]"
   onFlipChange?: (isBack: boolean) => void;
   front: React.ReactNode;             // content for the front
   back: React.ReactNode;              // content for the back
@@ -23,7 +23,7 @@ type Props = {
 export function FlipCard({
                                id,
                                currentFlipped,
-                               className = " w-[47%] m-[1.0%]",
+                               addedClasses = "",
                                onFlipChange,
                                front,
                                back,
@@ -31,9 +31,12 @@ export function FlipCard({
                              }: Props) {
   const progress = useSharedValue(0); // 0 = front, 1 = back
 
+  const [isBack, setIsBack] = useState(false);
+
   const toggle = useCallback(() => {
     const next = progress.value === 1 ? 0 : 1;
     progress.value = withTiming(next, { duration });
+    setIsBack(next === 1)
     onFlipChange?.(next === 1);
   }, [duration, onFlipChange, progress]);
 
@@ -74,9 +77,16 @@ export function FlipCard({
       toggle();
     }
   }, [currentFlipped, progress]);
+
+  useEffect(() => {
+    if (currentFlipped && id && currentFlipped !== id && isBack) {
+      setIsBack(false);
+    }
+  }, [currentFlipped, id, isBack]);
+
   return (
 
-    <Pressable className={`${className}`} onPress={toggle}>
+    <Pressable className={`${addedClasses}`} onPress={toggle}>
         <Card  className={`overflow-hidden rounded-2xl  `}>
           {/* Stack the two faces */}
           <View className="w-full h-full relative">
@@ -87,12 +97,13 @@ export function FlipCard({
               {front}
             </Animated.View>
 
-            <Animated.View
+
+            {isBack && <Animated.View
               style={backStyle}
               className="absolute inset-0 backface-hidden w-full h-full"
             >
               {back}
-            </Animated.View>
+            </Animated.View>}
           </View>
         </Card>
 

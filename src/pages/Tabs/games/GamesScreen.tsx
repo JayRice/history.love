@@ -1,27 +1,50 @@
 import { Screen } from '@/src/components/layout/Screen';
 import { Card, Text } from 'react-native-paper';
 import { Image, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { BackButton } from '@/src/components/buttons/BackButton';
 import { gameImages } from '@/src/data/games/gameImages';
 import { FlipCard } from '@/src/components/cards/FlipCard';
 import { getPartnerName } from '@/src/utils/getPartnerName';
 import { gameData } from '@/src/data/games/gameData';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { CategoryPicker } from '@/src/components/inputs/CategoryPicker';
+import { useModal } from '@/src/contexts/ModalContext';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/src/config/firebase';
+import { useRelationshipStore } from '@/src/store/relationshipStore';
+import { Game } from '@/src/types/Game';
+import { endGame } from '@/src/server/game/endGame';
+import { archiveGame } from '@/src/server/game/archiveGame';
+import { useThemeColors } from '@/src/hooks/useThemeColors';
+import Trophy from '@/assets/images/home-images/trophy.svg';
 function GameCard({game, idx, currentFlipped, setCurrentFlipped}: {game: any, idx: number, currentFlipped: string, setCurrentFlipped: (cf: string) => void}) {
   const image = game.image;
 
 
-  const [categoriesPicked, setCategoriesPicked] = React.useState<string[]>([game.modes[0]]);
+
+  const {openModal} = useModal();
+
+
 
   if (!image) {return null}
+
+
+
+
+  // useEffect(() => {
+  //
+  //   // If there's an active game send the user to the active game screen
+  //   if (relationship?.activeGame){
+  //     openModal("active_game");
+  //   }
+  // }, [relationship?.activeGame]);
+
   return (
     <FlipCard onFlipChange={(isBack) => {
       if (isBack){
         setCurrentFlipped(`${idx}`)
       }
-    }} id={`${idx}`} currentFlipped={currentFlipped}  className={"h-120 w-[100%] m-[1.5%]"}
+    }} id={`${idx}`} currentFlipped={currentFlipped}  addedClasses={"h-80 w-[47%] m-[1.5%]"}
 
               front={
       image &&
@@ -41,11 +64,12 @@ function GameCard({game, idx, currentFlipped, setCurrentFlipped}: {game: any, id
           <Text variant={"bodyLarge"} className={"text-center font-bold"}>{game.title}</Text>
           <Text variant={"bodySmall"} className={"text-center"}>{game.description}</Text>
 
-          {/*{ game.modes.length > 0 && <CategoryPicker chipStyle={{width: "40%"}} showTitleAndBorder={false} categories={game.modes} value={categoriesPicked} onChange={setCategoriesPicked} ></CategoryPicker>}*/}
 
         </View>
 
-        <PrimaryButton variant={"filled"} >Continue</PrimaryButton>
+        <PrimaryButton variant={"filled"} onPress={async () => {
+          await openModal("start_game", {game})
+        }} >Continue</PrimaryButton>
       </View>}
 
     />
@@ -57,19 +81,75 @@ export default function  GamesScreen(){
   const partnerName = getPartnerName();
 
 
+  const {openModal} = useModal();
+
+
+  const relationship = useRelationshipStore(s => s.relationship);
+  const currentGame = useRelationshipStore(s => s.currentGame);
+
+
 
   const [currentFlipped, setCurrentFlipped] = React.useState<string>("");
-  return (
-    <Screen scrollable >
-      <BackButton absolute={false} addedClasses={"left-[-10%] mb-4"}></BackButton>
-      <View className={"space-y-2 mb-4"}>
-        <Text variant="headlineMedium" className="text-gray-900 font-bold">
-          Games
-        </Text>
-        <Text variant="bodyLarge" className="text-gray-600">
-          Develop your relationship through fun games!
-        </Text>
 
+  const [loadingOnQuit, setLoadingOnQuit] = React.useState<boolean>(false);
+
+  const currentGameData = useMemo(() => {
+    if (!currentGame) return null;
+    return gameData.filter((gd) => gd.type == currentGame.type)[0];
+  }, [currentGame])
+
+  const colors = useThemeColors()
+
+  return (
+    <Screen scrollable style={{flex: 1}}>
+
+
+
+      <View className={"space-y-2 mb-4 w-full   "}>
+
+        <View className={"py-8 px-4 "}  style={{backgroundColor: colors.secondaryAccent}}>
+          <BackButton absolute={false} addedClasses={"left-[-10%] mb-4"}></BackButton>
+          <View className={"flex relative"}>
+
+            <View className={"w-3/4"}>
+              <Text variant="headlineMedium" className="text-white font-bold">
+                Games
+              </Text>
+              <Text variant="bodyLarge" className="text-white font-light">
+                Develop your relationship through fun games!
+              </Text>
+            </View>
+            <View className={"absolute left-3/4    z-50"}>
+              <Trophy width={100} height={100} ></Trophy>
+            </View>
+          </View>
+        </View>
+
+
+
+
+
+        { (relationship?.activeGame) && <Card className={" p-4 "} style={{width: "100%"}}>
+
+          <View className={"flex"} style={{ gap: 8}}>
+            <Text className={"text-center font-light mb-4"} variant={"headlineSmall"}>{currentGame?.status == "ended" ? "Game Ended":"Active Game"}</Text>
+
+            <PrimaryButton variant={"outlined"} onPress={() => {
+              openModal("active_game");
+            }}>{currentGame?.status == "active" ? "Play":"See Results"}</PrimaryButton>
+            <PrimaryButton loading={loadingOnQuit} variant={"filled"} onPress={async () => {
+              setLoadingOnQuit(true)
+              if (currentGame?.status == "active"){
+                await endGame();
+              } else if (currentGame?.status == "ended"){
+                await archiveGame();
+              }
+              setLoadingOnQuit(false)
+            }}>{currentGame?.status == "ended" ? "Dismiss":"Quit"}</PrimaryButton>
+          </View>
+
+
+        </Card>}
       </View>
 
       <View className={"flex flex-row flex-wrap justify-between items-between "}>

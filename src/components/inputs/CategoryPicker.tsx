@@ -13,6 +13,7 @@ export type CategoryPickerProps = {
   onChange: (next: any[]) => void;
   multiple?: boolean;                // false = single-select
   maxSelections?: number;            // Optional cap (only used for multiple)
+  minSelections?: number;
   label?: string;
   style?: ViewStyle;
   chipStyle?: any;             // Optional per-chip container style
@@ -27,6 +28,7 @@ export function CategoryPicker({
                                  onChange,
                                  multiple = true,
                                  maxSelections,
+                                 minSelections=0,
                                  label = "Categories",
                                  style,
                                  chipStyle,
@@ -42,20 +44,26 @@ export function CategoryPicker({
   const canAddMore =
     multiple ? (typeof maxSelections === "number" ? value.length < maxSelections : true) : value.length === 0;
 
+  const canRemoveMore = value.length !== minSelections;
+
+
   const toggle = (c: Category) => {
     if (disabled) return;
 
     if (multiple) {
       // remove if selected
-      if (selectedSet.has(c)) {
+      if (canRemoveMore && selectedSet.has(c)) {
         onChange(value.filter(v => v !== c));
       } else {
         if (!canAddMore) return;
-        onChange([...value, c]);
+
+        if (!selectedSet.has(c)) {
+          onChange([...value, c]);
+        }
       }
     } else {
       // single
-      if (selectedSet.has(c)) {
+      if (canRemoveMore && selectedSet.has(c)) {
         // tapping selected will clear (or you can comment this to keep one always)
         onChange([]);
       } else {
@@ -117,6 +125,7 @@ export function CategoryPicker({
               <Text
                 numberOfLines={1}
                 adjustsFontSizeToFit
+                className={"text-center"}
                 style={{
                   color: textColor,
                   fontSize: 12, // base size

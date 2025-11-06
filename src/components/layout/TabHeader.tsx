@@ -4,7 +4,7 @@ import { Text } from 'react-native-paper';
 import Trophy from '@/assets/images/home-images/trophy.svg';
 import React, { JSX } from 'react';
 
-export function TabHeader({title, description, Icon, style}: {title: string, description?: string, Icon: JSX.Element, style?: ViewStyle }) {
+export function TabHeader({title, description, Icon, style}: {title: string, description?: string, Icon:JSX.Element, style?: ViewStyle }) {
   return (
     <View className={"space-y-2 mb-4 w-full   "}>
 
@@ -21,7 +21,7 @@ export function TabHeader({title, description, Icon, style}: {title: string, des
             </Text>
           </View>
           <View className={"absolute left-3/4    z-50"}>
-            <Icon width={100} height={100} ></Icon>
+            {Icon}
           </View>
         </View>
       </View>

@@ -15,6 +15,12 @@ import { HorizontalScrollList } from '@/src/components/layout/HorizontalScrollLi
 import Questions from "@/assets/images/home-images/questions.svg"
 import CalendarImage from "@/assets/images/home-images/calendar.svg"
 import Trophy from "@/assets/images/home-images/trophy.svg"
+import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
+import { getPartnerName } from '@/src/utils/getPartnerName';
+import { getMoodById, MoodId, MoodList, RelationshipMood } from '@/src/types/Moods';
+import AnimatedHeart from '@/src/components/elements/AnimatedHeart';
+import { useAuth } from '@/src/contexts/AuthContext';
+import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 
 
 
@@ -25,6 +31,8 @@ interface DashboardCardProps {
   color: string;
   onPress: () => void;
 }
+
+
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
                                                        title,
@@ -71,6 +79,32 @@ function NavigationButton({title, children, onPress, style} : {title: string, ch
       <Text className={"px-1"} variant={"bodySmall"}>{title}</Text>
     </View>
 
+  )
+}
+
+
+
+const MoodCard = ({uid, relationshipMood, heartStyle}: {uid: string, relationshipMood: RelationshipMood, heartStyle?: any }) => {
+  const parseMood = relationshipMood.mood.toUpperCase();
+  const moodConfig = getMoodById(relationshipMood.mood);
+
+  const partnerName = getPartnerName();
+  const { authUser } = useAuth();
+  if (!authUser) {return null}
+
+  const name = authUser.uid == uid ? "YOU" : partnerName.toUpperCase();
+  return (
+    <Pressable className={"w-1/2 flex items-center justify-center "}>
+      <Text variant={'bodyLarge'} className={"text-center mb-2 "}>{name}</Text>
+
+      <Card className={"w-full flex justify-center items-center "}>
+        <Ionicons name={"heart"} className={"relative flex "} size={100} color={moodConfig.color} />
+
+        <Text variant={'bodyLarge'} className={"text-center mb-2"}>{parseMood}</Text>
+
+        <Text variant={'bodyLarge'} className={"text-center mb-2 font-light"}>Updated: {}</Text>
+      </Card>
+    </Pressable>
   )
 }
 
@@ -145,12 +179,16 @@ export default function HomeScreen() {
     }
   ]
 
+  const partnerName = getPartnerName();
+
+  const moods = relationship?.moods;
+
   return (
-    <Screen scrollable style={{flex: 1}}>
+    <Screen padding={false} safeArea={false} scrollable style={{flex: 1, paddingTop: 20}}>
       <View className="mb-8">
 
 
-        <View className={"py-8 px-4"}>
+        <View className={"pt-8 px-4"}>
           <View className="flex-row w-full justify-between items-center mb-2 ">
             <Text variant="headlineMedium" className="text-gray-900 font-bold">
               Home
@@ -167,9 +205,11 @@ export default function HomeScreen() {
           </Text>
         </View>
 
+        {/*<PrimaryButton onPress={() => router.push("/(modals)/pair_congratulations")}>Pair Congratulations</PrimaryButton>*/}
 
 
-        <View className={"mt-8"}>
+
+        <View className={"mt-2"}>
           <HorizontalScrollList horizontalSpacing={8}  data={navigationButtonData} renderItem={({ item }) => {
             const Icon = item.icon;
             return (
@@ -183,24 +223,20 @@ export default function HomeScreen() {
         </View>
 
 
-        {/*<HorizontalScrollList  data={items}*/}
-        {/*                       renderItem={({ item }) => (*/}
-        {/*                         <View*/}
-        {/*                           style={{*/}
-        {/*                             backgroundColor: "#333",*/}
-        {/*                             padding: 20,*/}
-        {/*                             borderRadius: 16,*/}
-        {/*                             width: 120,*/}
-        {/*                             alignItems: "center",*/}
-        {/*                           }}*/}
-        {/*                         >*/}
-        {/*                           <Text style={{ color: "white" }}>{item.title}</Text>*/}
-        {/*                         </View>*/}
-        {/*                       )}/>*/}
+
       </View>
 
-      <View>
+      <View className={"flex items-center"}>
+        <Text variant="headlineSmall" className="text-gray-900 font-light text-center mb-6">
+          Moods
+        </Text>
 
+        <View className={"flex flex-row  px-8"}  style={{gap: 10}}>
+          {moods ? (Object.keys(moods).map((uid) => {
+            return <MoodCard uid={uid} relationshipMood={moods[uid]}></MoodCard>
+          })) : (<LoadingSpinner />)
+          }
+        </View>
       </View>
 
       <View className="mt-8 p-6 bg-gradient-to-r from-primary/10 to-accent-pink/10 rounded-2xl">

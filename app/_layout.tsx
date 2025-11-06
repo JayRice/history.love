@@ -140,8 +140,13 @@ function InnerLayout() {
     const unsubMemory = onSnapshot(collection(db, "relationships", user?.partner?.relationship_id, "memories"), (snap) => {
       const memories = snap.docs.map(d => ({  ...d.data() } as Memory));
 
-      fetchMemoryImages(memories)
-      setMemories(memories);
+      try {
+        fetchMemoryImages(memories)
+        setMemories(memories);
+      } catch(err) {
+        console.log("Error while fetching memory images: ", err)
+      }
+
     });
 
     const unsubCalendarEvents = onSnapshot(collection(db, "relationships", user?.partner?.relationship_id, "calendarEvents"), (snap) => {
@@ -253,15 +258,24 @@ function InnerLayout() {
 
 
 
-        {/*<Stack.Screen*/}
-        {/*  name="(modals)"*/}
-        {/*  options={{*/}
-        {/*    presentation: "modal",           // <- important*/}
-        {/*    headerShown: false,*/}
-        {/*    gestureEnabled: true,            // iOS swipe down*/}
-        {/*    animation: "slide_from_bottom",  // iOS nicely slides up*/}
-        {/*  }}*/}
-        {/*/>*/}
+        <Stack.Screen
+          name="(modals)"
+          options={{
+            presentation: "modal",           // <- important
+            headerShown: false,
+            gestureEnabled: true,            // iOS swipe down
+            animation: "slide_from_bottom",  // iOS nicely slides up
+          }}
+        />
+        <Stack.Screen
+          name="(settings)"
+          options={{
+            presentation: "modal",
+            headerShown: false,
+            gestureEnabled: true,
+            animation: "slide_from_bottom",
+          }}
+        />
 
       </Stack>
       <StatusBar style="auto" />

@@ -28,6 +28,7 @@ import { View } from "react-native";
 // If you have a proper type, replace `any` below with your real `TextFieldProps` type.
 import { TextField } from '@/src/components/inputs/TextField';
 import { Text } from 'react-native-paper';
+import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 
 export type PinMode = "numeric" | "alpha" | "alphanumeric";
 
@@ -180,7 +181,7 @@ export default function PinInput({
 
   return (
     <View style={{ }} className={"w-full flex flex-row"}>
-      {Array.from({ length }).map((_, idx) => (
+      { loading ? <LoadingSpinner/> : Array.from({ length }).map((_, idx) => (
         <View key={idx} className={"text-center"}  style={{ flex: 1, marginHorizontal: gap / 2 }}>
 
           <TextField

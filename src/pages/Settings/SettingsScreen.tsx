@@ -34,7 +34,7 @@ const SettingItem: React.FC<SettingItemProps> = ({
       title={title}
       description={description}
       left={() => (
-        <View className="mr-3 justify-center">
+        <View className="w-8 mr-3 justify-center">
           {icon}
         </View>
       )}
@@ -77,7 +77,17 @@ export default function SettingsScreen() {
           <Text variant="titleMedium" className="text-gray-900 font-semibold mb-4">
             Account
           </Text>
-          
+
+          <SettingItem
+            title="Relationship Information"
+            description="Update your relationship's details and preferences"
+            icon={<View className={"flex flex-row justify-center"}><User size={24} color={colors.primary} /><User size={24} color={colors.primary} /></View>}
+            onPress={() => router.push('/(settings)/relationship_settings')}
+          />
+
+          <Divider className="my-2" />
+
+
           <SettingItem
             title="Profile Information"
             description="Update your personal details and preferences"

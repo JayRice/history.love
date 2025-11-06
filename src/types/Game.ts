@@ -1,7 +1,7 @@
 import { GameMode, GameType } from './GameData';
 import { GamePreferences } from './GamePreferences';
 
-export type GameStatus = "waiting" | "ended" | "active";
+export type GameStatus = "show-results" | "ended" | "active";
 
 export type WYRMode = "casual" | "romantic" | "deep" | "funny" | "spicy";
 export type WYRChoice = 1 | 2; // q1 or q2

@@ -1,5 +1,6 @@
 // Relationship Event
 import { RelationshipType } from './User';
+import { RelationshipMood } from '@/src/types/Moods';
 
 export interface RelationshipEvent {
   id: string;
@@ -30,11 +31,13 @@ export interface RelationshipEvent {
   updatedAt: string;
 }
 
+
 // Relationship Doc
 export default interface Relationship {
   id: string; // document ID, often = pairKey
   users: [string, string]; // both user UIDs
   pairKey: string; // e.g. [uid, otherUid].sort().join("_")
+
 
 
   // Core partner info
@@ -51,6 +54,8 @@ export default interface Relationship {
   events?: RelationshipEvent[];
   notes?: string;
   isPrivate?: boolean;
+
+  moods?: Record<string, RelationshipMood>;
 
   profileImageIds: Record<string, string | null>;
 

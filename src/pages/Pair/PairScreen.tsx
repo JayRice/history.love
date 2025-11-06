@@ -25,6 +25,8 @@ export default function PairScreen ()  {
 
   const [isPairing, setIsPairing] = React.useState(false);
 
+  const [loading, setLoading] = React.useState(false);
+
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
 
@@ -35,19 +37,15 @@ export default function PairScreen ()  {
     asyncGetMatchCode()
     async function asyncGetMatchCode(){
       if (user && !user?.profile?.match_code){
-        const match_code = await getMatchCode();
-        setUser({
-          ...user,
-          profile: {
-            ...user.profile,
-            match_code,
-          },
-        });
+        console.log("gettting match code")
+        setLoading(true);
+        await getMatchCode();
+        setLoading(false)
       }
     }
 
   }, []);
-  const first_name = user?.partner?.name?.trim().split(" ")[0]
+  const first_name = user?.partner?.name?.trim().split(" ")[0] ?? "my partner"
   return (
     <Screen className={"relative"} backgroundColor={colors.surface} padding>
 
@@ -71,7 +69,7 @@ export default function PairScreen ()  {
           </View>
 
 
-          <PinInput disabled  length={6} value={user?.profile?.match_code ?? "000000"} ></PinInput>
+          <PinInput disabled loading={loading}  length={6} value={user?.profile?.match_code ?? "000000"} ></PinInput>
 
           <SecondaryButton variant={"filled"} onPress={() => {
 
@@ -86,7 +84,7 @@ export default function PairScreen ()  {
         </View>
 
         <View style={{backgroundColor: colors.primaryAccent2 ?? "", gap: 8}} className={"relative w-full text-white flex justify-center p-4 "}>
-          <Text variant={"headlineSmall"} className={"font-bold"}>I have a code from {user?.partner?.name?.split(" ")[0]} </Text>
+          <Text variant={"headlineSmall"} className={"font-bold"}>I have a code from {first_name} </Text>
 
           <PinInput   length={6} value={pinValue}  setValue={setPinValue}></PinInput>
 

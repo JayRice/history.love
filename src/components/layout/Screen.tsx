@@ -3,11 +3,13 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { SwipeDownContainer } from '@/src/components/layout/SwipeDownContainer';
+import { BackButton } from '@/src/components/buttons/BackButton';
 
 interface ScreenProps {
   children: ReactNode;
   scrollable?: boolean;
   padding?: boolean;
+  backButton?: boolean;
   safeArea?: boolean;
   modal?: boolean;
   backgroundColor?: string;
@@ -21,6 +23,7 @@ export const Screen: React.FC<ScreenProps> = ({
   padding = true,
   safeArea = true,
   modal = false,
+  backButton = false,
   backgroundColor,
   className = '',
   style,
@@ -32,18 +35,25 @@ export const Screen: React.FC<ScreenProps> = ({
     backgroundColor: backgroundColor || colors.background,
   };
 
+  let wrappedContent = (
+    <View className="w-full h-full">
+      {backButton &&<BackButton absolute={false} addedClasses={"left-[-10%] mb-4"}></BackButton>}
+      {children}
+    </View>
+  )
 
-  const wrappedContent = scrollable ? (
+
+   wrappedContent = scrollable ? (
     <ScrollView
       style={[styles.container, style, addedStyle, padding && styles.padding]}
       showsVerticalScrollIndicator={false}
       className={className}
     >
-      {children}
+      {wrappedContent}
     </ScrollView>
   ) : (
     <View style={[styles.container, style, addedStyle, padding && styles.padding]} className={className}>
-      {children}
+      {wrappedContent}
     </View>
   );
 

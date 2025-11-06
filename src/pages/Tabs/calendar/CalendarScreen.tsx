@@ -16,6 +16,8 @@ import * as Localization from "expo-localization";
 import { detectUsesAMPM } from '@/src/utils/detectUsesAMPM';
 import { useModal } from '@/src/contexts/ModalContext';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
+import { TabHeader } from '@/src/components/layout/TabHeader';
+import CalendarImage from '@/assets/images/home-images/calendar.svg';
 
 
 const SCREEN_H = Dimensions.get("window").height;
@@ -148,9 +150,11 @@ export default function CalendarScreen() {
   const useAMPM = detectUsesAMPM();
 
   return (
-    <Screen style={{  backgroundColor: theme.palette.background }}>
+    <Screen scrollable padding={false} safeArea={false} style={{  backgroundColor: theme.palette.background }}>
       {/* Calendar layer */}
       <View style={{ flex: 1 }}>
+        <TabHeader style={{backgroundColor:colors.secondaryAccent}} title={"Calendar"}  description={"Plan things with your partner so you're always on the same page"} Icon={<CalendarImage width={100} height={100} ></CalendarImage>} />
+
         <Calendar
           ampm={useAMPM}
           height={SCREEN_H}            // fine to keep a fixed height, parent is flex:1 now
@@ -177,7 +181,6 @@ export default function CalendarScreen() {
         pointerEvents="box-none"
         style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
       >
-        <CloseButton addedClasses={"right-0"} />
         <FAB
           icon={() => <Plus size={24} color="white" />}
           className={"rounded-full"}

@@ -21,6 +21,7 @@ import fetchLocations from '@/src/server/fetchLocations';
 
 import { BackButton } from '@/src/components/buttons/BackButton';
 import { useModal } from '../../contexts/ModalContext';
+import { Screen } from '@/src/components/layout/Screen';
 
 type LocationSearchScreenProps = {
   initialQuery?: string;
@@ -100,7 +101,7 @@ export const LocationSearchScreen: React.FC<LocationSearchScreenProps> = ({
 
 
   return (
-    <Modal animationType="slide" onRequestClose={() => onPressLocation(null)} transparent>
+    <Screen className={"pt-8"} padding={false} safeArea={false} >
       <KeyboardAvoidingView
         className={"h-full"}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -124,19 +125,29 @@ export const LocationSearchScreen: React.FC<LocationSearchScreenProps> = ({
                   dense
                   underlineColor="transparent"
                   activeUnderlineColor="transparent"
-                  style={{ flex: 1, backgroundColor: 'transparent' }}
-                  theme={{ colors: { onSurfaceVariant: colors.onSurfaceVariant } } as any}
+                  style={{
+                    flex: 1,
+                    backgroundColor: 'transparent',
+                    color: colors.onSurfaceVariant, // make sure text is visible
+                  }}
+                  cursorColor={colors.primary}
+                  theme={{
+                    colors: {
+                      onSurfaceVariant: colors.onSurfaceVariant,
+                      text: colors.onSurfaceVariant,
+                      primary: colors.primary,
+                    },
+                  } as any}
                   autoFocus
                   autoCapitalize="words"
                   autoCorrect={false}
                   returnKeyType="search"
                   onSubmitEditing={() => runSearch(query)}
                 />
-              </View>
-              <View className={"w-1/4"}>
-                <BackButton  addedClasses={"relative top-2 left-0 "}></BackButton>
 
               </View>
+              <BackButton  addedClasses={"relative top-2 left-0 "}></BackButton>
+
 
             </View>
             <PrimaryButton className={"flex-1"}
@@ -174,7 +185,7 @@ export const LocationSearchScreen: React.FC<LocationSearchScreenProps> = ({
             </View> }
         </View>
       </KeyboardAvoidingView>
-    </Modal>
+    </Screen>
   );
 };
 

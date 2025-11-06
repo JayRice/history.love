@@ -11,7 +11,7 @@ import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
 import Photo from "../../types/Photo"
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
-import { convertToJpeg } from '@/src/utils/convertToJpeg';
+import { useJpegCompressor } from '@/src/hooks/useJpegCompressor';
 
 type PhotoInputProps = {
   photos: Photo[];
@@ -40,6 +40,9 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
   const colors = useThemeColors();
 
   const [loading, setLoading ] = useState<boolean>(false);
+
+  const { compressManyPhotos } = useJpegCompressor({ maxBytes: 5 * 1024 * 1024 });
+
 
   const remaining = useMemo(() => {
     if (typeof maxPhotos !== 'number') return Number.MAX_SAFE_INTEGER;
@@ -86,15 +89,10 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
 
       const selected = mapAssets(result.assets ?? []);
 
-      const converted = (
-        await Promise.all(
-          selected.map(async (image) =>
-            image?.uri ? { ...image, uri: await convertToJpeg(image.uri) } as Photo : null
-          )
-        )
-      ).filter((img): img is Photo => img !== null);
+      const converted = await compressManyPhotos(selected);
 
-      console.log("converted: ", converted)
+      console.log("selected: ", selected, "converted: ", converted);
+
 
 
       if (mode === 'replace' || replaceOnChange) {

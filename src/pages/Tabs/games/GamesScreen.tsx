@@ -17,6 +17,7 @@ import { endGame } from '@/src/server/game/endGame';
 import { archiveGame } from '@/src/server/game/archiveGame';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import Trophy from '@/assets/images/home-images/trophy.svg';
+import { TabHeader } from '@/src/components/layout/TabHeader';
 function GameCard({game, idx, currentFlipped, setCurrentFlipped}: {game: any, idx: number, currentFlipped: string, setCurrentFlipped: (cf: string) => void}) {
   const image = game.image;
 
@@ -93,6 +94,7 @@ export default function  GamesScreen(){
 
   const [loadingOnQuit, setLoadingOnQuit] = React.useState<boolean>(false);
 
+
   const currentGameData = useMemo(() => {
     if (!currentGame) return null;
     return gameData.filter((gd) => gd.type == currentGame.type)[0];
@@ -101,29 +103,12 @@ export default function  GamesScreen(){
   const colors = useThemeColors()
 
   return (
-    <Screen scrollable style={{flex: 1}}>
+    <Screen  padding={false} safeArea={false} scrollable style={{flex: 1}}>
 
 
 
-      <View className={"space-y-2 mb-4 w-full   "}>
 
-        <View className={"py-8 px-4 "}  style={{backgroundColor: colors.secondaryAccent}}>
-          <BackButton absolute={false} addedClasses={"left-[-10%] mb-4"}></BackButton>
-          <View className={"flex relative"}>
-
-            <View className={"w-3/4"}>
-              <Text variant="headlineMedium" className="text-white font-bold">
-                Games
-              </Text>
-              <Text variant="bodyLarge" className="text-white font-light">
-                Develop your relationship through fun games!
-              </Text>
-            </View>
-            <View className={"absolute left-3/4    z-50"}>
-              <Trophy width={100} height={100} ></Trophy>
-            </View>
-          </View>
-        </View>
+        <TabHeader style={{backgroundColor:colors.secondaryAccent}} title={"Games"}  description={"Develop your relationship through fun games!"} Icon={<Trophy width={100} height={100} ></Trophy>} />
 
 
 
@@ -150,7 +135,6 @@ export default function  GamesScreen(){
 
 
         </Card>}
-      </View>
 
       <View className={"flex flex-row flex-wrap justify-between items-between "}>
         {gameData.map((g, idx) => {

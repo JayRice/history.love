@@ -167,7 +167,7 @@ module.exports = defineConfig([
       'src/pages/Location/LocationSearchScreen.tsx',
       'src/features/profiles/ui/OnboardingScreen.tsx',
       'src/features/auth/ui/StartScreen.tsx',
-      'src/pages/Tabs/calendar/CalendarScreen.tsx',
+      'src/features/calendar/ui/CalendarScreen.tsx',
       'src/pages/Tabs/games/GamesScreen.tsx',
       'src/features/memories/ui/StoryModeScreen.tsx',
       'src/server/fetchServer.ts',
@@ -203,7 +203,7 @@ module.exports = defineConfig([
       'src/features/relationships/ui/PairScreen.tsx',
       'src/features/profiles/ui/SettingsScreen.tsx',
       'src/features/auth/ui/StartScreen.tsx',
-      'src/pages/Tabs/calendar/AddCalendarEventScreen.tsx',
+      'src/features/calendar/ui/AddCalendarEventScreen.tsx',
       'src/pages/Tabs/games/game-modes/WouldYouRather.tsx',
       'src/features/memories/ui/TimelineScreen.tsx',
       'src/server/fetchServer.ts',
@@ -224,7 +224,7 @@ module.exports = defineConfig([
       'src/features/profiles/ui/forms/ProfileForm.tsx', // isUsernameTaken (Phase 2)
       'src/features/relationships/ui/PairScreen.tsx', // getMatchCode, pairUsers (Phase 3)
       'src/features/relationships/ui/RelationshipSettings.tsx', // unpairUsers (Phase 7)
-      'src/pages/Tabs/calendar/AddCalendarEventScreen.tsx', // addCalenderEvent (Phase 6)
+      'src/features/calendar/ui/AddCalendarEventScreen.tsx', // addCalenderEvent (Phase 6)
       'src/pages/Tabs/games/GamesScreen.tsx', // endGame/archiveGame (Phase 6)
       'src/pages/Tabs/games/StartGameScreen.tsx', // startGame (Phase 6)
       'src/pages/Tabs/games/game-modes/WouldYouRather.tsx', // updateGame (Phase 6)

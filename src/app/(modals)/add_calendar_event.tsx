@@ -1,3 +1,3 @@
-import AddCalendarEventScreen from '@/src/pages/Tabs/calendar/AddCalendarEventScreen';
+import AddCalendarEventScreen from '@/src/features/calendar/ui/AddCalendarEventScreen';
 
 export default AddCalendarEventScreen;

@@ -21,7 +21,7 @@ import { RepeatPicker, toRRULE } from "@/src/shared/ui/inputs/RepeatPicker";
 import type { GeoLocation } from "@/src/shared/types/GeoLocation";
 import type { ActivityType, CalendarEvent } from "@/src/shared/types/Calendar";
 
-import { addCalenderEvent } from "@/src/server/set/addCalenderEvent";
+import { addCalenderEvent } from "../data/legacy/addCalenderEvent";
 import { useUserStore } from "@/src/store/userStore";
 import { getPartnerName } from "@/src/shared/lib/utils/getPartnerName";
 import { detectUsesAMPM } from '@/src/shared/lib/utils/detectUsesAMPM';

@@ -4,7 +4,7 @@ import { Calendar } from "react-native-big-calendar";
 
 import { addDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from "date-fns";
 import type { OccurrenceEvent, CalendarMode } from "@/src/shared/types/Calendar";
-import { expandEventsForRange } from "./rrule.expand";
+import { expandEventsForRange } from "../domain/rrule.expand";
 import { activityColor, activityIcon } from "./icons.map";
 import { Screen } from '@/src/shared/ui/layout/Screen';
 import { Plus } from 'lucide-react-native';

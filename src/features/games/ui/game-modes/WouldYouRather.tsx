@@ -5,10 +5,10 @@ import { Text } from 'react-native-paper';
 import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import { Game, WouldYouRatherGame, WYRMode } from '@/src/shared/types/Game';
 import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
-import { wouldYouRatherData } from '@/src/data/games/wouldYouRatherData';
+import { wouldYouRatherData } from '../../domain/wouldYouRatherData';
 import { LoadingSpinner } from '@/src/shared/ui/feedback/LoadingSpinner';
 import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
-import { updateGame } from '@/src/server/game/updateGame';
+import { updateGame } from '../../data/legacy/updateGame';
 import { useAuth } from '@/src/features/auth/hooks/AuthContext';
 import {useUserStore} from "@/src/store/userStore"
 

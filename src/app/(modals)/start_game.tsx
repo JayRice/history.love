@@ -1,3 +1,3 @@
-import {StartGameScreen} from "@/src/pages/Tabs/games/StartGameScreen"
+import {StartGameScreen} from "@/src/features/games/ui/StartGameScreen"
 
 export default StartGameScreen;

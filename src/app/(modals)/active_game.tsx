@@ -1,3 +1,3 @@
-import ActiveGameScreen from '@/src/pages/Tabs/games/ActiveGameScreen';
+import ActiveGameScreen from '@/src/features/games/ui/ActiveGameScreen';
 
 export default ActiveGameScreen;

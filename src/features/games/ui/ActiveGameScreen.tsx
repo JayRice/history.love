@@ -5,7 +5,7 @@ import { BackButton } from '@/src/shared/ui/buttons/BackButton';
 import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
 import { Game, WouldYouRatherGame } from '@/src/shared/types/Game';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
-import { WouldYouRather } from '@/src/pages/Tabs/games/game-modes/WouldYouRather';
+import { WouldYouRather } from '@/src/features/games/ui/game-modes/WouldYouRather';
 import { LoadingSpinner } from '@/src/shared/ui/feedback/LoadingSpinner';
 import { View } from 'react-native';
 import { useCurrentModal } from '@/src/shared/lib/hooks/useCurrentModal';

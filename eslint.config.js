@@ -155,7 +155,7 @@ module.exports = defineConfig([
       'src/shared/ui/inputs/ToggleButtons.tsx',
       'src/shared/ui/layout/Screen.tsx',
       'src/shared/ui/ModalContext.tsx',
-      'src/data/games/gameImages.ts',
+      'src/features/games/domain/gameImages.ts',
       'src/features/auth/data/legacy/loginWithEmail.ts',
       'src/features/auth/data/legacy/signupWithEmail.ts',
       'src/shared/lib/hooks/useCurrentModal.tsx',
@@ -168,10 +168,10 @@ module.exports = defineConfig([
       'src/features/profiles/ui/OnboardingScreen.tsx',
       'src/features/auth/ui/StartScreen.tsx',
       'src/features/calendar/ui/CalendarScreen.tsx',
-      'src/pages/Tabs/games/GamesScreen.tsx',
+      'src/features/games/ui/GamesScreen.tsx',
       'src/features/memories/ui/StoryModeScreen.tsx',
       'src/server/fetchServer.ts',
-      'src/server/game/updateGame.ts',
+      'src/features/games/data/legacy/updateGame.ts',
       'src/features/relationships/data/legacy/pairUsers.ts',
       'src/features/memories/data/legacy/addMemory.tsx',
       'src/features/memories/data/legacy/editMemory.tsx',
@@ -204,7 +204,7 @@ module.exports = defineConfig([
       'src/features/profiles/ui/SettingsScreen.tsx',
       'src/features/auth/ui/StartScreen.tsx',
       'src/features/calendar/ui/AddCalendarEventScreen.tsx',
-      'src/pages/Tabs/games/game-modes/WouldYouRather.tsx',
+      'src/features/games/ui/game-modes/WouldYouRather.tsx',
       'src/features/memories/ui/TimelineScreen.tsx',
       'src/server/fetchServer.ts',
       'src/features/profiles/data/legacy/handleOnboarding.ts',
@@ -225,9 +225,9 @@ module.exports = defineConfig([
       'src/features/relationships/ui/PairScreen.tsx', // getMatchCode, pairUsers (Phase 3)
       'src/features/relationships/ui/RelationshipSettings.tsx', // unpairUsers (Phase 7)
       'src/features/calendar/ui/AddCalendarEventScreen.tsx', // addCalenderEvent (Phase 6)
-      'src/pages/Tabs/games/GamesScreen.tsx', // endGame/archiveGame (Phase 6)
-      'src/pages/Tabs/games/StartGameScreen.tsx', // startGame (Phase 6)
-      'src/pages/Tabs/games/game-modes/WouldYouRather.tsx', // updateGame (Phase 6)
+      'src/features/games/ui/GamesScreen.tsx', // endGame/archiveGame (Phase 6)
+      'src/features/games/ui/StartGameScreen.tsx', // startGame (Phase 6)
+      'src/features/games/ui/game-modes/WouldYouRather.tsx', // updateGame (Phase 6)
       'src/features/memories/ui/AddMemoryScreen.tsx', // addMemory (Phase 4)
       'src/features/memories/ui/EditMemoryScreen.tsx', // editMemory (Phase 4)
     ],

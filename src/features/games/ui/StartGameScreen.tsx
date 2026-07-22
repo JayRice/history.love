@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
 import { View } from 'react-native';
 import { BackButton } from '@/src/shared/ui/buttons/BackButton';
-import { startGame } from '@/src/server/game/startGame';
+import { startGame } from '../data/legacy/startGame';
 import { GamePreferences } from '@/src/shared/types/GamePreferences';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import Toast from 'react-native-toast-message';

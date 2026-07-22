@@ -5,8 +5,7 @@ select plan(8);
 
 insert into auth.users (instance_id, id, aud, role, email, created_at, updated_at)
 values ('00000000-0000-0000-0000-000000000000', 'aaaaaaaa-1111-0000-0000-000000000001', 'authenticated', 'authenticated', 'imm@test.test', now(), now());
-insert into public.profiles (id, display_name, age_verified)
-values ('aaaaaaaa-1111-0000-0000-000000000001', 'Imm', true);
+update public.profiles set display_name = 'Imm', age_verified = true where id = 'aaaaaaaa-1111-0000-0000-000000000001';
 insert into public.user_consents (id, profile_id, consent_type, policy_version)
 values ('eeeeeeee-1111-0000-0000-000000000009', 'aaaaaaaa-1111-0000-0000-000000000001', 'terms', 'v1');
 insert into public.relationships (id, created_by, status)

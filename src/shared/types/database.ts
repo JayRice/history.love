@@ -34,6 +34,167 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_calendar_events: {
+        Row: {
+          created_at: string
+          created_by: string
+          doc: Json
+          id: string
+          relationship_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          doc?: Json
+          id?: string
+          relationship_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          doc?: Json
+          id?: string
+          relationship_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_calendar_events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_calendar_events_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "relationships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_games: {
+        Row: {
+          created_at: string
+          created_by: string
+          doc: Json
+          id: string
+          relationship_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          doc?: Json
+          id?: string
+          relationship_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          doc?: Json
+          id?: string
+          relationship_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_games_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_games_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "relationships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_memories: {
+        Row: {
+          created_at: string
+          created_by: string
+          doc: Json
+          id: string
+          relationship_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          doc?: Json
+          id?: string
+          relationship_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          doc?: Json
+          id?: string
+          relationship_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_memories_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_memories_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "relationships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_notifications: {
+        Row: {
+          created_at: string
+          doc: Json
+          id: string
+          read_at: string | null
+          recipient_id: string
+        }
+        Insert: {
+          created_at?: string
+          doc?: Json
+          id?: string
+          read_at?: string | null
+          recipient_id: string
+        }
+        Update: {
+          created_at?: string
+          doc?: Json
+          id?: string
+          read_at?: string | null
+          recipient_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_events: {
         Row: {
           actor_id: string | null
@@ -103,6 +264,35 @@ export type Database = {
           },
         ]
       }
+      device_tokens: {
+        Row: {
+          created_at: string
+          profile_id: string
+          token: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          profile_id: string
+          token: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          profile_id?: string
+          token?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_tokens_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           age_verified: boolean
@@ -115,6 +305,7 @@ export type Database = {
           display_name: string
           handle: string | null
           id: string
+          legacy_meta: Json | null
           legal_name: string | null
           pronouns: string | null
           search_status: string
@@ -134,6 +325,7 @@ export type Database = {
           display_name?: string
           handle?: string | null
           id: string
+          legacy_meta?: Json | null
           legal_name?: string | null
           pronouns?: string | null
           search_status?: string
@@ -153,6 +345,7 @@ export type Database = {
           display_name?: string
           handle?: string | null
           id?: string
+          legacy_meta?: Json | null
           legal_name?: string | null
           pronouns?: string | null
           search_status?: string
@@ -415,10 +608,12 @@ export type Database = {
       }
       relationships: {
         Row: {
+          active_game_id: string | null
           created_at: string
           created_by: string
           end_date: string | null
           id: string
+          legacy_meta: Json | null
           relationship_type: string
           start_date: string | null
           status: string
@@ -426,10 +621,12 @@ export type Database = {
           verification_state: string
         }
         Insert: {
+          active_game_id?: string | null
           created_at?: string
           created_by: string
           end_date?: string | null
           id?: string
+          legacy_meta?: Json | null
           relationship_type?: string
           start_date?: string | null
           status?: string
@@ -437,10 +634,12 @@ export type Database = {
           verification_state?: string
         }
         Update: {
+          active_game_id?: string | null
           created_at?: string
           created_by?: string
           end_date?: string | null
           id?: string
+          legacy_meta?: Json | null
           relationship_type?: string
           start_date?: string | null
           status?: string
@@ -508,6 +707,16 @@ export type Database = {
         Args: { p_consent_type: string; p_policy_version: string }
         Returns: string
       }
+      archive_active_game: { Args: never; Returns: undefined }
+      complete_onboarding: {
+        Args: {
+          p_avatar_path: string
+          p_display_name: string
+          p_handle: string
+          p_meta: Json
+        }
+        Returns: undefined
+      }
       confirm_relationship: {
         Args: { p_relationship_id: string }
         Returns: string
@@ -520,8 +729,17 @@ export type Database = {
           relationship_id: string
         }[]
       }
+      end_active_game: { Args: never; Returns: undefined }
+      is_handle_taken: { Args: { p_handle: string }; Returns: boolean }
+      leave_relationship: { Args: never; Returns: undefined }
       revoke_invitation: {
         Args: { p_invitation_id: string }
+        Returns: undefined
+      }
+      start_game: { Args: { p_doc: Json }; Returns: string }
+      update_profile_meta: { Args: { p_patch: Json }; Returns: undefined }
+      wyr_choose: {
+        Args: { p_choice: number; p_game_id: string }
         Returns: undefined
       }
     }

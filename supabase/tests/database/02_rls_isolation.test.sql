@@ -10,10 +10,10 @@ values
   ('00000000-0000-0000-0000-000000000000', 'bbbbbbbb-0000-0000-0000-000000000002', 'authenticated', 'authenticated', 'b@test.test', now(), now()),
   ('00000000-0000-0000-0000-000000000000', 'cccccccc-0000-0000-0000-000000000003', 'authenticated', 'authenticated', 'c@test.test', now(), now());
 
-insert into public.profiles (id, display_name, age_verified) values
-  ('aaaaaaaa-0000-0000-0000-000000000001', 'A', true),
-  ('bbbbbbbb-0000-0000-0000-000000000002', 'B', true),
-  ('cccccccc-0000-0000-0000-000000000003', 'C', true);
+-- profiles auto-created by the signup trigger; set test fields.
+update public.profiles set display_name = 'A', age_verified = true where id = 'aaaaaaaa-0000-0000-0000-000000000001';
+update public.profiles set display_name = 'B', age_verified = true where id = 'bbbbbbbb-0000-0000-0000-000000000002';
+update public.profiles set display_name = 'C', age_verified = true where id = 'cccccccc-0000-0000-0000-000000000003';
 
 insert into public.relationships (id, created_by, status, verification_state)
 values ('dddddddd-0000-0000-0000-000000000004', 'aaaaaaaa-0000-0000-0000-000000000001', 'active', 'verified');

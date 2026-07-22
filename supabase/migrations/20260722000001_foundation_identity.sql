@@ -1,7 +1,9 @@
 -- Migration 0001: identity foundation.
--- profiles, user_consents (append-only), private.legacy_identity_map.
+-- profiles and user_consents (append-only).
 -- Blueprint: docs/plans/history-love-mvp-implementation-plan.md section 3,
 -- docs/audits/history-love-security-model.md.
+-- Note: the planned legacy_identity_map was dropped by founder decision
+-- (2026-07-22): there are zero Firebase users to migrate.
 
 create extension if not exists pgcrypto with schema extensions;
 
@@ -117,10 +119,6 @@ create policy user_consents_owner_select on public.user_consents
 -- security.accept_policy (migration 0004) and trusted signup flows only.
 
 -- ---------------------------------------------------------------------------
--- private.legacy_identity_map: Firebase UID -> Supabase profile bridge.
--- Service-role only; populated by the Phase 2 import scripts.
--- ---------------------------------------------------------------------------
--- ---------------------------------------------------------------------------
 -- Table grants: the grant is the ceiling, RLS restricts rows within it.
 -- No UPDATE/DELETE grant on append-only tables means forgery attempts fail
 -- loudly (42501), not silently.
@@ -128,16 +126,4 @@ create policy user_consents_owner_select on public.user_consents
 grant select, update on public.profiles to authenticated;
 grant select on public.user_consents to authenticated;
 grant all on public.profiles, public.user_consents to service_role;
-
-create table private.legacy_identity_map (
-  firebase_uid text primary key,
-  profile_id uuid references public.profiles (id) on delete set null,
-  email_at_migration text,
-  auth_provider text,
-  link_method text check (link_method in ('hash_import','email_reset','oauth_relink','manual')),
-  linked_at timestamptz not null default now()
-);
-
-revoke all on private.legacy_identity_map from public, anon, authenticated;
 grant usage on schema private to service_role;
-grant all on private.legacy_identity_map to service_role;

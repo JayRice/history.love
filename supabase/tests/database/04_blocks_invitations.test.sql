@@ -7,10 +7,9 @@ values
   ('00000000-0000-0000-0000-000000000000', 'aaaaaaaa-2222-0000-0000-000000000001', 'authenticated', 'authenticated', 'inviter@test.test', now(), now()),
   ('00000000-0000-0000-0000-000000000000', 'bbbbbbbb-2222-0000-0000-000000000002', 'authenticated', 'authenticated', 'acceptor@test.test', now(), now()),
   ('00000000-0000-0000-0000-000000000000', 'cccccccc-2222-0000-0000-000000000003', 'authenticated', 'authenticated', 'blocked@test.test', now(), now());
-insert into public.profiles (id, display_name, age_verified) values
-  ('aaaaaaaa-2222-0000-0000-000000000001', 'Inviter', true),
-  ('bbbbbbbb-2222-0000-0000-000000000002', 'Acceptor', true),
-  ('cccccccc-2222-0000-0000-000000000003', 'Blocked', true);
+-- profiles auto-created by the signup trigger.
+update public.profiles set age_verified = true where id in
+  ('aaaaaaaa-2222-0000-0000-000000000001','bbbbbbbb-2222-0000-0000-000000000002','cccccccc-2222-0000-0000-000000000003');
 
 -- ---- Blocks ---------------------------------------------------------------
 select set_config('request.jwt.claims',
@@ -127,8 +126,7 @@ select throws_ok(
 -- Expired invitation fails.
 insert into auth.users (instance_id, id, aud, role, email, created_at, updated_at)
 values ('00000000-0000-0000-0000-000000000000', 'dddddddd-2222-0000-0000-000000000005', 'authenticated', 'authenticated', 'expired@test.test', now(), now());
-insert into public.profiles (id, display_name, age_verified)
-values ('dddddddd-2222-0000-0000-000000000005', 'Expired', true);
+update public.profiles set age_verified = true where id = 'dddddddd-2222-0000-0000-000000000005';
 
 select set_config('request.jwt.claims',
   json_build_object('sub', 'dddddddd-2222-0000-0000-000000000005', 'role', 'authenticated')::text, true);

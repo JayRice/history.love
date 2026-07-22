@@ -6,9 +6,7 @@ import { PaperProvider } from 'react-native-paper';
 import { paperTheme } from '@/src/theme/paperTheme';
 import { useUserStore } from '@/src/store/userStore';
 import { collection, doc, limit, onSnapshot, orderBy, query, where } from 'firebase/firestore';
-import {db, storage} from "@/src/config/firebase";
-import {getDoc} from "firebase/firestore"
-import {DEV_MODE} from '@/constants';
+import {db} from "@/src/config/firebase";
 
 import Toast from "react-native-toast-message";
 
@@ -43,6 +41,8 @@ export default function RootLayout() {
 }
 function InnerLayout() {
   useFrameworkReady();
+
+  console.log(" Inside app")
   const { authUser, authUserLoading } = useAuth();
 
 

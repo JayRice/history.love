@@ -3,7 +3,6 @@ import { View , Image} from 'react-native';
 import { Card } from "react-native-paper";
 
 import { Redirect, router } from 'expo-router';
-import { useAuth } from '@/src/hooks/useAuth';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 import Logo from '@/assets/images/logo.svg';
 

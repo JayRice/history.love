@@ -3,8 +3,6 @@ import { Screen } from '@/src/components/layout/Screen';
 import React, { useEffect, useState } from 'react';
 import { BackButton } from '@/src/components/buttons/BackButton';
 import { getPartnerName } from '@/src/utils/getPartnerName';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '@/src/config/firebase';
 import { Game } from '@/src/types/Game';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { Text } from 'react-native-paper';

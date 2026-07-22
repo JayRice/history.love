@@ -1,15 +1,10 @@
-import loginWithGoogle from '@/src/database/auth/loginWithApple';
-
 import loginWithApple from '@/src/database/auth/loginWithApple';
 import loginWithEmail from '@/src/database/auth/loginWithEmail';
 
 import { registerFcmToken } from '@/src/database/messaging/handleFcmMessaging';
-import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth';
-import type { AuthRequest } from 'expo-auth-session';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useGoogleLogin } from '@/src/hooks/useGoogleLogin';
 import signupWithEmail from '@/src/database/auth/signupWithEmail';
-import { toast } from '@lucide/lab';
 
 
 

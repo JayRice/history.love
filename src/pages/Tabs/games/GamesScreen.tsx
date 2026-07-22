@@ -9,8 +9,6 @@ import { getPartnerName } from '@/src/utils/getPartnerName';
 import { gameData } from '@/src/data/games/gameData';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { useModal } from '@/src/contexts/ModalContext';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '@/src/config/firebase';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { Game } from '@/src/types/Game';
 import { endGame } from '@/src/server/game/endGame';

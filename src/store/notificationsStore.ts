@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
-import Relationship from '@/src/types/Relationship';
-import { Notification } from '@/src/types/Notification';
+import { Notification } from '@/src/shared/types/Notification';
 type Store = {
   notifications: Notification[] | null;
   setNotifications: (notifications: Notification[]) => void;

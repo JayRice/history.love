@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { View, ScrollView } from 'react-native';
-import { Card, Text, Divider, IconButton  } from 'react-native-paper';
+import { View } from 'react-native';
+import { Card, Text, Divider  } from 'react-native-paper';
 import { Shield, MapPin, Clock, Fingerprint, Mic } from 'lucide-react-native';
-import { Screen } from '@/src/components/layout/Screen';
-import { SectionHeader } from '@/src/components/layout/SectionHeader';
-import { ToggleField } from '@/src/components/inputs/ToggleField';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
-import { ConsentVerificationForm } from '@/src/types/Consent';
-import { CloseButton } from '@/src/components/buttons/CloseButton';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { SectionHeader } from '@/src/shared/ui/layout/SectionHeader';
+import { ToggleField } from '@/src/shared/ui/inputs/ToggleField';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
+import { SecondaryButton } from '@/src/shared/ui/buttons/SecondaryButton';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
+import { ConsentVerificationForm } from '@/src/shared/types/Consent';
+import { CloseButton } from '@/src/shared/ui/buttons/CloseButton';
 import { router } from 'expo-router';
 
 export default function ConsentVerificationScreen() {
@@ -49,8 +49,7 @@ export default function ConsentVerificationScreen() {
     try {
       // Mock consent verification
       await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('Consent record created:', form);
-      
+
       // Show success and navigate back
       alert('Consent verification completed successfully');
     } catch (error) {
@@ -201,7 +200,7 @@ export default function ConsentVerificationScreen() {
                 Voice Signature
               </Text>
               <Text variant="bodySmall" className="text-gray-600">
-                "I consent to this verification"
+                &quot;I consent to this verification&quot;
               </Text>
             </View>
           </View>

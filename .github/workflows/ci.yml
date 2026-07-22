@@ -1,0 +1,61 @@
+# Phase 0B CI: full engineering gate.
+# Order: cheap static gates first, then the expensive bundle check.
+# Web export is deliberately NOT a required gate (mobile MVP); it works
+# as of the tooling-debt commit but must never block mobile work.
+name: ci
+
+on:
+  push:
+    branches: [main, "phase-*"]
+  pull_request:
+
+jobs:
+  safety-and-bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Migration safety check
+        run: npm run check:safety
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint (boundary rules + allowlist)
+        run: npm run lint
+
+      - name: Bundle check (Android)
+        id: bundle
+        # A full Metro bundle catches unresolved imports and syntax errors
+        # without an emulator. EXPO_PUBLIC_* values are inlined at bundle
+        # time; CI uses placeholders (runtime validation lives in
+        # src/config/env.ts).
+        env:
+          EXPO_PUBLIC_API_URL: https://ci-placeholder.invalid
+          EXPO_PUBLIC_FIREBASE_API_KEY: ci-placeholder
+        run: npx expo export --platform android
+
+  database:
+    # Phase 1 gate: migrations apply from zero and the pgTAP/RLS attack
+    # suite passes against a fresh local stack.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start local stack, apply migrations + seed
+        run: supabase db start && supabase db reset --local
+
+      - name: pgTAP / RLS attack suite
+        run: supabase test db

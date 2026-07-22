@@ -4,7 +4,8 @@ export default () => ({
     name: "history.love",
     slug: "historylove",
     owner: "jaydenrice",
-    entryPoint: "./index.tsx",
+    // Entry is expo-router/entry via package.json "main"; the router
+    // resolves the route tree from src/app (root app/ was moved there).
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
@@ -17,8 +18,6 @@ export default () => ({
       infoPlist: {
         NSCameraUsageDescription: "Allow taking a profile photo.",
         NSPhotoLibraryUsageDescription: "Allow choosing a profile photo.",
-        NSAppTransportSecurity: { NSAllowsArbitraryLoads: true },
-
       }
     },
     web: {
@@ -33,17 +32,15 @@ export default () => ({
 
     android: {
       package: "com.historylove.app",
-      usesCleartextTraffic: true
     },
     extra: {
       router: {},
       "eas": {
         "projectId": "bd3fcdab-b533-42b8-8275-54aee70ef587"
       },
-      firebaseApiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
-      webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
-      androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-      api_url: "https://confineless-alyson-lower.ngrok-free.dev/" //"http://10.0.2.2:5000"
+      // Supabase configuration comes from EXPO_PUBLIC_SUPABASE_URL and
+      // EXPO_PUBLIC_SUPABASE_ANON_KEY, validated at startup by
+      // src/shared/config/env.ts.
     },
   },
 });

@@ -1,4 +1,4 @@
-import { ConsentRecord } from '@/src/types';
+import { ConsentRecord } from '@/src/shared/types';
 
 // Placeholder API function for saving consent records
 export default async function saveConsentRecord(consentData: Omit<ConsentRecord, 'id' | 'createdAt' | 'updatedAt'>) {
@@ -12,8 +12,6 @@ export default async function saveConsentRecord(consentData: Omit<ConsentRecord,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
-
-  console.log('Saved consent record:', newRecord);
 
   return {
     success: true,

@@ -1,26 +1,23 @@
 import React, { useEffect } from 'react';
 import { View, TouchableOpacity, Pressable } from 'react-native';
 import { Text, Card } from 'react-native-paper';
-import {  Icon } from 'lucide-react-native';
-import { Screen } from '@/src/components/layout/Screen';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/userStore';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { useNotificationsStore } from '@/src/store/notificationsStore';
 import { Ionicons } from "@expo/vector-icons";
-import { HorizontalScrollList } from '@/src/components/layout/HorizontalScrollList';
+import { HorizontalScrollList } from '@/src/shared/ui/layout/HorizontalScrollList';
 
 
 import Questions from "@/assets/images/home-images/questions.svg"
 import CalendarImage from "@/assets/images/home-images/calendar.svg"
 import Trophy from "@/assets/images/home-images/trophy.svg"
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { getPartnerName } from '@/src/utils/getPartnerName';
-import { getMoodById, MoodId, MoodList, RelationshipMood } from '@/src/types/Moods';
-import AnimatedHeart from '@/src/components/elements/AnimatedHeart';
+import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
+import { getMoodById, RelationshipMood } from '@/src/shared/types/Moods';
 import { useAuth } from '@/src/contexts/AuthContext';
-import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
+import { LoadingSpinner } from '@/src/shared/ui/feedback/LoadingSpinner';
 
 
 

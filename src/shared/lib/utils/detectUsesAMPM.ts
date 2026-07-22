@@ -1,0 +1,19 @@
+import * as Localization from "expo-localization";
+
+export function detectUsesAMPM(): boolean {
+  try {
+    // expo-localization removed the static `locale` export; at runtime this is
+    // undefined today and Intl falls back to the device default. Typed cast
+    // preserves that behavior; migrate to getLocales() in a UI phase.
+    const locale = (Localization as { locale?: string }).locale;
+    const fmt = new Intl.DateTimeFormat(locale, { hour: "numeric" });
+    const hc = (fmt.resolvedOptions().hourCycle || "") as string;
+    if (hc.includes("h12") || hc.includes("h11")) return true;
+
+    // Fallback: look for AM/PM in a formatted time string
+    const sample = new Date(2020, 0, 1, 13, 0).toLocaleTimeString(locale, { hour: "numeric" });
+    return /AM|PM/i.test(sample);
+  } catch {
+    return false; // safe default to 24h if detection fails
+  }
+}

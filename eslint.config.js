@@ -144,7 +144,7 @@ module.exports = defineConfig([
   // 4a. `any` usage predating the migration (63 occurrences).
   {
     files: [
-      'src/app/_layout.tsx',
+      'src/shared/lib/legacy/useLegacyFirebaseSync.ts',
       'src/shared/ui/animations/CollisionHeartAnimation.tsx',
       'src/shared/ui/buttons/BackButton.tsx',
       'src/shared/ui/elements/GalleryScreen.tsx',
@@ -218,7 +218,7 @@ module.exports = defineConfig([
   // (see docs/migration-status.md "Remaining Firebase dependencies").
   {
     files: [
-      'src/app/_layout.tsx', // six Firestore listeners (Phases 3-4, 6)
+      'src/shared/lib/legacy/useLegacyFirebaseSync.ts', // six Firestore listeners (Phases 3-4, 6)
       'src/pages/Location/LocationSearchScreen.tsx', // fetchLocations (Phase 3/PD)
       'src/features/profiles/ui/OnboardingScreen.tsx', // handleOnboarding, match code (Phase 2-3)
       'src/features/profiles/ui/forms/ProfileForm.tsx', // isUsernameTaken (Phase 2)

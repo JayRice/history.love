@@ -1,3 +1,3 @@
-import JournalScreen from '@/src/pages/Journal/JournalScreen';
+import JournalScreen from '@/src/features/journal/ui/JournalScreen';
 
 export default JournalScreen;

@@ -199,7 +199,7 @@ module.exports = defineConfig([
       'src/shared/lib/hooks/useJpegCompressor.ts',
       'src/features/auth/ui/LoginScreen.tsx',
       'src/pages/Consent/ConsentVerificationScreen.tsx',
-      'src/pages/Journal/JournalScreen.tsx',
+      'src/features/journal/ui/JournalScreen.tsx',
       'src/features/relationships/ui/PairScreen.tsx',
       'src/features/profiles/ui/SettingsScreen.tsx',
       'src/features/auth/ui/StartScreen.tsx',

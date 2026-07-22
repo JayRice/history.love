@@ -13,8 +13,6 @@ export default async function saveConsentRecord(consentData: Omit<ConsentRecord,
     updatedAt: new Date().toISOString(),
   };
 
-  console.log('Saved consent record:', newRecord);
-
   return {
     success: true,
     data: newRecord,

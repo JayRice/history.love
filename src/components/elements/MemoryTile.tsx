@@ -25,8 +25,6 @@ export function MemoryTile({ memory }: Props) {
     return memoryImages[cover.name]
   }, [memoryImages, cover]);
 
-  console.log("coverURL", coverURL);
-
   // Compute aspect ratio for correct masonry sizing.
   // Fallback to 4:3 if unknown.
   const aspectRatio =

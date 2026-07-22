@@ -13,8 +13,6 @@ export default async function saveJournalEntry(entryData: Omit<JournalEntry, 'id
     updatedAt: new Date().toISOString(),
   };
 
-  console.log('Saved journal entry:', newEntry);
-
   return {
     success: true,
     data: newEntry,

@@ -91,8 +91,6 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
 
       const converted = await compressManyPhotos(selected);
 
-      console.log("selected: ", selected, "converted: ", converted);
-
 
 
       if (mode === 'replace' || replaceOnChange) {

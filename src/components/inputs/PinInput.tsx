@@ -89,7 +89,6 @@ export default function PinInput({
   const chars = useMemo(() => {
     const clean = sanitize(mode, value || "").slice(0, length);
     if (clean !== value) setValue&&setValue(clean); // keep parent state sanitized
-    console.log("clean: ", Array.from({ length }, (_, i) => clean[i] ?? ""))
     return Array.from({ length }, (_, i) => clean[i] ?? "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, length, mode]);
@@ -161,7 +160,6 @@ export default function PinInput({
   function handleKeyPressAt(index: number, e: { nativeEvent?: { key?: string } }) {
 
     const key = e?.nativeEvent?.key;
-    console.log(key)
 
     if (key === "Backspace") {
       if (chars[index]) {

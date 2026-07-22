@@ -53,8 +53,6 @@ export default async function fetchServer(
       body: (payload instanceof FormData) ? payload:body,
     });
 
-    console.log("fetch server response", res);
-
     // Try to detect non-JSON responses safely
     const contentType = res.headers.get("content-type") || "";
     if (!contentType.toLowerCase().includes("application/json")) {
@@ -66,8 +64,8 @@ export default async function fetchServer(
     const json = await res.json();
 
     if (!res.ok) {
-      // backend returned JSON error
-      console.warn("Server error JSON", { status: res.status, url, json });
+      // backend returned JSON error; never log the full payload
+      console.warn("Server error", { status: res.status, url, error: json?.error });
       throw new Error(json?.error || `Request failed (${res.status})`);
     }
 

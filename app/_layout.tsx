@@ -18,6 +18,7 @@ import Toast from "react-native-toast-message";
 
 
 import User from "../src/types/User"
+import { logger } from '@/src/lib/logger';
 import { AuthProvider, useAuth } from "@/src/contexts/AuthContext";
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { ref, getDownloadURL } from "firebase/storage";
@@ -47,7 +48,6 @@ export default function RootLayout() {
 function InnerLayout() {
   useFrameworkReady();
 
-  console.log(" Inside app")
   const { authUser, authUserLoading } = useAuth();
 
 
@@ -111,24 +111,16 @@ function InnerLayout() {
   }
 
   useEffect(() => {
-    console.log("Reloading Instance")
-  }, []);
-
-
-  useEffect(() => {
 
     if (!relationship || !relationship?.activeGame) {return}
 
     const activeGameId = relationship.activeGame;
-    console.log("listening to active game: ", activeGameId)
     const unsubGame = onSnapshot(doc(db, "relationships", relationship.id, "games", activeGameId), (snap) => {
       if (snap.exists()) {
         const game = snap.data() as Game;
         setCurrentGame(game);
-        console.log("Game updated:", game);
       } else {
         setCurrentGame(null)
-        console.log("Game document does not exist");
       }
 
 
@@ -149,7 +141,7 @@ function InnerLayout() {
         fetchMemoryImages(memories)
         setMemories(memories);
       } catch(err) {
-        console.log("Error while fetching memory images: ", err)
+        logger.warn("Failed to fetch memory images");
       }
 
     });

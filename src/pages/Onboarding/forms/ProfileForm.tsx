@@ -32,7 +32,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ formUser, updateFormUser , us
     async function checkIfTaken() {
       if (debouncedUsername) {
         const taken = await isUsernameTaken(debouncedUsername);
-        console.log("username taken: ", taken);
         if (setUsernameTaken){
           setUsernameTaken(taken);
         }

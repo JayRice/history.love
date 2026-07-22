@@ -24,7 +24,6 @@ const GenderForm = ({formUser, updateFormUser}: FormProps) => {
           updateFormUser("profile.gender", gender)
         },
         "other": () => {
-          console.log(formUser)
           updateFormUser("profile.gender", "")
           setShowOtherInput(true)
         }

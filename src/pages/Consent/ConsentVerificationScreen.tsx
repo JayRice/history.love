@@ -49,8 +49,7 @@ export default function ConsentVerificationScreen() {
     try {
       // Mock consent verification
       await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('Consent record created:', form);
-      
+
       // Show success and navigate back
       alert('Consent verification completed successfully');
     } catch (error) {

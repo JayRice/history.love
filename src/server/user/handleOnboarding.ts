@@ -17,7 +17,6 @@ export default async function handleOnboarding(user: User){
 
   if (!user?.profile?.profileImage) {return}
 
-  console.log("local uri:",  user?.profile?.profileImage?.local_uri)
   formData.append("profile_picture", {
     uri: user?.profile?.profileImage?.local_uri,
     type: "image/png",
@@ -32,8 +31,6 @@ export default async function handleOnboarding(user: User){
 
   const token = await authUser.getIdToken();
 
-  console.log(`${Constants.expoConfig?.extra.api_url}/api/users/handle_onboarding`)
-
   try {
     const res = await fetch(`${Constants.expoConfig?.extra.api_url}/api/users/handle_onboarding`, {
       method: "POST",
@@ -44,7 +41,6 @@ export default async function handleOnboarding(user: User){
 
     });
     const json = await res.json();
-    console.log("json response: ", json)
 
     return json;
   }catch (e){

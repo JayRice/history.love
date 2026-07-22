@@ -96,7 +96,6 @@ export default function PairScreen ()  {
             const response = await pairUsers(pinValue)
             setIsPairing(false)
 
-            console.log("pair response: ", response)
             if (response.success){
               router.replace("/pair_congratulations")
             }

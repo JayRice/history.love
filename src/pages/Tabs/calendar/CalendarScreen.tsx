@@ -78,8 +78,6 @@ export default function CalendarScreen() {
     return expandEventsForRange(calendarEvents, visibleRange.from, visibleRange.to);
   }, [calendarEvents, visibleRange]);
 
-  console.log("expanded calender events: ", expanded)
-
   const eventsForBigCalendar = useMemo(() => {
     return expanded.map((e) => ({
       id: e.instanceKey,

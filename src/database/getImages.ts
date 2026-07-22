@@ -9,8 +9,8 @@ export default async function getImages(dir: string, images: string[]) {
         const imageRef = ref(storage, `${dir}/${imageId}`);
         return await getDownloadURL(imageRef);
       } catch (err) {
-
-        console.log("full error object:", JSON.stringify(err, null, 2));
+        // Storage errors can embed signed URLs and object paths; log the code only.
+        console.warn("getImages failed:", (err as { code?: string })?.code ?? "unknown");
         return null;
       }
     })

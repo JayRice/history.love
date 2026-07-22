@@ -8,7 +8,7 @@ insert into auth.users (instance_id, id, aud, role, email, encrypted_password, e
 values
   ('00000000-0000-0000-0000-000000000000', '11111111-1111-1111-1111-111111111111', 'authenticated', 'authenticated', 'ada@example.test', extensions.crypt('password123', extensions.gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}', '{}', now(), now()),
   ('00000000-0000-0000-0000-000000000000', '22222222-2222-2222-2222-222222222222', 'authenticated', 'authenticated', 'grace@example.test', extensions.crypt('password123', extensions.gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}', '{}', now(), now())
-on conflict (id) do update set display_name = excluded.display_name;
+on conflict (id) do nothing;
 
 insert into public.profiles (id, display_name, handle, age_verified)
 values

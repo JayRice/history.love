@@ -1,58 +1,56 @@
+import { useState } from 'react';
 import loginWithApple from '../data/legacy/loginWithApple';
 import loginWithEmail from '../data/legacy/loginWithEmail';
-
-import { registerFcmToken } from '@/src/features/notifications/data/legacy/handleFcmMessaging';
-import { useState } from 'react';
-import { useGoogleLogin } from '@/src/features/auth/hooks/useGoogleLogin';
 import signupWithEmail from '../data/legacy/signupWithEmail';
+import { registerPushToken } from '@/src/features/notifications/domain/pushTokens';
+import { logger } from '@/src/shared/lib/logger';
 
-
-
+type LoginKind = "google" | "email-login" | "email-signup" | "apple";
+type LoginResponse =
+  | { success: true; user: { uid: string; email: string | null } }
+  | { success: false; error: string };
 
 type UseLogin = {
-  loading: boolean   ;
+  loading: boolean;
   error: string | null;
-  login: ( type: "google" | "email-login"| "email-signup" | "apple", email?: string, password?: string) => any;
+  login: (type: LoginKind, email?: string, password?: string) => Promise<LoginResponse>;
 };
-export default  function useLogin() : UseLogin  {
 
-
-
+export default function useLogin(): UseLogin {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-
-  let {signInWithGoogle} = useGoogleLogin();
-
-
-  async function login ( type: "google" | "email-login"| "email-signup" | "apple", email?: string, password?: string) {
-    let response : any;
+  async function login(type: LoginKind, email?: string, password?: string): Promise<LoginResponse> {
+    let response: LoginResponse = { success: false, error: "Unsupported login type." };
 
     setLoading(true);
-    if (type == "google") {
-      response = await signInWithGoogle()
-    }else if (type == "apple" ){
-      response = await loginWithApple()
-    }else if (email && password){
-      if (type==="email-login"){
-        response = await loginWithEmail(email, password)
-      }else if (type==="email-signup"){
-        response = await signupWithEmail(email, password)
+    if (type === "google") {
+      // Google OAuth returns with Supabase provider configuration (see
+      // docs/migration-status.md, OAuth section).
+      response = { success: false, error: "Google sign-in is not available during the migration." };
+    } else if (type === "apple") {
+      response = await loginWithApple();
+    } else if (email && password) {
+      if (type === "email-login") {
+        response = await loginWithEmail(email, password);
+      } else if (type === "email-signup") {
+        response = await signupWithEmail(email, password);
       }
     }
 
-    if (response.success){
-      await registerFcmToken(response.user.uid)
-    }else if (response.error){
-      setError(error)
+    if (response.success) {
+      try {
+        await registerPushToken(response.user.uid);
+      } catch {
+        logger.warn("push token registration failed");
+      }
+    } else {
+      setError(response.error);
     }
-
 
     setLoading(false);
     return response;
   }
 
-  return {login, loading, error};
-
-
+  return { login, loading, error };
 }

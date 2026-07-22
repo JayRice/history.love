@@ -1,14 +1,10 @@
-import { doc, updateDoc } from '@firebase/firestore';
-import { db } from '@/src/shared/config/firebase';
+import { supabase } from '@/src/shared/lib/supabase';
+import { logger } from '@/src/shared/lib/logger';
 
-export default async function markRead(uid: string, notificationId: string) {
-
-  try {
-    await updateDoc(doc(db, "users", uid, "notifications", notificationId), {
-      readAt: new Date()
-    });
-  }catch(e){
-    console.error(e);
-  }
-
+export default async function markRead(_uid: string, notificationId: string) {
+  const { error } = await supabase
+    .from('app_notifications')
+    .update({ read_at: new Date().toISOString() })
+    .eq('id', notificationId);
+  if (error) logger.warn("mark read failed:", error.message);
 }

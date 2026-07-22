@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 // Environment validation for values inlined into the client bundle.
-// Only EXPO_PUBLIC_* variables are ever readable here; secrets must
-// never be added to this file or to Expo env at all.
+// Only EXPO_PUBLIC_* variables are ever readable here; secrets (service
+// role keys, database passwords) must never be added to Expo env at all.
 //
 // Fails loudly at startup (dev red box / production crash) rather than
 // letting the app run against a missing or unsafe configuration.
@@ -10,16 +10,16 @@ import { z } from "zod";
 const TUNNEL_HOST_PATTERN = /(ngrok|trycloudflare|loca\.lt|localtunnel)/i;
 
 const envSchema = z.object({
-  EXPO_PUBLIC_API_URL: z.string().url(),
-  EXPO_PUBLIC_FIREBASE_API_KEY: z.string().min(1),
+  EXPO_PUBLIC_SUPABASE_URL: z.string().url(),
+  EXPO_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
 });
 
 export type ClientEnv = z.infer<typeof envSchema>;
 
 export function validateEnv(): ClientEnv {
   const parsed = envSchema.safeParse({
-    EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL,
-    EXPO_PUBLIC_FIREBASE_API_KEY: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+    EXPO_PUBLIC_SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
+    EXPO_PUBLIC_SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
   });
 
   if (!parsed.success) {
@@ -32,16 +32,16 @@ export function validateEnv(): ClientEnv {
     );
   }
 
-  const apiUrl = new URL(parsed.data.EXPO_PUBLIC_API_URL);
+  const url = new URL(parsed.data.EXPO_PUBLIC_SUPABASE_URL);
 
   if (!__DEV__) {
-    if (TUNNEL_HOST_PATTERN.test(apiUrl.hostname)) {
+    if (TUNNEL_HOST_PATTERN.test(url.hostname)) {
       throw new Error(
-        `Production builds must not point at a development tunnel (${apiUrl.hostname}).`
+        `Production builds must not point at a development tunnel (${url.hostname}).`
       );
     }
-    if (apiUrl.protocol !== "https:") {
-      throw new Error("Production API URL must use https.");
+    if (url.protocol !== "https:") {
+      throw new Error("Production Supabase URL must use https.");
     }
   }
 

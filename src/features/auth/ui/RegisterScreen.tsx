@@ -11,7 +11,6 @@ import { useUserStore } from '@/src/store/userStore';
 import { BackButton } from '@/src/shared/ui/buttons/BackButton';
 import Logo from '@/assets/images/logo.svg';
 import signupWithEmail from '../data/legacy/signupWithEmail';
-import { useGoogleLogin } from '@/src/features/auth/hooks/useGoogleLogin';
 import { useToast } from '@/src/shared/ui/ToastProvider';
 
 export default function RegisterScreen() {
@@ -60,31 +59,12 @@ export default function RegisterScreen() {
 
   const toast = useToast();
 
-  const { signInWithGoogle, googleLoading, googleError } = useGoogleLogin();
-
+  // Google OAuth returns with Supabase provider configuration (see
+  // docs/migration-status.md, OAuth section).
+  const googleLoading = false;
 
   const handleGoogleLogin = async () => {
-    const userCred = await signInWithGoogle();
-    if (userCred) {
-      const user = userCred.user;
-
-      const uid = user.uid;
-      const email = user.email;
-      const displayName = user.displayName;
-      const photoURL = user.photoURL;
-
-      if (!email || !displayName || !photoURL) {
-        return toast("Google account is invalid, try again.")
-      }
-      setUserProperty("email", email);
-      setUserProperty("name", displayName);
-      setUserProperty("profileImage", {
-        type: "google",
-        url: photoURL
-      })
-
-      router.replace("/onboarding");
-    }
+    toast("Google sign-in is not available during the migration. Use email for now.");
   };
 
   const isFormValid = Object.values(formData).every(value => value.trim() !== '') && 
@@ -163,7 +143,7 @@ export default function RegisterScreen() {
 
             <PrimaryButton
               onPress={handleGoogleLogin}
-              error={googleError ?? ""}
+              error={""}
               loading={googleLoading}
               size="large"
             >

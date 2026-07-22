@@ -144,7 +144,6 @@ module.exports = defineConfig([
   // 4a. `any` usage predating the migration (63 occurrences).
   {
     files: [
-      'src/shared/lib/legacy/useLegacyFirebaseSync.ts',
       'src/shared/ui/animations/CollisionHeartAnimation.tsx',
       'src/shared/ui/buttons/BackButton.tsx',
       'src/shared/ui/elements/GalleryScreen.tsx',
@@ -156,12 +155,8 @@ module.exports = defineConfig([
       'src/shared/ui/layout/Screen.tsx',
       'src/shared/ui/ModalContext.tsx',
       'src/features/games/domain/gameImages.ts',
-      'src/features/auth/data/legacy/loginWithEmail.ts',
-      'src/features/auth/data/legacy/signupWithEmail.ts',
       'src/shared/lib/hooks/useCurrentModal.tsx',
-      'src/features/auth/hooks/useGoogleLogin.ts',
       'src/shared/lib/hooks/useJpegCompressor.ts',
-      'src/features/auth/hooks/useLogin.ts',
       'src/shared/lib/sfx.ts',
       'src/pages/Home/HomeScreen.tsx',
       'src/pages/Location/LocationSearchScreen.tsx',
@@ -170,13 +165,6 @@ module.exports = defineConfig([
       'src/features/calendar/ui/CalendarScreen.tsx',
       'src/features/games/ui/GamesScreen.tsx',
       'src/features/memories/ui/StoryModeScreen.tsx',
-      'src/server/fetchServer.ts',
-      'src/features/games/data/legacy/updateGame.ts',
-      'src/features/relationships/data/legacy/pairUsers.ts',
-      'src/features/memories/data/legacy/addMemory.tsx',
-      'src/features/memories/data/legacy/editMemory.tsx',
-      'src/features/relationships/data/legacy/unpairUsers.ts',
-      'src/features/profiles/data/legacy/handleOnboarding.ts',
       'src/shared/types/Notification.ts',
     ],
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
@@ -192,9 +180,6 @@ module.exports = defineConfig([
       'src/shared/ui/inputs/PhotoInput.tsx',
       'src/shared/ui/layout/SwipeDownContainer.tsx',
       'src/shared/ui/ModalContext.tsx',
-      'src/shared/lib/legacy/getImages.ts',
-      'src/features/notifications/data/legacy/handleFcmMessaging.ts',
-      'src/features/notifications/data/legacy/markRead.ts',
       'src/shared/lib/hooks/useCurrentModal.tsx',
       'src/shared/lib/hooks/useJpegCompressor.ts',
       'src/features/auth/ui/LoginScreen.tsx',
@@ -206,8 +191,6 @@ module.exports = defineConfig([
       'src/features/calendar/ui/AddCalendarEventScreen.tsx',
       'src/features/games/ui/game-modes/WouldYouRather.tsx',
       'src/features/memories/ui/TimelineScreen.tsx',
-      'src/server/fetchServer.ts',
-      'src/features/profiles/data/legacy/handleOnboarding.ts',
     ],
     rules: { 'no-console': 'off' },
   },
@@ -240,15 +223,12 @@ module.exports = defineConfig([
   // then they keep their provider imports.
   {
     files: [
-      'src/features/auth/hooks/AuthContext.tsx',
-      'src/features/auth/hooks/useGoogleLogin.ts',
       // Cross-feature reach into auth's legacy logout; replaced by an auth
       // use case in Phase 2.
       'src/features/profiles/ui/SettingsScreen.tsx',
       'src/features/profiles/ui/forms/WelcomeForm.tsx',
       // useLogin registers the FCM token from notifications' legacy data;
       // replaced when Phase 2 rebuilds the sign-in use case.
-      'src/features/auth/hooks/useLogin.ts',
     ],
     rules: { 'no-restricted-imports': 'off' },
   },

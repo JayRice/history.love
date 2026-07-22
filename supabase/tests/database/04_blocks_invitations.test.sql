@@ -46,8 +46,8 @@ select * from public.create_invitation('dating', null);
 
 select results_eq(
   $$select length(code)::int from t_inv$$,
-  array[10],
-  'create_invitation returns a 10-char plaintext code once'
+  array[6],
+  'create_invitation returns a 6-char plaintext code once'
 );
 
 -- Inviter sees the invitation row; only the hash is stored.
@@ -78,7 +78,7 @@ select throws_ok(
 select set_config('request.jwt.claims',
   json_build_object('sub', 'bbbbbbbb-2222-0000-0000-000000000002', 'role', 'authenticated')::text, true);
 select throws_ok(
-  $$select public.accept_invitation('0000000000')$$,
+  $$select public.accept_invitation('000000')$$,
   'invitation is not valid',
   'wrong code fails with the generic message'
 );

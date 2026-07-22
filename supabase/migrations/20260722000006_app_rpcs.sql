@@ -31,10 +31,10 @@ grant execute on function public.is_handle_taken(text) to authenticated;
 -- legacy_meta (dies when onboarding is rebuilt on PRD columns).
 -- ---------------------------------------------------------------------------
 create or replace function public.complete_onboarding(
-  p_display_name text,
-  p_handle text,
-  p_avatar_path text,
-  p_meta jsonb
+  p_display_name text default null,
+  p_handle text default null,
+  p_avatar_path text default null,
+  p_meta jsonb default '{}'::jsonb
 ) returns void
 language plpgsql
 security definer

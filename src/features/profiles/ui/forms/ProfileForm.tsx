@@ -1,6 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { auth } from '@/src/shared/config/firebase';
-import { ProfileImage } from '@/src/shared/types/User';
 import useDebounce from '@/src/shared/lib/hooks/useDebounce';
 import isUsernameTaken from '../../data/legacy/isUsernameTaken';
 import * as ImagePicker from 'expo-image-picker';
@@ -15,16 +13,8 @@ import * as CONSTANTS from "@/src/shared/config/constants"
 const ProfileForm: React.FC<ProfileFormProps> = ({ formUser, updateFormUser , usernameTaken, setUsernameTaken}) => {
   const [requestingPerms, setRequestingPerms] = useState(false)
 
-  // Seed Google photoURL exactly once if user has none set yet
-  useEffect(() => {
-    const photoURL = auth.currentUser?.photoURL;
-    const hasUserImage = !!formUser?.profile?.profileImage?.local_uri;
-
-    if (!hasUserImage && photoURL) {
-      updateFormUser("profile.profileImage", { type: "google", local_uri: photoURL } as ProfileImage);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // (Google avatar seeding removed with Firebase; returns with Supabase
+  // OAuth in the auth phase.)
 
   const debouncedUsername = useDebounce(formUser?.profile?.username, 500);
 

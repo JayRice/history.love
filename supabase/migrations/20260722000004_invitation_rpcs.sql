@@ -77,8 +77,9 @@ begin
   insert into public.relationship_members (relationship_id, profile_id, member_status, joined_at)
   values (v_relationship_id, v_uid, 'active', now());
 
-  -- 10 hex chars from 5 random bytes: not guessable within 5 attempts.
-  v_code := encode(extensions.gen_random_bytes(5), 'hex');
+  -- 6 uppercase hex chars (16^6 combinations): matches the existing 6-digit
+  -- pairing UI; brute force is bounded by the 5-attempt cap and expiry.
+  v_code := upper(substr(encode(extensions.gen_random_bytes(4), 'hex'), 1, 6));
 
   insert into public.relationship_invitations (relationship_id, inviter_id, code_hash)
   values (v_relationship_id, v_uid, encode(extensions.digest(v_code, 'sha256'), 'hex'))

@@ -1,40 +1,40 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "@/src/shared/config/firebase";
-import { useUserStore } from '@/src/store/userStore';
+import type { AuthUser } from "../domain/AuthSession";
+import { onAuthUserChange } from "../data/authRepository";
 
-type AuthContextType = {
-  authUser: User | null;
+// Supabase-backed session context. Exposes the same { authUser,
+// authUserLoading } contract (with authUser.uid) the screens already use.
+interface AuthContextValue {
+  authUser: AuthUser | null;
   authUserLoading: boolean;
-};
+}
 
-const AuthContext = createContext<AuthContextType>({
+const AuthContext = createContext<AuthContextValue>({
   authUser: null,
   authUserLoading: true,
 });
 
-
-
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [authUser, setAuthUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [authUserLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      const { reset } = useUserStore.getState()
-
+    // onAuthStateChange emits INITIAL_SESSION on subscribe, which covers
+    // session restoration from AsyncStorage.
+    const unsubscribe = onAuthUserChange((user) => {
       setAuthUser(user);
       setLoading(false);
-
     });
-    return unsub;
+    return unsubscribe;
   }, []);
 
   return (
-    <AuthContext.Provider value={{ authUser, authUserLoading: loading }}>
+    <AuthContext.Provider value={{ authUser, authUserLoading }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  return useContext(AuthContext);
+}

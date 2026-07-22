@@ -1,6 +1,7 @@
-import fetchServer from '@/src/server/fetchServer';
+import { supabase } from '@/src/shared/lib/supabase';
 
 export async function archiveGame() {
-
-  return await fetchServer("/games/archive_game", {  } , "POST");
+  const { error } = await supabase.rpc('archive_active_game');
+  if (error) return { success: false, error: error.message };
+  return { success: true };
 }

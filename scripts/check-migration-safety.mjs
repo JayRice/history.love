@@ -40,6 +40,7 @@ const EXCLUDED = [
   /^docs\//, // documentation may cite the removed footguns as evidence
   /^scripts\/check-migration-safety\.mjs$/, // this file names the patterns
   /^src\/shared\/config\/env\.ts$/, // contains the tunnel pattern as a runtime guard
+  /^supabase\/config\.toml$/, // CLI-generated; names Data API roles in comments, no secrets
   /^package-lock\.json$/,
   /^\.env\.example$/,
   /^assets\//,

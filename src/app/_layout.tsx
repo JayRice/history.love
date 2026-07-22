@@ -10,7 +10,7 @@ import { paperTheme } from '@/src/shared/ui/theme/paperTheme';
 import Toast from "react-native-toast-message";
 
 import { AuthProvider, useAuth } from "@/src/features/auth/hooks/AuthContext";
-import { useLegacyFirebaseSync } from '@/src/shared/lib/legacy/useLegacyFirebaseSync';
+import { useSupabaseAppSync } from '@/src/shared/lib/legacy/useSupabaseAppSync';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ModalProvider } from '@/src/shared/ui/ModalContext';
 
@@ -34,9 +34,9 @@ function InnerLayout() {
 
   const { authUser, authUserLoading } = useAuth();
 
-  // LEGACY: the six Firestore listeners live in this hook until their
-  // Supabase replacements land (Phases 3-4, 6).
-  const { user, profileLoading } = useLegacyFirebaseSync(authUser, authUserLoading);
+  // TRANSITIONAL: Supabase app sync feeding the legacy stores until
+  // per-feature query hooks land (Phases 2-6).
+  const { user, profileLoading } = useSupabaseAppSync(authUser, authUserLoading);
 
   const segments = useSegments();
 

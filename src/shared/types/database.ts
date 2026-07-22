@@ -710,10 +710,10 @@ export type Database = {
       archive_active_game: { Args: never; Returns: undefined }
       complete_onboarding: {
         Args: {
-          p_avatar_path: string
-          p_display_name: string
-          p_handle: string
-          p_meta: Json
+          p_avatar_path?: string
+          p_display_name?: string
+          p_handle?: string
+          p_meta?: Json
         }
         Returns: undefined
       }

@@ -1,51 +1,55 @@
-import  User  from '@/src/shared/types/User';
+// Transitional: onboarding submission on Supabase. Uploads the avatar into
+// the private profile-images bucket, then persists the form through the
+// complete_onboarding RPC (structured columns + legacy_meta for the rest of
+// the form document). The PRD onboarding (age gate, versioned consent)
+// replaces this screen flow in the auth/consent phase.
+import User from '@/src/shared/types/User';
+import { supabase } from '@/src/shared/lib/supabase';
+import { newId, uploadLocalFile } from '@/src/shared/lib/legacy/supabaseAppHelpers';
 
-import Constants from "expo-constants";
-import { getAuthUser } from '@/src/features/auth/data/legacy/getAuthUser';
+type OnboardingResponse =
+  | { success: true; user: User }
+  | { success: false; error: string };
 
-import { Alert } from "react-native";
+export default async function handleOnboarding(user: User): Promise<OnboardingResponse> {
+  const { data: auth } = await supabase.auth.getSession();
+  const uid = auth.session?.user.id;
+  if (!uid) return { success: false, error: "Not signed in." };
 
-
-export default async function handleOnboarding(user: User){
-
-  if (!Constants.expoConfig?.extra) {
-    throw Error('Expo config constants required - Cannot find constants in app.config');
+  let avatarPath: string | null = null;
+  const localUri = user?.profile?.profileImage?.local_uri;
+  if (localUri && localUri.startsWith("file")) {
+    const path = `${uid}/${newId()}.jpg`;
+    if (await uploadLocalFile("profile-images", path, localUri, "image/jpeg")) {
+      avatarPath = path;
+    }
   }
 
-  const formData = new FormData();
+  // Everything except identity lands in legacy_meta so the existing screens
+  // keep reading the shapes they already know.
+  const meta: Record<string, unknown> = {
+    profile: {
+      ...user.profile,
+      profileImage: avatarPath ? { type: "stored", name: avatarPath } : user.profile?.profileImage,
+    },
+    partner: user.partner,
+    settings: user.settings,
+    location: user.location,
+    analytics: user.analytics,
+    data: user.data,
+  };
 
+  const displayName = [user.profile?.first_name, user.profile?.last_name]
+    .filter(Boolean)
+    .join(" ");
 
-  if (!user?.profile?.profileImage) {return}
+  const { error } = await supabase.rpc("complete_onboarding", {
+    p_display_name: displayName || undefined,
+    p_handle: user.profile?.username ?? undefined,
+    p_avatar_path: avatarPath ?? undefined,
+    p_meta: meta as never,
+  });
 
-  formData.append("profile_picture", {
-    uri: user?.profile?.profileImage?.local_uri,
-    type: "image/png",
-    name: "profile.png",
-  } as any);
-
-  formData.append("user", JSON.stringify(user))
-
-
-  const authUser = getAuthUser();
-  if(!authUser) throw new Error("Not signed in");
-
-  const token = await authUser.getIdToken();
-
-  try {
-    const res = await fetch(`${Constants.expoConfig?.extra.api_url}/api/users/handle_onboarding`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData
-
-    });
-    const json = await res.json();
-
-    return json;
-  }catch (e){
-    Alert.alert("Error", "Something went wrong, try again later.");
-    console.error(e);
-  }
-
+  if (error) return { success: false, error: error.message };
+  return { success: true, user };
 }

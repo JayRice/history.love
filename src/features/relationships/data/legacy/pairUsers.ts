@@ -1,21 +1,25 @@
-import fetchServer from '@/src/server/fetchServer';
 import Toast from 'react-native-toast-message';
+import { supabase } from '@/src/shared/lib/supabase';
 import { isValidMatchCode } from '../../domain/isValidMatchCode';
 
-export default async function pairUsers(matchCode: string) : Promise <any | null>{
-
-
-  if (!isValidMatchCode(matchCode)){
+export default async function pairUsers(matchCode: string): Promise<{ success: boolean }> {
+  if (!isValidMatchCode(matchCode)) {
     Toast.show({
       type: "error",
       text1: "Error",
       text2: `Invalid Match Code: ${matchCode}`,
     });
-    return null;
+    return { success: false };
   }
 
-  const response = await fetchServer("/matches/pair_users", {matchCode: matchCode}, "POST");
+  const { error } = await supabase.rpc('accept_invitation', {
+    p_code: matchCode.toUpperCase(),
+  });
 
-  return response;
+  if (error) {
+    Toast.show({ type: "error", text1: "Error", text2: "That code did not work. Check it and try again." });
+    return { success: false };
+  }
 
+  return { success: true };
 }

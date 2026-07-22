@@ -38,12 +38,9 @@ export default () => ({
       "eas": {
         "projectId": "bd3fcdab-b533-42b8-8275-54aee70ef587"
       },
-      firebaseApiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
-      webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
-      androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-      // Set EXPO_PUBLIC_API_URL in .env.local (see .env.example).
-      // Validated at app startup by src/config/env.ts.
-      api_url: process.env.EXPO_PUBLIC_API_URL
+      // Supabase configuration comes from EXPO_PUBLIC_SUPABASE_URL and
+      // EXPO_PUBLIC_SUPABASE_ANON_KEY, validated at startup by
+      // src/shared/config/env.ts.
     },
   },
 });

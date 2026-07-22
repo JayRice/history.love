@@ -1,10 +1,7 @@
-# Phase 0A CI: migration safety gates + bundle check.
-#
-# Deliberately excluded for now (pre-existing debt, see
-# docs/migration-status.md):
-# - `expo lint`: eslint was never installed; enabling it is Phase 0B work.
-# - `tsc --noEmit`: fails on pre-existing type errors in src/components
-#   and on react-native-paper shipping raw .tsx.
+# Phase 0B CI: full engineering gate.
+# Order: cheap static gates first, then the expensive bundle check.
+# Web export is deliberately NOT a required gate (mobile MVP); it works
+# as of the tooling-debt commit but must never block mobile work.
 name: ci
 
 on:
@@ -28,6 +25,12 @@ jobs:
 
       - name: Migration safety check
         run: npm run check:safety
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint (boundary rules + allowlist)
+        run: npm run lint
 
       - name: Bundle check (Android)
         # A full Metro bundle catches unresolved imports and syntax errors

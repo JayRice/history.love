@@ -39,7 +39,7 @@ const SCAN_EXTENSIONS = /\.(ts|tsx|js|jsx|mjs|cjs|json|plist|gradle|xml|toml|yml
 const EXCLUDED = [
   /^docs\//, // documentation may cite the removed footguns as evidence
   /^scripts\/check-migration-safety\.mjs$/, // this file names the patterns
-  /^src\/config\/env\.ts$/, // contains the tunnel pattern as a runtime guard
+  /^src\/shared\/config\/env\.ts$/, // contains the tunnel pattern as a runtime guard
   /^package-lock\.json$/,
   /^\.env\.example$/,
   /^assets\//,

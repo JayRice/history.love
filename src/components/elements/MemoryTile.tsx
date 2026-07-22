@@ -1,10 +1,10 @@
 // components/MemoryTile.tsx
 import React, { useMemo } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text, Chip, useTheme } from "react-native-paper";
 import { Image } from "expo-image";
 import { Lock } from "lucide-react-native";
-import Memory, { MemoryMood } from '@/src/types/Memory';
+import Memory from '@/src/types/Memory';
 
 
 import { MOOD_EMOJI } from '@/constants';

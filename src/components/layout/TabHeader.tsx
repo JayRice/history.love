@@ -1,7 +1,6 @@
 import { View, ViewStyle } from 'react-native';
 import { BackButton } from '@/src/components/buttons/BackButton';
 import { Text } from 'react-native-paper';
-import Trophy from '@/assets/images/home-images/trophy.svg';
 import React, { JSX } from 'react';
 
 export function TabHeader({title, description, Icon, style}: {title: string, description?: string, Icon:JSX.Element, style?: ViewStyle }) {

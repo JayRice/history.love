@@ -1,8 +1,6 @@
 
 import Memory from "../../types/Memory"
-import { GeoLocation } from '../../types/GeoLocation';
 import fetchServer from "../fetchServer"
-import Photo from '@/src/types/Photo';
 
 export async function editMemory(memoryData: Memory, shouldDelete: boolean, deletedPhotos : string[]) {
 

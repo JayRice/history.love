@@ -1,5 +1,5 @@
 import { IconButton } from "react-native-paper";
-import { Pressable, View } from 'react-native';
+import { Pressable } from 'react-native';
 import { router } from 'expo-router';
 
 type CloseButtonProps = { onPress?: () => void; size?: number, position?: "left"|"right", addedClasses?: string };

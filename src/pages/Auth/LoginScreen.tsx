@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Card } from 'react-native-paper';
-import { Heart } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
 import { TextField } from '@/src/components/inputs/TextField';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
-import { useUserStore } from '../../store/userStore';
 import { BackButton } from '@/src/components/buttons/BackButton';
-import loginWithEmail from '@/src/database/auth/loginWithEmail';
 import Logo from '@/assets/images/logo.svg';
 import useLogin from '@/src/hooks/useLogin';
 
@@ -108,7 +105,7 @@ export default function LoginScreen() {
 
         <View className="mt-6 flex-row justify-center items-center">
           <Text variant="bodyMedium" className="text-gray-600">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
           </Text>
           <SecondaryButton
             variant="text"

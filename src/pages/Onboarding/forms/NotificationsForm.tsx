@@ -18,7 +18,7 @@ const NotificationsForm = ({formUser, updateFormUser}: FormProps) => {
       <View >
         <Text variant={"displaySmall"} className={"font-bold mb-4 text-center"}> {`Recieve notifications from ${partnerName}`}? </Text>
 
-        <Text variant={"bodyLarge"} className={"mb-10 text-center"}>We'll send you notifcations whenever your partner does something`.</Text>
+        <Text variant={"bodyLarge"} className={"mb-10 text-center"}>We&apos;ll send you notifcations whenever your partner does something`.</Text>
 
       </View>
 

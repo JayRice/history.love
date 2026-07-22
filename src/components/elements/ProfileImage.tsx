@@ -1,4 +1,3 @@
-import { Image } from 'react-native';
 import React from 'react';
 import RoundedImage from '@/src/components/elements/RoundedImage';
 

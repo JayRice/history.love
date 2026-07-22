@@ -6,7 +6,6 @@ import {
 
 } from 'firebase/auth'
 import { auth } from '@/src/config/firebase';
-import { removeFcmToken } from '@/src/database/messaging/handleFcmMessaging';
 
 export default async function logout(){
 

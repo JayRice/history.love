@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, ButtonProps, Text } from 'react-native-paper';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { View } from 'react-native';
-import useDebounce from "../../hooks/useDebounce"
 interface PrimaryButtonProps extends Omit<ButtonProps, 'mode'> {
   variant?: 'filled' | 'outlined' | 'text';
   size?: 'small' | 'medium' | 'large';

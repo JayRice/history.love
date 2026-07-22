@@ -1,6 +1,6 @@
 import * as React from "react";
-import { StyleSheet, View, ViewStyle } from 'react-native';
-import { Chip, Text, useTheme } from "react-native-paper";
+import { View, ViewStyle } from 'react-native';
+import { Chip, Text } from "react-native-paper";
 // If you have your own hook:
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 
@@ -35,8 +35,10 @@ export function CategoryPicker({
                                  disabled,
                                  showTitleAndBorder=true
                                }: CategoryPickerProps) {
-  const theme = useTheme();
-  const colors = useThemeColors ? useThemeColors() : theme.colors;
+  // useThemeColors is an imported function and always defined; the previous
+  // `useThemeColors ? useThemeColors() : ...` conditional was dead code that
+  // also violated rules-of-hooks.
+  const colors = useThemeColors();
 
 
   const selectedSet = React.useMemo(() => new Set(value), [value]);
@@ -99,9 +101,9 @@ export function CategoryPicker({
         {categories?.map((c) => {
           const selected = selectedSet.has(c);
           // Outline when not selected; filled with primary when picked
-          const backgroundColor = selected ? theme.colors.primary : theme.colors.surface;
-          const borderColor = selected ? theme.colors.primary : theme.colors.outline;
-          const textColor = selected ? theme.colors.onPrimary : theme.colors.onSurface;
+          const backgroundColor = selected ? colors.primary : colors.surface;
+          const borderColor = selected ? colors.primary : colors.outline;
+          const textColor = selected ? colors.onPrimary : colors.onSurface;
 
           return (
             <Chip

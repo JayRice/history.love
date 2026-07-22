@@ -1,18 +1,15 @@
 // src/screens/CongratulationsScreen.tsx
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Pressable, Text } from 'react-native';
+import { View } from 'react-native';
 import LottieView from 'lottie-react-native';
 
-import * as Haptics from "expo-haptics";
 import useSfx from "@/src/hooks/useSfx";
-import * as SFX from "@/src/lib/sfx";
 
 
 // Adjust these imports to your paths:
 import {Screen} from '@/src/components/layout/Screen';
 import { colors } from '@/src/theme/colors';
-import { router } from 'expo-router';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton'; // or wherever you export colors
+// or wherever you export colors
 
 type CongratulationsScreenProps = {
   onContinue?: () => void;

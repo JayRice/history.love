@@ -4,7 +4,6 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from '
 import { Text } from 'react-native-paper';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { Game, WouldYouRatherGame, WYRMode } from '@/src/types/Game';
-import { CloseButton } from '@/src/components/buttons/CloseButton';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { wouldYouRatherData } from '@/src/data/games/wouldYouRatherData';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';

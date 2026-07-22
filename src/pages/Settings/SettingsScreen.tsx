@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Card, Text, List, Divider } from 'react-native-paper';
-import { Settings, Bell, Shield, Palette, User, CircleHelp as HelpCircle, Info, LogOut, ChevronRight } from 'lucide-react-native';
+import { Settings, Shield, Palette, User, CircleHelp as HelpCircle, Info, LogOut, ChevronRight } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
 import { SectionHeader } from '@/src/components/layout/SectionHeader';
 import { ToggleField } from '@/src/components/inputs/ToggleField';
 import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
-import { useAuth } from '@/src/contexts/AuthContext';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
 import logout from '@/src/database/auth/logout';

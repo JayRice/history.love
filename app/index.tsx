@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react';
-import { View , Image} from 'react-native';
-import { Card } from "react-native-paper";
+import { View } from 'react-native';
 
-import { Redirect, router } from 'expo-router';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 import Logo from '@/assets/images/logo.svg';
 

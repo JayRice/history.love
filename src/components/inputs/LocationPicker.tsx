@@ -2,9 +2,9 @@
 
 
 // components/location/LocationPicker.tsx
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Pressable, View, StyleSheet } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { MapPin as MapPinIcon, X as XIcon } from 'lucide-react-native';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { GeoLocation } from '@/src/types/GeoLocation';

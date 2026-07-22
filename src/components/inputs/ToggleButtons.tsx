@@ -1,4 +1,3 @@
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { ScrollView, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useThemeColors } from '@/src/hooks/useThemeColors';

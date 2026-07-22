@@ -1,9 +1,8 @@
 // GameFlipCard.tsx
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Pressable, Image, Text, ScrollView } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { Card } from "react-native-paper";
 import Animated, {
-  Extrapolate,
   interpolate,
   useSharedValue,
   useAnimatedStyle,

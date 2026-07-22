@@ -1,4 +1,4 @@
-import { GameMode, GameType } from './GameData';
+import { GameType } from './GameData';
 import { GamePreferences } from './GamePreferences';
 
 export type GameStatus = "show-results" | "ended" | "active";

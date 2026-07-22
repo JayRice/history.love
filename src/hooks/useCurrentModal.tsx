@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BackHandler } from 'react-native';
-import { useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import { useModal } from '@/src/contexts/ModalContext';
 
 export function useCurrentModal<TData = any, TResult = any>() {

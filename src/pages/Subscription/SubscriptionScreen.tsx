@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Image, Dimensions, Platform, Pressable } from 'react-native';
-import { Text, Card, Avatar, Divider, Button } from 'react-native-paper';
-import { CreditCard as Edit3, MapPin, Heart, Users, Eye, EyeOff, Apple, Star } from 'lucide-react-native';
+import React from 'react';
+import { View, Dimensions, Pressable } from 'react-native';
+import { Text } from 'react-native-paper';
+import { Star } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
 
 import { useThemeColors } from '@/src/hooks/useThemeColors';
@@ -11,7 +11,6 @@ import { router } from 'expo-router';
 import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import Swiper from 'react-native-swiper';
 import { ToggleField } from '@/src/components/inputs/ToggleField';
-import { BackButton } from '@/src/components/buttons/BackButton';
 import { CloseButton } from '@/src/components/buttons/CloseButton';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
@@ -106,7 +105,7 @@ export default function SubscriptionScreen() {
           {/* Slide 1 */}
           <View className="flex-1 items-center justify-center p-6">
             <Text className="text-lg text-center">
-              Great tool for discussing critical topics and exploring each other's thoughts and perspectives
+              Great tool for discussing critical topics and exploring each other&apos;s thoughts and perspectives
             </Text>
             <Text className="absolute bottom-2 right-4 text-xs text-gray-400">Slide 1</Text>
           </View>

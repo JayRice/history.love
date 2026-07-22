@@ -1,8 +1,7 @@
 import { Screen } from '@/src/components/layout/Screen';
 import { Card, Text } from 'react-native-paper';
-import { Image, View } from 'react-native';
-import React, { useEffect, useMemo, useState } from 'react';
-import { BackButton } from '@/src/components/buttons/BackButton';
+import { View } from 'react-native';
+import React, { useMemo } from 'react';
 import { gameImages } from '@/src/data/games/gameImages';
 import { FlipCard } from '@/src/components/cards/FlipCard';
 import { getPartnerName } from '@/src/utils/getPartnerName';
@@ -10,7 +9,6 @@ import { gameData } from '@/src/data/games/gameData';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { useModal } from '@/src/contexts/ModalContext';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
-import { Game } from '@/src/types/Game';
 import { endGame } from '@/src/server/game/endGame';
 import { archiveGame } from '@/src/server/game/archiveGame';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
@@ -136,7 +134,7 @@ export default function  GamesScreen(){
 
       <View className={"flex flex-row flex-wrap justify-between items-between "}>
         {gameData.map((g, idx) => {
-          return <GameCard game={g} idx={idx} currentFlipped={currentFlipped} setCurrentFlipped={setCurrentFlipped}></GameCard>
+          return <GameCard key={g.type} game={g} idx={idx} currentFlipped={currentFlipped} setCurrentFlipped={setCurrentFlipped}></GameCard>
         })}
 
       </View>

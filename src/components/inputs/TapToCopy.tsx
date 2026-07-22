@@ -1,7 +1,6 @@
 import React from "react";
-import { View, Text, Pressable, Alert } from "react-native";
+import { Text, Pressable } from "react-native";
 import * as Clipboard from "expo-clipboard";
-import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { ClipboardCopy } from 'lucide-react-native';
 import Toast from 'react-native-toast-message';
 

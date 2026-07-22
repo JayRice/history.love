@@ -1,6 +1,3 @@
-import Memory from "../types/Memory"
-import Relationship from "../types/Relationship"
-import fetchServer from '@/src/server/fetchServer';
 
 // Placeholder API function for getting timeline data
 export default async function getTimeline(scrollIndex: number) {

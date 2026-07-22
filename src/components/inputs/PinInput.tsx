@@ -27,7 +27,6 @@ import { View } from "react-native";
 // Assuming your TextField matches this minimal prop surface. Adjust as needed in your codebase.
 // If you have a proper type, replace `any` below with your real `TextFieldProps` type.
 import { TextField } from '@/src/components/inputs/TextField';
-import { Text } from 'react-native-paper';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 
 export type PinMode = "numeric" | "alpha" | "alphanumeric";
@@ -76,7 +75,7 @@ export default function PinInput({
                                    gap = 8,
                                    disabled = false,
                                  }: PinInputProps) {
-  const refs = useRef<Array<any>>([]);
+  const refs = useRef<any[]>([]);
 
   // Ensure array of refs matches `length`
   useEffect(() => {

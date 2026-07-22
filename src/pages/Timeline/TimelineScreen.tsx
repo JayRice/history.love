@@ -5,11 +5,9 @@ import { Plus, Heart } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
 import { SectionHeader } from '@/src/components/layout/SectionHeader';
 import { RelationshipCard } from '@/src/components/cards/RelationshipCard';
-import { TimelineEventCard } from '@/src/components/cards/TimelineEventCard';
 import { EmptyState } from '@/src/components/feedback/EmptyState';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
-import { getTimeline } from '@/src/server/getTimeline';
 import Memory from "../../types/Memory"
 import  Relationship  from '@/src/types/Relationship';
 import { router } from 'expo-router';

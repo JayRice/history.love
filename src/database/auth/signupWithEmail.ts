@@ -1,7 +1,6 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "@/src/config/firebase";
-import { useToast } from '@/src/contexts/ToastProvider';
 import { FirebaseError } from "firebase/app";
 
 

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-import Relationship from '@/src/types/Relationship';
 type Store = {
   profileImage: string | null;
   setProfileImage: (profileImage: string | null) => void;

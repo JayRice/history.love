@@ -1,5 +1,3 @@
-import { GameData } from '@/src/types/GameData';
-import { GamePreferences } from '@/src/types/GamePreferences';
 import fetchServer from '@/src/server/fetchServer';
 import { Game } from '@/src/types/Game';
 

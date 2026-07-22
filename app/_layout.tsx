@@ -1,8 +1,5 @@
 import { validateEnv } from '@/src/config/env';
 
-// Fail fast on missing or unsafe configuration before anything else loads.
-validateEnv();
-
 import { useEffect, useState } from 'react';
 import { router, Stack, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -17,11 +14,9 @@ import Toast from "react-native-toast-message";
 
 
 
-import User from "../src/types/User"
 import { logger } from '@/src/lib/logger';
 import { AuthProvider, useAuth } from "@/src/contexts/AuthContext";
 import { useRelationshipStore } from '@/src/store/relationshipStore';
-import { ref, getDownloadURL } from "firebase/storage";
 import getImages from '@/src/database/getImages';
 import { useImagesStore } from '@/src/store/imagesStore';
 import { useNotificationsStore } from '@/src/store/notificationsStore';
@@ -32,6 +27,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ModalProvider } from '../src/contexts/ModalContext';
 import { CalendarEvent } from '@/src/types/Calendar';
 import { Game } from '@/src/types/Game';
+
+// Fail fast on missing or unsafe configuration before anything else loads.
+validateEnv();
 
 export default function RootLayout() {
   return (

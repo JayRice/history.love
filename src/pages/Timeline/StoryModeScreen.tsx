@@ -1,6 +1,6 @@
 // components/StoryModeScreen.tsx
-import React, { useCallback, useMemo, useRef, useState, useEffect, memo } from 'react';
-import { View, StyleSheet, Dimensions, FlatList, TextInput as RNTextInput, Modal } from 'react-native';
+import React, { useMemo, useRef, useState, useEffect, memo } from 'react';
+import { View, StyleSheet, Dimensions, FlatList } from 'react-native';
 import { Image } from "expo-image";
 
 
@@ -15,7 +15,6 @@ import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
 import { useModal } from '@/src/contexts/ModalContext';
 import { useCurrentModal } from '@/src/hooks/useCurrentModal';
-import { router } from 'expo-router';
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 

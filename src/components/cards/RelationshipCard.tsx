@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Card, Text, Chip } from 'react-native-paper';
-import { Calendar, MapPin, Heart } from 'lucide-react-native';
+import { Calendar, Heart } from 'lucide-react-native';
 import Relationship from '@/src/types/Relationship';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { formatDate } from '@/src/utils/formatDate';

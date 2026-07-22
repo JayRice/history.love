@@ -1,14 +1,12 @@
 import { Screen } from '@/src/components/layout/Screen';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BackButton } from '@/src/components/buttons/BackButton';
 import { getPartnerName } from '@/src/utils/getPartnerName';
 import { Game, WouldYouRatherGame } from '@/src/types/Game';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
-import { Text } from 'react-native-paper';
 import { WouldYouRather } from '@/src/pages/Tabs/games/game-modes/WouldYouRather';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import { useCurrentModal } from '@/src/hooks/useCurrentModal';
 

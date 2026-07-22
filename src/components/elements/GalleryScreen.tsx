@@ -1,6 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
 import { MemoryTile } from '@/src/components/elements/MemoryTile';
-import type Memory from "../../types/Memory";
 import { Pressable } from 'react-native';
 
 export function GalleryScreen({ items, onPressItem }: { items: any[], onPressItem?: (index: number) => void }) {
@@ -16,7 +15,7 @@ export function GalleryScreen({ items, onPressItem }: { items: any[], onPressIte
           if (!onPressItem) {return}
           onPressItem(index)
         }}>
-          <MemoryTile memory={item} /> // width handled by layout
+          <MemoryTile memory={item} />{/* width handled by layout */}
         </Pressable>
       )}
       optimizeItemArrangement       // balances column heights

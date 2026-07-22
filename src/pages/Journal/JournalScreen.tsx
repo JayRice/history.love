@@ -93,7 +93,7 @@ const JournalEntryCard: React.FC<JournalEntryCardProps> = ({ entry, onPress }) =
               </Text>
             </View>
             <Text variant="bodySmall" className="text-purple-600 italic">
-              "{entry.aiPrompt}"
+              &quot;{entry.aiPrompt}&quot;
             </Text>
           </View>
         )}
@@ -213,7 +213,7 @@ export default function JournalScreen() {
             {aiPrompts.slice(0, 1).map((prompt) => (
               <View key={prompt.id} className="bg-white/20 p-3 rounded-lg">
                 <Text variant="bodyMedium" className="text-white italic">
-                  "{prompt.prompt}"
+                  &quot;{prompt.prompt}&quot;
                 </Text>
               </View>
             ))}

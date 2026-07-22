@@ -1,14 +1,11 @@
 import { useThemeColors } from '@/src/hooks/useThemeColors';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Screen } from '@/src/components/layout/Screen';
-import Animated, { FadeInUp, FadeOutDown } from 'react-native-reanimated';
-import { CloseButton } from '@/src/components/buttons/CloseButton';
 import { router } from 'expo-router';
-import { Text, Title } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { Input } from 'postcss';
 import * as CONSTANTS from '@/constants';
 import { TextField } from '@/src/components/inputs/TextField';
 import { BackButton } from '@/src/components/buttons/BackButton';

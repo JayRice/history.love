@@ -1,6 +1,4 @@
 import { router } from "expo-router";
-import { IconButton } from "react-native-paper";
-import { ArrowLeft } from "lucide-react-native";
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 
 export function BackButton({  absolute=true, ...props }: { onPress?: () => void; addedClasses?: string, labelStyle?: any, absolute?:boolean }) {

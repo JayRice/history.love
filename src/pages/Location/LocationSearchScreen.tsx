@@ -1,20 +1,17 @@
 // components/location/LocationSearchModal.tsx
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Modal,
   View,
-  FlatList,
   Pressable,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  ActivityIndicator,
 } from 'react-native';
-import { Text } from 'react-native-paper';
-import { X as XIcon, MapPin as MapPinIcon, Search as SearchIcon } from 'lucide-react-native';
+import { Text , TextInput } from 'react-native-paper';
+import { MapPin as MapPinIcon, Search as SearchIcon } from 'lucide-react-native';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { GeoLocation } from '@/src/types/GeoLocation';
-import { TextInput } from 'react-native-paper';
+
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { LoadingSpinner } from "@/src/components/feedback/LoadingSpinner"
 import fetchLocations from '@/src/server/fetchLocations';
@@ -174,7 +171,7 @@ export const LocationSearchScreen: React.FC<LocationSearchScreenProps> = ({
             <View className={"px-8"}>
               {
                 data.map((item, i) => (
-                  <Pressable onPress={() => {
+                  <Pressable key={i} onPress={() => {
                     onPressLocation(item)
                   }} className={"w-full h-16 bg-white flex flex-row items-center gap-2"}>
                     <MapPinIcon></MapPinIcon>

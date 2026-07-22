@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, ScrollView } from 'react-native';
-import { Card, Text, Divider, IconButton  } from 'react-native-paper';
+import { View } from 'react-native';
+import { Card, Text, Divider  } from 'react-native-paper';
 import { Shield, MapPin, Clock, Fingerprint, Mic } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
 import { SectionHeader } from '@/src/components/layout/SectionHeader';
@@ -200,7 +200,7 @@ export default function ConsentVerificationScreen() {
                 Voice Signature
               </Text>
               <Text variant="bodySmall" className="text-gray-600">
-                "I consent to this verification"
+                &quot;I consent to this verification&quot;
               </Text>
             </View>
           </View>

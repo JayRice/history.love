@@ -1,7 +1,6 @@
 // CollisionHeartAnimation.tsx
 import React, { useEffect, useRef } from "react";
 import { View, Animated, Easing, StyleSheet, ViewStyle, Pressable } from "react-native";
-import Svg, { Path } from "react-native-svg";
 import ProfileImage from '@/src/components/elements/ProfileImage';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 

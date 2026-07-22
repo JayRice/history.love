@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Dimensions, Platform } from 'react-native';
-import { Text, Card, Avatar, Divider } from 'react-native-paper';
+import { Text, Card } from 'react-native-paper';
 import { Screen } from '@/src/components/layout/Screen';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 

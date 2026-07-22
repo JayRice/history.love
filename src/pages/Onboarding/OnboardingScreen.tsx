@@ -1,57 +1,31 @@
-import React, { JSX, useEffect, useMemo, useState } from 'react';
-import { Alert, Dimensions, Image, Platform, Pressable, ScrollView, View } from 'react-native';
-import * as ImagePicker from "expo-image-picker";
+import React, { useEffect, useState } from 'react';
+import { Alert, Dimensions } from 'react-native';
 
-import { Text, Card, Avatar, Divider, TextInput } from 'react-native-paper';
-import {
-  CreditCard as Edit3,
-  MapPin,
-  Heart,
-  Users,
-  Eye,
-  EyeOff,
-  Apple,
-  CheckCircle,
-  CircleMinus,
-  CircleCheck
-} from 'lucide-react-native';
+import { Text } from 'react-native-paper';
+
+
 import { Screen } from '@/src/components/layout/Screen';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
 
 import { useThemeColors } from '@/src/hooks/useThemeColors';
-import Logo from "@/assets/images/logo.svg";
 import { router } from 'expo-router';
 
 import {useUserStore} from '@/src/store/userStore';
-import { TextField } from '@/src/components/inputs/TextField';
 
 
-import User, { Cohabitation, ProfileImage, RelationshipGoal, UserSource } from '@/src/types/User';
+import User from '@/src/types/User';
 
-import { auth } from "@/src/config/firebase"
 import { useAuth } from '@/src/contexts/AuthContext';
-import DatePicker from '@/src/components/inputs/DatePicker';
-import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 
 
 
 import Animated, {
   SlideInRight,
-  SlideOutLeft,
-  FadeIn,
-  FadeOut, SlideInLeft, SlideOutRight
+  SlideOutLeft, SlideInLeft, SlideOutRight
 } from 'react-native-reanimated';
 import handleOnboarding from '@/src/server/user/handleOnboarding';
 import ProfileFormProps from '@/src/types/props/ProfileFormProps';
-import isUsernameTaken from '@/src/server/user/isUsernameTaken';
 import { BackButton } from '@/src/components/buttons/BackButton';
-import ToggleButtons from '@/src/components/inputs/ToggleButtons';
-import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
-import useDebounce from '@/src/hooks/useDebounce';
-
-
-const { width, height } = Dimensions.get("window");
 
 
 
@@ -72,6 +46,9 @@ import FormProps from '@/src/types/props/FormProps';
 
 
 import getMatchCode from '@/src/server/getMatchCode';
+
+
+const { width, height } = Dimensions.get("window");
 
 export default function OnboardingScreen() {
 

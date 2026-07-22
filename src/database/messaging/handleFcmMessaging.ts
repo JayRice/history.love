@@ -4,7 +4,6 @@ import * as Device from "expo-device";
 import { Platform } from "react-native";
 import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/src/config/firebase";
-import { getAuthUser } from "@/src/database/auth/getAuthUser";
 
 // Ask for permission + register for Expo Push Token
 export async function registerFcmToken(uid: string) {

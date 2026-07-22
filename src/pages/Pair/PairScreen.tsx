@@ -1,4 +1,4 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import React, { useEffect } from 'react';
@@ -6,7 +6,6 @@ import PinInput from '@/src/components/inputs/PinInput';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { useUserStore } from '@/src/store/userStore';
 import getMatchCode from '@/src/server/getMatchCode';
-import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 import TapToCopy from '@/src/components/inputs/TapToCopy';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import pairUsers from '@/src/server/pairUsers';

@@ -8,7 +8,6 @@ import Animated, {
   withTiming,
   interpolate,
   Extrapolate,
-  runOnJS,
 } from 'react-native-reanimated';
 import Svg, { Path, G } from 'react-native-svg';
 

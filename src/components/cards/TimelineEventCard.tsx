@@ -2,11 +2,10 @@ import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Card, Text, Chip } from 'react-native-paper';
 import { Calendar, MapPin, Tag } from 'lucide-react-native';
-import { RelationshipEvent } from '@/src/types/Relationship';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { formatDate } from '@/src/utils/formatDate';
-import Memory from '@/src/types/Memory';
-import { MemoryCategory } from '@/src/types/Memory';
+import Memory, { MemoryCategory } from '@/src/types/Memory';
+
 
 
 

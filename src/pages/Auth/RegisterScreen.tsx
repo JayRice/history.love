@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, KeyboardAvoidingView, Platform } from 'react-native';
-import { Text, Card, Divider } from 'react-native-paper';
-import { Heart } from 'lucide-react-native';
+import { Text, Card } from 'react-native-paper';
 import { Screen } from '@/src/components/layout/Screen';
 import { TextField } from '@/src/components/inputs/TextField';
 import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
@@ -14,7 +13,6 @@ import Logo from '@/assets/images/logo.svg';
 import signupWithEmail from '@/src/database/auth/signupWithEmail';
 import { useGoogleLogin } from '@/src/hooks/useGoogleLogin';
 import { useToast } from '@/src/contexts/ToastProvider';
-import { Google } from '@expo/config-plugins/build/ios';
 
 export default function RegisterScreen() {
 

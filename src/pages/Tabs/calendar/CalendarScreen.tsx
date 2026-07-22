@@ -1,18 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Dimensions, Platform, Pressable, View } from "react-native";
+import React, { useCallback, useMemo, useState } from "react";
+import { Dimensions, View , useColorScheme } from "react-native";
 import { Calendar } from "react-native-big-calendar";
-import { useColorScheme } from "react-native";
+
 import { addDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from "date-fns";
-import type { CalendarEvent, OccurrenceEvent, CalendarMode } from "@/src/types/Calendar";
+import type { OccurrenceEvent, CalendarMode } from "@/src/types/Calendar";
 import { expandEventsForRange } from "./rrule.expand";
 import { activityColor, activityIcon } from "./icons.map";
 import { Screen } from '@/src/components/layout/Screen';
 import { Plus } from 'lucide-react-native';
 import { FAB, Text } from 'react-native-paper';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
-import { BackButton } from '@/src/components/buttons/BackButton';
-import { CloseButton } from '@/src/components/buttons/CloseButton';
-import * as Localization from "expo-localization";
 import { detectUsesAMPM } from '@/src/utils/detectUsesAMPM';
 import { useModal } from '@/src/contexts/ModalContext';
 import { useRelationshipStore } from '@/src/store/relationshipStore';

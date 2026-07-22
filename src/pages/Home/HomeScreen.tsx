@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, TouchableOpacity, Pressable } from 'react-native';
 import { Text, Card } from 'react-native-paper';
-import {  Icon } from 'lucide-react-native';
 import { Screen } from '@/src/components/layout/Screen';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { router } from 'expo-router';
@@ -15,10 +14,8 @@ import { HorizontalScrollList } from '@/src/components/layout/HorizontalScrollLi
 import Questions from "@/assets/images/home-images/questions.svg"
 import CalendarImage from "@/assets/images/home-images/calendar.svg"
 import Trophy from "@/assets/images/home-images/trophy.svg"
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
 import { getPartnerName } from '@/src/utils/getPartnerName';
-import { getMoodById, MoodId, MoodList, RelationshipMood } from '@/src/types/Moods';
-import AnimatedHeart from '@/src/components/elements/AnimatedHeart';
+import { getMoodById, RelationshipMood } from '@/src/types/Moods';
 import { useAuth } from '@/src/contexts/AuthContext';
 import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
 

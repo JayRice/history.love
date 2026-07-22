@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-import Relationship from '@/src/types/Relationship';
 import { Notification } from '@/src/types/Notification';
 type Store = {
   notifications: Notification[] | null;

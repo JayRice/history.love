@@ -1,3 +1,3 @@
-import TimelineScreen from '@/src/pages/Timeline/TimelineScreen';
+import TimelineScreen from '@/src/features/memories/ui/TimelineScreen';
 
 export default TimelineScreen;

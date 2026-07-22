@@ -169,12 +169,12 @@ module.exports = defineConfig([
       'src/features/auth/ui/StartScreen.tsx',
       'src/pages/Tabs/calendar/CalendarScreen.tsx',
       'src/pages/Tabs/games/GamesScreen.tsx',
-      'src/pages/Timeline/StoryModeScreen.tsx',
+      'src/features/memories/ui/StoryModeScreen.tsx',
       'src/server/fetchServer.ts',
       'src/server/game/updateGame.ts',
       'src/features/relationships/data/legacy/pairUsers.ts',
-      'src/server/set/addMemory.tsx',
-      'src/server/set/editMemory.tsx',
+      'src/features/memories/data/legacy/addMemory.tsx',
+      'src/features/memories/data/legacy/editMemory.tsx',
       'src/features/relationships/data/legacy/unpairUsers.ts',
       'src/features/profiles/data/legacy/handleOnboarding.ts',
       'src/shared/types/Notification.ts',
@@ -192,7 +192,7 @@ module.exports = defineConfig([
       'src/shared/ui/inputs/PhotoInput.tsx',
       'src/shared/ui/layout/SwipeDownContainer.tsx',
       'src/shared/ui/ModalContext.tsx',
-      'src/database/getImages.ts',
+      'src/shared/lib/legacy/getImages.ts',
       'src/database/messaging/handleFcmMessaging.ts',
       'src/database/notifications/markRead.ts',
       'src/shared/lib/hooks/useCurrentModal.tsx',
@@ -205,7 +205,7 @@ module.exports = defineConfig([
       'src/features/auth/ui/StartScreen.tsx',
       'src/pages/Tabs/calendar/AddCalendarEventScreen.tsx',
       'src/pages/Tabs/games/game-modes/WouldYouRather.tsx',
-      'src/pages/Timeline/TimelineScreen.tsx',
+      'src/features/memories/ui/TimelineScreen.tsx',
       'src/server/fetchServer.ts',
       'src/features/profiles/data/legacy/handleOnboarding.ts',
     ],
@@ -228,8 +228,8 @@ module.exports = defineConfig([
       'src/pages/Tabs/games/GamesScreen.tsx', // endGame/archiveGame (Phase 6)
       'src/pages/Tabs/games/StartGameScreen.tsx', // startGame (Phase 6)
       'src/pages/Tabs/games/game-modes/WouldYouRather.tsx', // updateGame (Phase 6)
-      'src/pages/Timeline/AddMemoryScreen.tsx', // addMemory (Phase 4)
-      'src/pages/Timeline/EditMemoryScreen.tsx', // editMemory (Phase 4)
+      'src/features/memories/ui/AddMemoryScreen.tsx', // addMemory (Phase 4)
+      'src/features/memories/ui/EditMemoryScreen.tsx', // editMemory (Phase 4)
     ],
     rules: { 'no-restricted-imports': 'off' },
   },

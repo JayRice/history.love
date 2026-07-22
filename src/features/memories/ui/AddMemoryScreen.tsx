@@ -13,7 +13,7 @@ import DatePicker from '@/src/shared/ui/inputs/DatePicker';
 import { PhotoInput } from '@/src/shared/ui/inputs/PhotoInput';
 import { LocationPicker } from '@/src/shared/ui/inputs/LocationPicker';
 import { GeoLocation } from '@/src/shared/types/GeoLocation';
-import { addMemory } from '@/src/server/set/addMemory';
+import { addMemory } from '../data/legacy/addMemory';
 import Memory, { MemoryCategory, MemoryCategoryList, MemoryMood, MemoryMoodList } from '@/src/shared/types/Memory';
 import { CategoryPicker } from '@/src/shared/ui/inputs/CategoryPicker';
 import Photo from "@/src/shared/types/Photo"

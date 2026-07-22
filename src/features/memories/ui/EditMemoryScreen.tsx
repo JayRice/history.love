@@ -17,7 +17,7 @@ import Memory, { MemoryCategory, MemoryCategoryList, MemoryMood, MemoryMoodList 
 import { CategoryPicker } from '@/src/shared/ui/inputs/CategoryPicker';
 import Photo from "@/src/shared/types/Photo"
 import { useAuth } from '@/src/features/auth/hooks/AuthContext';
-import { editMemory } from '@/src/server/set/editMemory';
+import { editMemory } from '../data/legacy/editMemory';
 import {ToggleField} from "@/src/shared/ui/inputs/ToggleField"
 import { useCurrentModal } from '@/src/shared/lib/hooks/useCurrentModal';
 import { useMemoryImageStore } from '@/src/store/memoryImageStore';

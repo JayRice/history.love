@@ -1,3 +1,3 @@
-import EditMemoryScreen from '@/src/pages/Timeline/EditMemoryScreen';
+import EditMemoryScreen from '@/src/features/memories/ui/EditMemoryScreen';
 
 export default  EditMemoryScreen;

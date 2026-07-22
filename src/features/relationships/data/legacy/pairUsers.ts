@@ -1,6 +1,6 @@
 import fetchServer from '@/src/server/fetchServer';
 import Toast from 'react-native-toast-message';
-import { isValidMatchCode } from '@/src/logic/isValidMatchCode';
+import { isValidMatchCode } from '../../domain/isValidMatchCode';
 
 export default async function pairUsers(matchCode: string) : Promise <any | null>{
 

@@ -1,2 +1,2 @@
-import PairCongratulationsScreen from '@/src/pages/PairCongratulations/PairCongratulationsScreen';
+import PairCongratulationsScreen from '@/src/features/relationships/ui/PairCongratulationsScreen';
 export default PairCongratulationsScreen;

@@ -3,7 +3,7 @@ import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
 import { ConfirmOverlay } from '@/src/shared/ui/feedback/ConfirmOverlay';
 import { Screen } from '@/src/shared/ui/layout/Screen';
 import { useState } from 'react';
-import unpairUsers from '@/src/server/unpairUsers';
+import unpairUsers from '../data/legacy/unpairUsers';
 
 export function RelationshipSettings(){
   const [open, setOpen] = useState(false);

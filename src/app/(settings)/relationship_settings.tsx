@@ -1,3 +1,3 @@
-import { RelationshipSettings } from '@/src/pages/Settings/settings/RelationshipSettings';
+import { RelationshipSettings } from '@/src/features/relationships/ui/RelationshipSettings';
 
 export default RelationshipSettings;

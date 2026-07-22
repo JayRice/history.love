@@ -1,3 +1,3 @@
-import PairScreen from '@/src/pages/Pair/PairScreen';
+import PairScreen from '@/src/features/relationships/ui/PairScreen';
 
 export default PairScreen;

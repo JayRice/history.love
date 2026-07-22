@@ -45,7 +45,7 @@ import WelcomeForm from '@/src/features/profiles/ui/forms/WelcomeForm';
 import FormProps from '@/src/shared/types/props/FormProps';
 
 
-import getMatchCode from '@/src/server/getMatchCode';
+import getMatchCode from '@/src/features/relationships/data/legacy/getMatchCode';
 
 
 const { width, height } = Dimensions.get("window");

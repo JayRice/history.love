@@ -172,10 +172,10 @@ module.exports = defineConfig([
       'src/pages/Timeline/StoryModeScreen.tsx',
       'src/server/fetchServer.ts',
       'src/server/game/updateGame.ts',
-      'src/server/pairUsers.ts',
+      'src/features/relationships/data/legacy/pairUsers.ts',
       'src/server/set/addMemory.tsx',
       'src/server/set/editMemory.tsx',
-      'src/server/unpairUsers.ts',
+      'src/features/relationships/data/legacy/unpairUsers.ts',
       'src/features/profiles/data/legacy/handleOnboarding.ts',
       'src/shared/types/Notification.ts',
     ],
@@ -200,7 +200,7 @@ module.exports = defineConfig([
       'src/features/auth/ui/LoginScreen.tsx',
       'src/pages/Consent/ConsentVerificationScreen.tsx',
       'src/pages/Journal/JournalScreen.tsx',
-      'src/pages/Pair/PairScreen.tsx',
+      'src/features/relationships/ui/PairScreen.tsx',
       'src/features/profiles/ui/SettingsScreen.tsx',
       'src/features/auth/ui/StartScreen.tsx',
       'src/pages/Tabs/calendar/AddCalendarEventScreen.tsx',
@@ -222,8 +222,8 @@ module.exports = defineConfig([
       'src/pages/Location/LocationSearchScreen.tsx', // fetchLocations (Phase 3/PD)
       'src/features/profiles/ui/OnboardingScreen.tsx', // handleOnboarding, match code (Phase 2-3)
       'src/features/profiles/ui/forms/ProfileForm.tsx', // isUsernameTaken (Phase 2)
-      'src/pages/Pair/PairScreen.tsx', // getMatchCode, pairUsers (Phase 3)
-      'src/pages/Settings/settings/RelationshipSettings.tsx', // unpairUsers (Phase 7)
+      'src/features/relationships/ui/PairScreen.tsx', // getMatchCode, pairUsers (Phase 3)
+      'src/features/relationships/ui/RelationshipSettings.tsx', // unpairUsers (Phase 7)
       'src/pages/Tabs/calendar/AddCalendarEventScreen.tsx', // addCalenderEvent (Phase 6)
       'src/pages/Tabs/games/GamesScreen.tsx', // endGame/archiveGame (Phase 6)
       'src/pages/Tabs/games/StartGameScreen.tsx', // startGame (Phase 6)
@@ -242,6 +242,10 @@ module.exports = defineConfig([
     files: [
       'src/features/auth/hooks/AuthContext.tsx',
       'src/features/auth/hooks/useGoogleLogin.ts',
+      // Cross-feature reach into auth's legacy logout; replaced by an auth
+      // use case in Phase 2.
+      'src/features/profiles/ui/SettingsScreen.tsx',
+      'src/features/profiles/ui/forms/WelcomeForm.tsx',
     ],
     rules: { 'no-restricted-imports': 'off' },
   },

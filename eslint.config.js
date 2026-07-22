@@ -193,8 +193,8 @@ module.exports = defineConfig([
       'src/shared/ui/layout/SwipeDownContainer.tsx',
       'src/shared/ui/ModalContext.tsx',
       'src/shared/lib/legacy/getImages.ts',
-      'src/database/messaging/handleFcmMessaging.ts',
-      'src/database/notifications/markRead.ts',
+      'src/features/notifications/data/legacy/handleFcmMessaging.ts',
+      'src/features/notifications/data/legacy/markRead.ts',
       'src/shared/lib/hooks/useCurrentModal.tsx',
       'src/shared/lib/hooks/useJpegCompressor.ts',
       'src/features/auth/ui/LoginScreen.tsx',
@@ -246,6 +246,9 @@ module.exports = defineConfig([
       // use case in Phase 2.
       'src/features/profiles/ui/SettingsScreen.tsx',
       'src/features/profiles/ui/forms/WelcomeForm.tsx',
+      // useLogin registers the FCM token from notifications' legacy data;
+      // replaced when Phase 2 rebuilds the sign-in use case.
+      'src/features/auth/hooks/useLogin.ts',
     ],
     rules: { 'no-restricted-imports': 'off' },
   },

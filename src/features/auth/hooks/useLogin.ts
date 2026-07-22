@@ -1,7 +1,7 @@
 import loginWithApple from '../data/legacy/loginWithApple';
 import loginWithEmail from '../data/legacy/loginWithEmail';
 
-import { registerFcmToken } from '@/src/database/messaging/handleFcmMessaging';
+import { registerFcmToken } from '@/src/features/notifications/data/legacy/handleFcmMessaging';
 import { useState } from 'react';
 import { useGoogleLogin } from '@/src/features/auth/hooks/useGoogleLogin';
 import signupWithEmail from '../data/legacy/signupWithEmail';

@@ -69,7 +69,7 @@ module.exports = defineConfig([
   // ---- 3. Architecture boundaries ----------------------------------------
   // Route files and screens/visual components: no provider or HTTP imports.
   {
-    files: ['app/**/*.{ts,tsx}', 'src/pages/**/*.{ts,tsx}', 'src/components/**/*.{ts,tsx}', 'src/features/*/ui/**/*.{ts,tsx}'],
+    files: ['src/app/**/*.{ts,tsx}', 'src/pages/**/*.{ts,tsx}', 'src/components/**/*.{ts,tsx}', 'src/features/*/ui/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': ['error', { patterns: PROVIDER_IMPORT_PATTERNS }],
     },
@@ -144,7 +144,7 @@ module.exports = defineConfig([
   // 4a. `any` usage predating the migration (63 occurrences).
   {
     files: [
-      'app/_layout.tsx',
+      'src/app/_layout.tsx',
       'src/components/animations/CollisionHeartAnimation.tsx',
       'src/components/buttons/BackButton.tsx',
       'src/components/elements/GalleryScreen.tsx',
@@ -218,7 +218,7 @@ module.exports = defineConfig([
   // (see docs/migration-status.md "Remaining Firebase dependencies").
   {
     files: [
-      'app/_layout.tsx', // six Firestore listeners (Phases 3-4, 6)
+      'src/app/_layout.tsx', // six Firestore listeners (Phases 3-4, 6)
       'src/pages/Location/LocationSearchScreen.tsx', // fetchLocations (Phase 3/PD)
       'src/pages/Onboarding/OnboardingScreen.tsx', // handleOnboarding, match code (Phase 2-3)
       'src/pages/Onboarding/forms/ProfileForm.tsx', // isUsernameTaken (Phase 2)

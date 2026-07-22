@@ -4,7 +4,8 @@ export default () => ({
     name: "history.love",
     slug: "historylove",
     owner: "jaydenrice",
-    entryPoint: "./index.tsx",
+    // Entry is expo-router/entry via package.json "main"; the router
+    // resolves the route tree from src/app (root app/ was moved there).
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",

@@ -24,7 +24,7 @@ import { Notification } from '@/src/types/Notification';
 import Memory from '@/src/types/Memory';
 import { useMemoryImageStore } from '@/src/store/memoryImageStore';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ModalProvider } from '../src/contexts/ModalContext';
+import { ModalProvider } from '@/src/contexts/ModalContext';
 import { CalendarEvent } from '@/src/types/Calendar';
 import { Game } from '@/src/types/Game';
 

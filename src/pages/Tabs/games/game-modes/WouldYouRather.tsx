@@ -9,7 +9,7 @@ import { wouldYouRatherData } from '@/src/data/games/wouldYouRatherData';
 import { LoadingSpinner } from '@/src/shared/ui/feedback/LoadingSpinner';
 import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
 import { updateGame } from '@/src/server/game/updateGame';
-import { useAuth } from '@/src/contexts/AuthContext';
+import { useAuth } from '@/src/features/auth/hooks/AuthContext';
 import {useUserStore} from "@/src/store/userStore"
 
 

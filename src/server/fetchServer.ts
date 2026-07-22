@@ -1,6 +1,6 @@
 
 import Constants from "expo-constants";
-import { getAuthUser } from '@/src/database/auth/getAuthUser';
+import { getAuthUser } from '@/src/features/auth/data/legacy/getAuthUser';
 
 
 import Toast from 'react-native-toast-message';

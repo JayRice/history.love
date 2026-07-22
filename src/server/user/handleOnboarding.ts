@@ -1,7 +1,7 @@
 import  User  from '@/src/shared/types/User';
 
 import Constants from "expo-constants";
-import { getAuthUser } from '@/src/database/auth/getAuthUser';
+import { getAuthUser } from '@/src/features/auth/data/legacy/getAuthUser';
 
 import { Alert } from "react-native";
 

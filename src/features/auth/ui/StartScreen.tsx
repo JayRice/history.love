@@ -10,7 +10,7 @@ import Logo from "@/assets/images/logo.svg";
 
 import * as AppleAuthentication from "expo-apple-authentication";
 
-import loginWithApple from "@/src/database/auth/loginWithApple";
+import loginWithApple from "../data/legacy/loginWithApple";
 
 import { router } from 'expo-router';
 

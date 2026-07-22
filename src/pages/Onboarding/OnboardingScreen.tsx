@@ -15,7 +15,7 @@ import {useUserStore} from '@/src/store/userStore';
 
 import User from '@/src/shared/types/User';
 
-import { useAuth } from '@/src/contexts/AuthContext';
+import { useAuth } from '@/src/features/auth/hooks/AuthContext';
 
 
 

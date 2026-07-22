@@ -1,10 +1,10 @@
-import loginWithApple from '@/src/database/auth/loginWithApple';
-import loginWithEmail from '@/src/database/auth/loginWithEmail';
+import loginWithApple from '../data/legacy/loginWithApple';
+import loginWithEmail from '../data/legacy/loginWithEmail';
 
 import { registerFcmToken } from '@/src/database/messaging/handleFcmMessaging';
 import { useState } from 'react';
-import { useGoogleLogin } from '@/src/hooks/useGoogleLogin';
-import signupWithEmail from '@/src/database/auth/signupWithEmail';
+import { useGoogleLogin } from '@/src/features/auth/hooks/useGoogleLogin';
+import signupWithEmail from '../data/legacy/signupWithEmail';
 
 
 

@@ -16,7 +16,7 @@ import { GeoLocation } from '@/src/shared/types/GeoLocation';
 import Memory, { MemoryCategory, MemoryCategoryList, MemoryMood, MemoryMoodList } from '@/src/shared/types/Memory';
 import { CategoryPicker } from '@/src/shared/ui/inputs/CategoryPicker';
 import Photo from "@/src/shared/types/Photo"
-import { useAuth } from '@/src/contexts/AuthContext';
+import { useAuth } from '@/src/features/auth/hooks/AuthContext';
 import { editMemory } from '@/src/server/set/editMemory';
 import {ToggleField} from "@/src/shared/ui/inputs/ToggleField"
 import { useCurrentModal } from '@/src/shared/lib/hooks/useCurrentModal';

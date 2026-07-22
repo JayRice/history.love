@@ -8,7 +8,7 @@ import { ToggleField } from '@/src/shared/ui/inputs/ToggleField';
 import { SecondaryButton } from '@/src/shared/ui/buttons/SecondaryButton';
 import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import { router } from 'expo-router';
-import logout from '@/src/database/auth/logout';
+import logout from '@/src/features/auth/data/legacy/logout';
 import { useUserStore } from '@/src/store/userStore';
 
 interface SettingItemProps {

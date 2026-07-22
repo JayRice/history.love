@@ -15,7 +15,7 @@ import Toast from "react-native-toast-message";
 
 
 import { logger } from '@/src/shared/lib/logger';
-import { AuthProvider, useAuth } from "@/src/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/src/features/auth/hooks/AuthContext";
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import getImages from '@/src/database/getImages';
 import { useImagesStore } from '@/src/store/imagesStore';

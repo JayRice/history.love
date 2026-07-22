@@ -9,7 +9,7 @@ import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import { router } from 'expo-router';
 import { BackButton } from '@/src/shared/ui/buttons/BackButton';
 import Logo from '@/assets/images/logo.svg';
-import useLogin from '@/src/hooks/useLogin';
+import useLogin from '@/src/features/auth/hooks/useLogin';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');

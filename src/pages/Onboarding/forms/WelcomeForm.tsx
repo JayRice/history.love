@@ -3,7 +3,7 @@ import { Text } from 'react-native-paper';
 import Logo from '@/assets/images/logo.svg';
 import React from 'react';
 import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
-import logout from '@/src/database/auth/logout';
+import logout from '@/src/features/auth/data/legacy/logout';
 
 const WelcomeForm = () => {
   return (

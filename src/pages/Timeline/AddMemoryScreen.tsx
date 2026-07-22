@@ -17,7 +17,7 @@ import { addMemory } from '@/src/server/set/addMemory';
 import Memory, { MemoryCategory, MemoryCategoryList, MemoryMood, MemoryMoodList } from '@/src/shared/types/Memory';
 import { CategoryPicker } from '@/src/shared/ui/inputs/CategoryPicker';
 import Photo from "@/src/shared/types/Photo"
-import {useAuth} from '@/src/contexts/AuthContext';
+import {useAuth} from '@/src/features/auth/hooks/AuthContext';
 
 export default function AddMemoryScreen() {
 

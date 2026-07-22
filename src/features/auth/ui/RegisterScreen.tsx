@@ -10,8 +10,8 @@ import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/userStore';
 import { BackButton } from '@/src/shared/ui/buttons/BackButton';
 import Logo from '@/assets/images/logo.svg';
-import signupWithEmail from '@/src/database/auth/signupWithEmail';
-import { useGoogleLogin } from '@/src/hooks/useGoogleLogin';
+import signupWithEmail from '../data/legacy/signupWithEmail';
+import { useGoogleLogin } from '@/src/features/auth/hooks/useGoogleLogin';
 import { useToast } from '@/src/shared/ui/ToastProvider';
 
 export default function RegisterScreen() {

@@ -156,17 +156,17 @@ module.exports = defineConfig([
       'src/shared/ui/layout/Screen.tsx',
       'src/shared/ui/ModalContext.tsx',
       'src/data/games/gameImages.ts',
-      'src/database/auth/loginWithEmail.ts',
-      'src/database/auth/signupWithEmail.ts',
+      'src/features/auth/data/legacy/loginWithEmail.ts',
+      'src/features/auth/data/legacy/signupWithEmail.ts',
       'src/shared/lib/hooks/useCurrentModal.tsx',
-      'src/hooks/useGoogleLogin.ts',
+      'src/features/auth/hooks/useGoogleLogin.ts',
       'src/shared/lib/hooks/useJpegCompressor.ts',
-      'src/hooks/useLogin.ts',
+      'src/features/auth/hooks/useLogin.ts',
       'src/shared/lib/sfx.ts',
       'src/pages/Home/HomeScreen.tsx',
       'src/pages/Location/LocationSearchScreen.tsx',
       'src/pages/Onboarding/OnboardingScreen.tsx',
-      'src/pages/Start/StartScreen.tsx',
+      'src/features/auth/ui/StartScreen.tsx',
       'src/pages/Tabs/calendar/CalendarScreen.tsx',
       'src/pages/Tabs/games/GamesScreen.tsx',
       'src/pages/Timeline/StoryModeScreen.tsx',
@@ -197,12 +197,12 @@ module.exports = defineConfig([
       'src/database/notifications/markRead.ts',
       'src/shared/lib/hooks/useCurrentModal.tsx',
       'src/shared/lib/hooks/useJpegCompressor.ts',
-      'src/pages/Auth/LoginScreen.tsx',
+      'src/features/auth/ui/LoginScreen.tsx',
       'src/pages/Consent/ConsentVerificationScreen.tsx',
       'src/pages/Journal/JournalScreen.tsx',
       'src/pages/Pair/PairScreen.tsx',
       'src/pages/Settings/SettingsScreen.tsx',
-      'src/pages/Start/StartScreen.tsx',
+      'src/features/auth/ui/StartScreen.tsx',
       'src/pages/Tabs/calendar/AddCalendarEventScreen.tsx',
       'src/pages/Tabs/games/game-modes/WouldYouRather.tsx',
       'src/pages/Timeline/TimelineScreen.tsx',
@@ -230,6 +230,18 @@ module.exports = defineConfig([
       'src/pages/Tabs/games/game-modes/WouldYouRather.tsx', // updateGame (Phase 6)
       'src/pages/Timeline/AddMemoryScreen.tsx', // addMemory (Phase 4)
       'src/pages/Timeline/EditMemoryScreen.tsx', // editMemory (Phase 4)
+    ],
+    rules: { 'no-restricted-imports': 'off' },
+  },
+
+  // 4d-pre. Legacy Firebase session code living in the auth hooks layer.
+  // AuthContext (onAuthStateChanged) and useGoogleLogin (signInWithCredential)
+  // ARE the files Phase 2 replaces with the Supabase AuthRepository; until
+  // then they keep their provider imports.
+  {
+    files: [
+      'src/features/auth/hooks/AuthContext.tsx',
+      'src/features/auth/hooks/useGoogleLogin.ts',
     ],
     rules: { 'no-restricted-imports': 'off' },
   },

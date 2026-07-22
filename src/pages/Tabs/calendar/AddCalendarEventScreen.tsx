@@ -10,7 +10,7 @@ import { TextField } from "@/src/shared/ui/inputs/TextField";
 import { LocationPicker } from "@/src/shared/ui/inputs/LocationPicker";
 import { ToggleField } from "@/src/shared/ui/inputs/ToggleField";
 import { useThemeColors } from "@/src/shared/lib/hooks/useThemeColors";
-import { useAuth } from "@/src/contexts/AuthContext";
+import { useAuth } from "@/src/features/auth/hooks/AuthContext";
 import { useCurrentModal } from "@/src/shared/lib/hooks/useCurrentModal";
 
 import { DateTimeRangeField } from "@/src/shared/ui/inputs/DateTimeRangeField";

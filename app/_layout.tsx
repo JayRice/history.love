@@ -1,3 +1,8 @@
+import { validateEnv } from '@/src/config/env';
+
+// Fail fast on missing or unsafe configuration before anything else loads.
+validateEnv();
+
 import { useEffect, useState } from 'react';
 import { router, Stack, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';

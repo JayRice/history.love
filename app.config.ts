@@ -17,8 +17,6 @@ export default () => ({
       infoPlist: {
         NSCameraUsageDescription: "Allow taking a profile photo.",
         NSPhotoLibraryUsageDescription: "Allow choosing a profile photo.",
-        NSAppTransportSecurity: { NSAllowsArbitraryLoads: true },
-
       }
     },
     web: {
@@ -33,7 +31,6 @@ export default () => ({
 
     android: {
       package: "com.historylove.app",
-      usesCleartextTraffic: true
     },
     extra: {
       router: {},
@@ -43,7 +40,9 @@ export default () => ({
       firebaseApiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
       webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
       androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-      api_url: "https://confineless-alyson-lower.ngrok-free.dev/" //"http://10.0.2.2:5000"
+      // Set EXPO_PUBLIC_API_URL in .env.local (see .env.example).
+      // Validated at app startup by src/config/env.ts.
+      api_url: process.env.EXPO_PUBLIC_API_URL
     },
   },
 });

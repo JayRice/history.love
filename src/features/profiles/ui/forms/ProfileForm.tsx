@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { auth } from '@/src/shared/config/firebase';
 import { ProfileImage } from '@/src/shared/types/User';
 import useDebounce from '@/src/shared/lib/hooks/useDebounce';
-import isUsernameTaken from '@/src/server/user/isUsernameTaken';
+import isUsernameTaken from '../../data/legacy/isUsernameTaken';
 import * as ImagePicker from 'expo-image-picker';
 import { Alert, Image, Platform, Pressable, View } from 'react-native';
 import { Text } from 'react-native-paper';

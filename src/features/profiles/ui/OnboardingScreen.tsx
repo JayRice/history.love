@@ -23,25 +23,25 @@ import Animated, {
   SlideInRight,
   SlideOutLeft, SlideInLeft, SlideOutRight
 } from 'react-native-reanimated';
-import handleOnboarding from '@/src/server/user/handleOnboarding';
+import handleOnboarding from '../data/legacy/handleOnboarding';
 import ProfileFormProps from '@/src/shared/types/props/ProfileFormProps';
 import { BackButton } from '@/src/shared/ui/buttons/BackButton';
 
 
 
-import AboutForm from '@/src/pages/Onboarding/forms/AboutForm';
-import AskIfInRelationshipForm from '@/src/pages/Onboarding/forms/AskIfInRelationshipForm';
-import CohabitationForm from '@/src/pages/Onboarding/forms/CohabitationForm';
-import FunFactForm from '@/src/pages/Onboarding/forms/FunFactForm';
-import GenderForm from '@/src/pages/Onboarding/forms/GenderForm';
-import GoalForm from '@/src/pages/Onboarding/forms/GoalForm';
-import KidsForm from '@/src/pages/Onboarding/forms/KidsForm';
-import NotificationsForm from '@/src/pages/Onboarding/forms/NotificationsForm';
-import PartnerForm from '@/src/pages/Onboarding/forms/PartnerForm';
-import ProfileForm from '@/src/pages/Onboarding/forms/ProfileForm';
-import RelationshipForm from '@/src/pages/Onboarding/forms/RelationshipForm';
-import SourceForm from '@/src/pages/Onboarding/forms/SourceForm';
-import WelcomeForm from '@/src/pages/Onboarding/forms/WelcomeForm';
+import AboutForm from '@/src/features/profiles/ui/forms/AboutForm';
+import AskIfInRelationshipForm from '@/src/features/profiles/ui/forms/AskIfInRelationshipForm';
+import CohabitationForm from '@/src/features/profiles/ui/forms/CohabitationForm';
+import FunFactForm from '@/src/features/profiles/ui/forms/FunFactForm';
+import GenderForm from '@/src/features/profiles/ui/forms/GenderForm';
+import GoalForm from '@/src/features/profiles/ui/forms/GoalForm';
+import KidsForm from '@/src/features/profiles/ui/forms/KidsForm';
+import NotificationsForm from '@/src/features/profiles/ui/forms/NotificationsForm';
+import PartnerForm from '@/src/features/profiles/ui/forms/PartnerForm';
+import ProfileForm from '@/src/features/profiles/ui/forms/ProfileForm';
+import RelationshipForm from '@/src/features/profiles/ui/forms/RelationshipForm';
+import SourceForm from '@/src/features/profiles/ui/forms/SourceForm';
+import WelcomeForm from '@/src/features/profiles/ui/forms/WelcomeForm';
 import FormProps from '@/src/shared/types/props/FormProps';
 
 

@@ -165,7 +165,7 @@ module.exports = defineConfig([
       'src/shared/lib/sfx.ts',
       'src/pages/Home/HomeScreen.tsx',
       'src/pages/Location/LocationSearchScreen.tsx',
-      'src/pages/Onboarding/OnboardingScreen.tsx',
+      'src/features/profiles/ui/OnboardingScreen.tsx',
       'src/features/auth/ui/StartScreen.tsx',
       'src/pages/Tabs/calendar/CalendarScreen.tsx',
       'src/pages/Tabs/games/GamesScreen.tsx',
@@ -176,7 +176,7 @@ module.exports = defineConfig([
       'src/server/set/addMemory.tsx',
       'src/server/set/editMemory.tsx',
       'src/server/unpairUsers.ts',
-      'src/server/user/handleOnboarding.ts',
+      'src/features/profiles/data/legacy/handleOnboarding.ts',
       'src/shared/types/Notification.ts',
     ],
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
@@ -201,13 +201,13 @@ module.exports = defineConfig([
       'src/pages/Consent/ConsentVerificationScreen.tsx',
       'src/pages/Journal/JournalScreen.tsx',
       'src/pages/Pair/PairScreen.tsx',
-      'src/pages/Settings/SettingsScreen.tsx',
+      'src/features/profiles/ui/SettingsScreen.tsx',
       'src/features/auth/ui/StartScreen.tsx',
       'src/pages/Tabs/calendar/AddCalendarEventScreen.tsx',
       'src/pages/Tabs/games/game-modes/WouldYouRather.tsx',
       'src/pages/Timeline/TimelineScreen.tsx',
       'src/server/fetchServer.ts',
-      'src/server/user/handleOnboarding.ts',
+      'src/features/profiles/data/legacy/handleOnboarding.ts',
     ],
     rules: { 'no-console': 'off' },
   },
@@ -220,8 +220,8 @@ module.exports = defineConfig([
     files: [
       'src/app/_layout.tsx', // six Firestore listeners (Phases 3-4, 6)
       'src/pages/Location/LocationSearchScreen.tsx', // fetchLocations (Phase 3/PD)
-      'src/pages/Onboarding/OnboardingScreen.tsx', // handleOnboarding, match code (Phase 2-3)
-      'src/pages/Onboarding/forms/ProfileForm.tsx', // isUsernameTaken (Phase 2)
+      'src/features/profiles/ui/OnboardingScreen.tsx', // handleOnboarding, match code (Phase 2-3)
+      'src/features/profiles/ui/forms/ProfileForm.tsx', // isUsernameTaken (Phase 2)
       'src/pages/Pair/PairScreen.tsx', // getMatchCode, pairUsers (Phase 3)
       'src/pages/Settings/settings/RelationshipSettings.tsx', // unpairUsers (Phase 7)
       'src/pages/Tabs/calendar/AddCalendarEventScreen.tsx', // addCalenderEvent (Phase 6)

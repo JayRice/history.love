@@ -1,3 +1,3 @@
-import OnboardingScreen from '@/src/pages/Onboarding/OnboardingScreen';
+import OnboardingScreen from '@/src/features/profiles/ui/OnboardingScreen';
 
 export default OnboardingScreen;

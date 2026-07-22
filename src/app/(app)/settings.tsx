@@ -1,3 +1,3 @@
-import SettingsScreen from '@/src/pages/Settings/SettingsScreen';
+import SettingsScreen from '@/src/features/profiles/ui/SettingsScreen';
 
 export default SettingsScreen;

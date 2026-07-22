@@ -1,3 +1,3 @@
-import ProfileScreen from '@/src/pages/Profile/ProfileScreen';
+import ProfileScreen from '@/src/features/profiles/ui/ProfileScreen';
 
 export default ProfileScreen;

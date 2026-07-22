@@ -33,6 +33,7 @@ jobs:
         run: npm run lint
 
       - name: Bundle check (Android)
+        id: bundle
         # A full Metro bundle catches unresolved imports and syntax errors
         # without an emulator. EXPO_PUBLIC_* values are inlined at bundle
         # time; CI uses placeholders (runtime validation lives in
@@ -41,3 +42,20 @@ jobs:
           EXPO_PUBLIC_API_URL: https://ci-placeholder.invalid
           EXPO_PUBLIC_FIREBASE_API_KEY: ci-placeholder
         run: npx expo export --platform android
+
+  database:
+    # Phase 1 gate: migrations apply from zero and the pgTAP/RLS attack
+    # suite passes against a fresh local stack.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start local stack, apply migrations + seed
+        run: supabase db start && supabase db reset --local
+
+      - name: pgTAP / RLS attack suite
+        run: supabase test db

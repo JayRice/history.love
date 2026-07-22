@@ -33,6 +33,73 @@ Branch: `phase-0a-safety-cleanup`. Scope was deliberately narrow: remove footgun
 - The `babel.config.js` still lists deprecated `expo-router/babel` (warning during bundling); cleanup candidate for Phase 0B.
 - Uncommitted user change retained in the working tree: `src/pages/Home/HomeScreen.tsx` (comments out an empty "Updated:" line). Left uncommitted deliberately.
 
-### Next: Phase 0B (on approval)
+## Phase 0B: Engineering baseline and feature-first structure — COMPLETE
 
-Folder restructure to `src/app` + `features/` + `shared/`, TanStack Query provider, ESLint + import-boundary rules, TypeScript debt reduction, dark-token groundwork. No Supabase code until Phase 1.
+Branch: `phase-0b-baseline` (stacked on `phase-0a-safety-cleanup`). All gates green at completion: `npm run check:safety`, `npm run typecheck` (0 errors), `npm run lint` (0 errors, 177 documented warnings), `npx expo export --platform android`, `npx expo export --platform web`.
+
+### Completed
+
+1. **TypeScript is a trustworthy gate.** 96 baseline errors to 0 without weakening strict mode, adding skip patterns, or new `any`. Key decisions, each commented at its boundary:
+   - `AppColors` type + a single sanctioned cast in `useThemeColors` (paperTheme's custom tokens are real at runtime; MD3 typings cannot know them). `border`/`text`/`textSecondary` are typed optional because they are genuinely undefined at runtime today.
+   - Removing two bogus imports in OnboardingScreen (`postcss`, `react-native-paper/src/...`) eliminated all seven third-party source errors.
+   - Legacy field aliases (`Memory.note/private_note/tags`, `Relationship.partnerName`) typed optional with Phase 3-4 reconciliation notes; renders unchanged.
+   - `Calender` -> `Calendar` type-only import typo (Babel elides type imports, which is why Metro never failed); `FormProps.updateFormUser`/`setUserProperty` typed to their dynamic implementations; null-safety guards where the old code would crash; discriminant-guarded and documented casts for WYR payload/animation.
+2. **ESLint installed and configured** (eslint 9 + eslint-config-expo 57 flat + unused-imports). `lint`, `lint:fix`, `typecheck` scripts. ~200 unused imports auto-removed; 10 JSX entities escaped; two missing list keys added; a dead conditional-hook call fixed (CategoryPicker); a raw text node in Pressable fixed (GalleryScreen; latent RN crash reached only when the feed has data). React-hooks v6 advisory rules run as warnings repo-wide (fixing them changes runtime behavior; they return to errors as screens are rebuilt).
+3. **Architecture boundaries enforced** with exact-path shrink-only allowlists. See `docs/architecture/dependency-boundaries.md`. The rules caught five real cross-feature/provider leaks during the moves, which is the intended behavior.
+4. **Feature-first structure in place.** Route tree moved to `src/app` (Expo Router 6 native support; typed-route manifest identical before/after: 27 routes, zero diff). `src/shared/{ui,lib,config,types}` created; features moved in order: auth, profiles, relationships, memories, notifications, calendar, games, journal, each with `ui` + `data/legacy` (+ `domain` where pure logic exists), own-feature relative imports, and a green gate per commit.
+5. **Root layout reduced 281 -> 94 lines.** The six Firestore listeners moved verbatim into `src/shared/lib/legacy/useLegacyFirebaseSync` (effect order, dependency arrays, subscriptions, and casts unchanged). `src/app/_layout.tsx` now contains zero Firebase imports.
+6. **Tooling debt resolved.** Deprecated `expo-router/babel` removed; `@lottiefiles/dotlottie-react` installed so `build:web` passes (native untouched; web stays outside the required CI gate).
+7. **CI runs the full gate:** safety check, typecheck, lint, Android bundle.
+
+### Final structure
+
+```
+src/
+  app/                  route files only (guard + providers in _layout, 94 lines)
+  features/
+    auth/          ui, hooks (legacy Firebase session), data/legacy
+    profiles/      ui (+ onboarding forms), data/legacy
+    relationships/ ui, domain, data/legacy
+    memories/      ui, data/legacy
+    notifications/ data/legacy
+    calendar/      ui, domain, data/legacy
+    games/         ui (+ game-modes), domain (static content), data/legacy
+    journal/       ui, data/legacy
+  shared/
+    ui/            components, theme, ModalContext, ToastProvider
+    lib/           logger, sfx, hooks/, utils/, legacy/ (getImages, useLegacyFirebaseSync)
+    config/        env (zod), firebase (legacy), constants
+    types/         shared contracts
+  pages/           legacy remainder: Home (user-owned change), Consent,
+                   Subscription, Location, Tabs/questions (all replaced/hidden in later phases)
+  server/          legacy remainder: fetchServer + mocks (fetchLocations,
+                   getMessages, getProfile, getVenues, saveConsentRecord)
+  store/           legacy Zustand mirrors (die with TanStack Query adoption)
+```
+
+### Boundary allowlist, TS decisions, lint exceptions
+
+Cataloged with death plans in `docs/architecture/dependency-boundaries.md`. Counts: 34 files with legacy `any`, 21 with pre-logger `console`, 12 UI files calling the external API, 5 cross-feature/provider legacy exceptions, 2 individual rule exceptions.
+
+### Files still containing direct Firebase imports
+
+`src/shared/config/firebase.ts`, `src/shared/lib/legacy/getImages.ts`, `src/shared/lib/legacy/useLegacyFirebaseSync.ts`, `src/features/auth/hooks/{AuthContext,useGoogleLogin}`, `src/features/auth/data/legacy/*`, `src/features/notifications/data/legacy/*`. Nothing else.
+
+### Files still using the external API
+
+`src/server/fetchServer.ts` (client) plus the feature `data/legacy` modules for profiles, relationships, memories, calendar, games, and `src/server/fetchLocations.ts`.
+
+### Requires future runtime verification
+
+- Full app flows on a device/emulator (all Phase 0A/0B changes verified via typecheck, lint, and full Metro bundles only; the layout-extraction hook preserves effect order by construction but has not run on hardware).
+- The `.env.local`-driven Firebase apiKey + API URL against the real backend.
+- TanStack Query provider deliberately deferred: it was in the original 0B sketch, but installing it without any consumer adds dead surface; it lands with the first Supabase repository in Phase 2. (Documented decision.)
+
+### Risks before Phase 1
+
+- Legacy stores still mirror Firestore; the guard still depends on the user store via the legacy hook. Unchanged behavior, but any Phase 1+ work must not add new consumers.
+- `src/pages/Home/HomeScreen.tsx` carries a user-owned uncommitted change; sweeps must keep excluding it from staging.
+
+## Phase 1: Supabase foundation — IN PROGRESS
+
+Authoring migrations, RLS, storage policies, seed, and pgTAP locally per `docs/plans/history-love-mvp-implementation-plan.md` section 3 (migration group 01). Remote project creation is deliberately NOT done: it spends money and needs an organization decision (morning-review question).

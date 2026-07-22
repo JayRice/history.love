@@ -4,16 +4,16 @@ import { Alert, Dimensions } from 'react-native';
 import { Text } from 'react-native-paper';
 
 
-import { Screen } from '@/src/components/layout/Screen';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
 
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import { router } from 'expo-router';
 
 import {useUserStore} from '@/src/store/userStore';
 
 
-import User from '@/src/types/User';
+import User from '@/src/shared/types/User';
 
 import { useAuth } from '@/src/contexts/AuthContext';
 
@@ -24,8 +24,8 @@ import Animated, {
   SlideOutLeft, SlideInLeft, SlideOutRight
 } from 'react-native-reanimated';
 import handleOnboarding from '@/src/server/user/handleOnboarding';
-import ProfileFormProps from '@/src/types/props/ProfileFormProps';
-import { BackButton } from '@/src/components/buttons/BackButton';
+import ProfileFormProps from '@/src/shared/types/props/ProfileFormProps';
+import { BackButton } from '@/src/shared/ui/buttons/BackButton';
 
 
 
@@ -42,7 +42,7 @@ import ProfileForm from '@/src/pages/Onboarding/forms/ProfileForm';
 import RelationshipForm from '@/src/pages/Onboarding/forms/RelationshipForm';
 import SourceForm from '@/src/pages/Onboarding/forms/SourceForm';
 import WelcomeForm from '@/src/pages/Onboarding/forms/WelcomeForm';
-import FormProps from '@/src/types/props/FormProps';
+import FormProps from '@/src/shared/types/props/FormProps';
 
 
 import getMatchCode from '@/src/server/getMatchCode';

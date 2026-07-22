@@ -4,7 +4,7 @@ import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import Constants from "expo-constants";
 import { GoogleAuthProvider, signInWithCredential, UserCredential } from "firebase/auth";
-import { auth } from "@/src/config/firebase";
+import { auth } from "@/src/shared/config/firebase";
 import type { AuthRequest } from "expo-auth-session";
 
 WebBrowser.maybeCompleteAuthSession();

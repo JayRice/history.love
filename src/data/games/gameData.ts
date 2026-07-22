@@ -1,5 +1,5 @@
-import { getPartnerName } from '@/src/utils/getPartnerName';
-import { GameData } from '@/src/types/GameData';
+import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
+import { GameData } from '@/src/shared/types/GameData';
 
 const partnerName = getPartnerName();
 

@@ -62,14 +62,14 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ['src/lib/logger.ts'],
+    files: ['src/shared/lib/logger.ts'],
     rules: { 'no-console': 'off' },
   },
 
   // ---- 3. Architecture boundaries ----------------------------------------
   // Route files and screens/visual components: no provider or HTTP imports.
   {
-    files: ['src/app/**/*.{ts,tsx}', 'src/pages/**/*.{ts,tsx}', 'src/components/**/*.{ts,tsx}', 'src/features/*/ui/**/*.{ts,tsx}'],
+    files: ['src/app/**/*.{ts,tsx}', 'src/pages/**/*.{ts,tsx}', 'src/shared/ui/**/*.{ts,tsx}', 'src/features/*/ui/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': ['error', { patterns: PROVIDER_IMPORT_PATTERNS }],
     },
@@ -145,24 +145,24 @@ module.exports = defineConfig([
   {
     files: [
       'src/app/_layout.tsx',
-      'src/components/animations/CollisionHeartAnimation.tsx',
-      'src/components/buttons/BackButton.tsx',
-      'src/components/elements/GalleryScreen.tsx',
-      'src/components/inputs/CategoryPicker.tsx',
-      'src/components/inputs/DatePicker.tsx',
-      'src/components/inputs/PinInput.tsx',
-      'src/components/inputs/TextField.tsx',
-      'src/components/inputs/ToggleButtons.tsx',
-      'src/components/layout/Screen.tsx',
-      'src/contexts/ModalContext.tsx',
+      'src/shared/ui/animations/CollisionHeartAnimation.tsx',
+      'src/shared/ui/buttons/BackButton.tsx',
+      'src/shared/ui/elements/GalleryScreen.tsx',
+      'src/shared/ui/inputs/CategoryPicker.tsx',
+      'src/shared/ui/inputs/DatePicker.tsx',
+      'src/shared/ui/inputs/PinInput.tsx',
+      'src/shared/ui/inputs/TextField.tsx',
+      'src/shared/ui/inputs/ToggleButtons.tsx',
+      'src/shared/ui/layout/Screen.tsx',
+      'src/shared/ui/ModalContext.tsx',
       'src/data/games/gameImages.ts',
       'src/database/auth/loginWithEmail.ts',
       'src/database/auth/signupWithEmail.ts',
-      'src/hooks/useCurrentModal.tsx',
+      'src/shared/lib/hooks/useCurrentModal.tsx',
       'src/hooks/useGoogleLogin.ts',
-      'src/hooks/useJpegCompressor.ts',
+      'src/shared/lib/hooks/useJpegCompressor.ts',
       'src/hooks/useLogin.ts',
-      'src/lib/sfx.ts',
+      'src/shared/lib/sfx.ts',
       'src/pages/Home/HomeScreen.tsx',
       'src/pages/Location/LocationSearchScreen.tsx',
       'src/pages/Onboarding/OnboardingScreen.tsx',
@@ -177,7 +177,7 @@ module.exports = defineConfig([
       'src/server/set/editMemory.tsx',
       'src/server/unpairUsers.ts',
       'src/server/user/handleOnboarding.ts',
-      'src/types/Notification.ts',
+      'src/shared/types/Notification.ts',
     ],
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
   },
@@ -187,16 +187,16 @@ module.exports = defineConfig([
   // to src/lib/logger when it migrates to its feature module.
   {
     files: [
-      'src/components/elements/CloudText.tsx',
-      'src/components/inputs/DatePicker.tsx',
-      'src/components/inputs/PhotoInput.tsx',
-      'src/components/layout/SwipeDownContainer.tsx',
-      'src/contexts/ModalContext.tsx',
+      'src/shared/ui/elements/CloudText.tsx',
+      'src/shared/ui/inputs/DatePicker.tsx',
+      'src/shared/ui/inputs/PhotoInput.tsx',
+      'src/shared/ui/layout/SwipeDownContainer.tsx',
+      'src/shared/ui/ModalContext.tsx',
       'src/database/getImages.ts',
       'src/database/messaging/handleFcmMessaging.ts',
       'src/database/notifications/markRead.ts',
-      'src/hooks/useCurrentModal.tsx',
-      'src/hooks/useJpegCompressor.ts',
+      'src/shared/lib/hooks/useCurrentModal.tsx',
+      'src/shared/lib/hooks/useJpegCompressor.ts',
       'src/pages/Auth/LoginScreen.tsx',
       'src/pages/Consent/ConsentVerificationScreen.tsx',
       'src/pages/Journal/JournalScreen.tsx',
@@ -238,7 +238,7 @@ module.exports = defineConfig([
   {
     // Hook called via helper in stable order; works today, restructure in
     // the memories UI phase rather than risk an animation behavior change.
-    files: ['src/components/elements/CloudText.tsx'],
+    files: ['src/shared/ui/elements/CloudText.tsx'],
     rules: { 'react-hooks/rules-of-hooks': 'off' },
   },
   {

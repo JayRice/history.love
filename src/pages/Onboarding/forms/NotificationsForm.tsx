@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import React from 'react';
-import FormProps from '@/src/types/props/FormProps';
+import FormProps from '@/src/shared/types/props/FormProps';
 
 
 const NotificationsForm = ({formUser, updateFormUser}: FormProps) => {

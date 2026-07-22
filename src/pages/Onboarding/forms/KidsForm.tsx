@@ -1,8 +1,8 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import ToggleButtons from '@/src/components/inputs/ToggleButtons';
+import ToggleButtons from '@/src/shared/ui/inputs/ToggleButtons';
 import React from 'react';
-import FormProps from '@/src/types/props/FormProps';
+import FormProps from '@/src/shared/types/props/FormProps';
 
 
 const KidsForm = ({formUser, updateFormUser}: FormProps) => {

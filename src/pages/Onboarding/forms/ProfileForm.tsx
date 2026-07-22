@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { auth } from '@/src/config/firebase';
-import { ProfileImage } from '@/src/types/User';
-import useDebounce from '@/src/hooks/useDebounce';
+import { auth } from '@/src/shared/config/firebase';
+import { ProfileImage } from '@/src/shared/types/User';
+import useDebounce from '@/src/shared/lib/hooks/useDebounce';
 import isUsernameTaken from '@/src/server/user/isUsernameTaken';
 import * as ImagePicker from 'expo-image-picker';
 import { Alert, Image, Platform, Pressable, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { TextField } from '@/src/components/inputs/TextField';
-import ProfileFormProps from '@/src/types/props/ProfileFormProps';
+import { TextField } from '@/src/shared/ui/inputs/TextField';
+import ProfileFormProps from '@/src/shared/types/props/ProfileFormProps';
 
-import * as CONSTANTS from "@/constants/index"
+import * as CONSTANTS from "@/src/shared/config/constants"
 
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ formUser, updateFormUser , usernameTaken, setUsernameTaken}) => {

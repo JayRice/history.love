@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
-import Relationship from '@/src/types/Relationship';
-import Memory from '@/src/types/Memory';
-import { CalendarEvent } from "@/src/types/Calendar"
-import { Game } from '@/src/types/Game';
+import Relationship from '@/src/shared/types/Relationship';
+import Memory from '@/src/shared/types/Memory';
+import { CalendarEvent } from "@/src/shared/types/Calendar"
+import { Game } from '@/src/shared/types/Game';
 
 type Store = {
   relationship: Relationship | null;

@@ -2,18 +2,18 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import React, { useEffect } from 'react';
-import PinInput from '@/src/components/inputs/PinInput';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import PinInput from '@/src/shared/ui/inputs/PinInput';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import { useUserStore } from '@/src/store/userStore';
 import getMatchCode from '@/src/server/getMatchCode';
-import TapToCopy from '@/src/components/inputs/TapToCopy';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
+import TapToCopy from '@/src/shared/ui/inputs/TapToCopy';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
 import pairUsers from '@/src/server/pairUsers';
 import { isValidMatchCode } from '@/src/logic/isValidMatchCode';
-import { Screen } from '@/src/components/layout/Screen';
-import { CloseButton } from '@/src/components/buttons/CloseButton';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { CloseButton } from '@/src/shared/ui/buttons/CloseButton';
 import { router } from 'expo-router';
-import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
+import { SecondaryButton } from '@/src/shared/ui/buttons/SecondaryButton';
 
 
 export default function PairScreen ()  {

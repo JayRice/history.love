@@ -2,17 +2,17 @@ import React from 'react';
 import { View, Dimensions, Pressable } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Star } from 'lucide-react-native';
-import { Screen } from '@/src/components/layout/Screen';
+import { Screen } from '@/src/shared/ui/layout/Screen';
 
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 
 import { router } from 'expo-router';
 
 import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import Swiper from 'react-native-swiper';
-import { ToggleField } from '@/src/components/inputs/ToggleField';
-import { CloseButton } from '@/src/components/buttons/CloseButton';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
+import { ToggleField } from '@/src/shared/ui/inputs/ToggleField';
+import { CloseButton } from '@/src/shared/ui/buttons/CloseButton';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
 
 
 

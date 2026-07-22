@@ -1,7 +1,7 @@
-import { Screen } from '@/src/components/layout/Screen';
-import { TabHeader } from '@/src/components/layout/TabHeader';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { TabHeader } from '@/src/shared/ui/layout/TabHeader';
 import React from 'react';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import Questions from '@/assets/images/home-images/questions.svg';
 
 export default function  QuestionsScreen(){

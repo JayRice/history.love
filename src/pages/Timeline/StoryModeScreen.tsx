@@ -4,17 +4,17 @@ import { View, StyleSheet, Dimensions, FlatList } from 'react-native';
 import { Image } from "expo-image";
 
 
-import type Memory from "@/src/types/Memory";
-import Photo from "@/src/types/Photo";
+import type Memory from "@/src/shared/types/Memory";
+import Photo from "@/src/shared/types/Photo";
 import { useMemoryImageStore } from '@/src/store/memoryImageStore';
-import { CloseButton } from '@/src/components/buttons/CloseButton';
-import ProfileImage from '@/src/components/elements/ProfileImage';
+import { CloseButton } from '@/src/shared/ui/buttons/CloseButton';
+import ProfileImage from '@/src/shared/ui/elements/ProfileImage';
 import { useImagesStore } from '@/src/store/imagesStore';
-import { CloudText } from '@/src/components/elements/CloudText';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
+import { CloudText } from '@/src/shared/ui/elements/CloudText';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
 
-import { useModal } from '@/src/contexts/ModalContext';
-import { useCurrentModal } from '@/src/hooks/useCurrentModal';
+import { useModal } from '@/src/shared/ui/ModalContext';
+import { useCurrentModal } from '@/src/shared/lib/hooks/useCurrentModal';
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 

@@ -2,7 +2,7 @@
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as Crypto from "expo-crypto";
 import { OAuthProvider, signInWithCredential } from "firebase/auth";
-import { auth } from "@/src/config/firebase";
+import { auth } from "@/src/shared/config/firebase";
 
 function randomString(length = 32) {
   const chars =

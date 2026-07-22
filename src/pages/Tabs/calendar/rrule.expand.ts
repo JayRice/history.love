@@ -1,6 +1,6 @@
 import { RRule } from "rrule";
 import { addMilliseconds } from "date-fns";
-import type { CalendarEvent, OccurrenceEvent } from "@/src/types/Calendar";
+import type { CalendarEvent, OccurrenceEvent } from "@/src/shared/types/Calendar";
 
 
 function toDate(x: string | Date): Date {

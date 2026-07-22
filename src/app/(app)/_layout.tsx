@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Chrome as Home, User, Calendar, BookOpen, Settings } from 'lucide-react-native';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 
 export default function AppLayout() {
   const colors = useThemeColors();

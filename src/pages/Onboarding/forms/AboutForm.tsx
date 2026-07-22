@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { TextField } from '@/src/components/inputs/TextField';
-import DatePicker from '@/src/components/inputs/DatePicker';
+import { TextField } from '@/src/shared/ui/inputs/TextField';
+import DatePicker from '@/src/shared/ui/inputs/DatePicker';
 import React from 'react';
-import FormProps from '@/src/types/props/FormProps';
+import FormProps from '@/src/shared/types/props/FormProps';
 
 const AboutForm = ({formUser, updateFormUser}: FormProps) => {
 

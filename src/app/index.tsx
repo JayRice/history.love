@@ -1,10 +1,10 @@
 import { View } from 'react-native';
 
-import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
+import { LoadingSpinner } from '@/src/shared/ui/feedback/LoadingSpinner';
 import Logo from '@/assets/images/logo.svg';
 
 
-import {Screen} from "@/src/components/layout/Screen"
+import {Screen} from "@/src/shared/ui/layout/Screen"
 
 
 export default function Index() {

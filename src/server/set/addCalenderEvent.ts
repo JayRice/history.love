@@ -1,4 +1,4 @@
-import { CalendarEvent } from "@/src/types/Calendar";
+import { CalendarEvent } from "@/src/shared/types/Calendar";
 import fetchServer from '@/src/server/fetchServer';
 
 export async function addCalenderEvent(calendarEvent: Omit<CalendarEvent, "id">){

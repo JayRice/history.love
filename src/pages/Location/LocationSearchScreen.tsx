@@ -9,16 +9,16 @@ import {
 } from 'react-native';
 import { Text , TextInput } from 'react-native-paper';
 import { MapPin as MapPinIcon, Search as SearchIcon } from 'lucide-react-native';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
-import { GeoLocation } from '@/src/types/GeoLocation';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
+import { GeoLocation } from '@/src/shared/types/GeoLocation';
 
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { LoadingSpinner } from "@/src/components/feedback/LoadingSpinner"
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
+import { LoadingSpinner } from "@/src/shared/ui/feedback/LoadingSpinner"
 import fetchLocations from '@/src/server/fetchLocations';
 
-import { BackButton } from '@/src/components/buttons/BackButton';
-import { useModal } from '../../contexts/ModalContext';
-import { Screen } from '@/src/components/layout/Screen';
+import { BackButton } from '@/src/shared/ui/buttons/BackButton';
+import { useModal } from '@/src/shared/ui/ModalContext';
+import { Screen } from '@/src/shared/ui/layout/Screen';
 
 type LocationSearchScreenProps = {
   initialQuery?: string;

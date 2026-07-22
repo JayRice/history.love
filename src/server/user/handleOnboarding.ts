@@ -1,4 +1,4 @@
-import  User  from '@/src/types/User';
+import  User  from '@/src/shared/types/User';
 
 import Constants from "expo-constants";
 import { getAuthUser } from '@/src/database/auth/getAuthUser';

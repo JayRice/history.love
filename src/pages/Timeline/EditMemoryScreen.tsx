@@ -1,25 +1,25 @@
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Screen } from '@/src/components/layout/Screen';
+import { Screen } from '@/src/shared/ui/layout/Screen';
 import { router } from 'expo-router';
 import { Text } from 'react-native-paper';
 import { View } from 'react-native';
 
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import * as CONSTANTS from '@/constants';
-import { TextField } from '@/src/components/inputs/TextField';
-import { BackButton } from '@/src/components/buttons/BackButton';
-import DatePicker from '@/src/components/inputs/DatePicker';
-import { PhotoInput } from '@/src/components/inputs/PhotoInput';
-import { LocationPicker } from '@/src/components/inputs/LocationPicker';
-import { GeoLocation } from '@/src/types/GeoLocation';
-import Memory, { MemoryCategory, MemoryCategoryList, MemoryMood, MemoryMoodList } from '../../types/Memory';
-import { CategoryPicker } from '@/src/components/inputs/CategoryPicker';
-import Photo from "../../types/Photo"
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
+import * as CONSTANTS from '@/src/shared/config/constants';
+import { TextField } from '@/src/shared/ui/inputs/TextField';
+import { BackButton } from '@/src/shared/ui/buttons/BackButton';
+import DatePicker from '@/src/shared/ui/inputs/DatePicker';
+import { PhotoInput } from '@/src/shared/ui/inputs/PhotoInput';
+import { LocationPicker } from '@/src/shared/ui/inputs/LocationPicker';
+import { GeoLocation } from '@/src/shared/types/GeoLocation';
+import Memory, { MemoryCategory, MemoryCategoryList, MemoryMood, MemoryMoodList } from '@/src/shared/types/Memory';
+import { CategoryPicker } from '@/src/shared/ui/inputs/CategoryPicker';
+import Photo from "@/src/shared/types/Photo"
 import { useAuth } from '@/src/contexts/AuthContext';
 import { editMemory } from '@/src/server/set/editMemory';
-import {ToggleField} from "../../components/inputs/ToggleField"
-import { useCurrentModal } from '@/src/hooks/useCurrentModal';
+import {ToggleField} from "@/src/shared/ui/inputs/ToggleField"
+import { useCurrentModal } from '@/src/shared/lib/hooks/useCurrentModal';
 import { useMemoryImageStore } from '@/src/store/memoryImageStore';
 
 interface ModalData {

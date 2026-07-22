@@ -5,7 +5,7 @@ import {
 
 
 } from 'firebase/auth'
-import { auth } from '@/src/config/firebase';
+import { auth } from '@/src/shared/config/firebase';
 
 export default async function logout(){
 

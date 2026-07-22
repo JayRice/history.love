@@ -1,6 +1,6 @@
 import { Link, router, Stack } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
 
 export default function NotFoundScreen() {
   return (

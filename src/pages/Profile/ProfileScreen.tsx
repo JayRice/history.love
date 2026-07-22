@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Text, Card, Avatar, Divider } from 'react-native-paper';
 import { CreditCard as Edit3, MapPin, Heart, Users, Eye, EyeOff } from 'lucide-react-native';
-import { Screen } from '@/src/components/layout/Screen';
-import { SectionHeader } from '@/src/components/layout/SectionHeader';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
-import { ToggleField } from '@/src/components/inputs/ToggleField';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { SectionHeader } from '@/src/shared/ui/layout/SectionHeader';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
+import { SecondaryButton } from '@/src/shared/ui/buttons/SecondaryButton';
+import { ToggleField } from '@/src/shared/ui/inputs/ToggleField';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import { useUserStore } from '@/src/store/userStore';
-import getAgeFromDate from '@/src/logic/getAgeFromDate';
+import getAgeFromDate from '@/src/shared/lib/utils/getAgeFromDate';
 
 export default function ProfileScreen() {
   const user = useUserStore((state) => state.user)

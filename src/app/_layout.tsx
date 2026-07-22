@@ -1,32 +1,32 @@
-import { validateEnv } from '@/src/config/env';
+import { validateEnv } from '@/src/shared/config/env';
 
 import { useEffect, useState } from 'react';
 import { router, Stack, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useFrameworkReady } from '@/hooks/useFrameworkReady';
+import { useFrameworkReady } from '@/src/shared/lib/hooks/useFrameworkReady';
 import { PaperProvider } from 'react-native-paper';
-import { paperTheme } from '@/src/theme/paperTheme';
+import { paperTheme } from '@/src/shared/ui/theme/paperTheme';
 import { useUserStore } from '@/src/store/userStore';
 import { collection, doc, limit, onSnapshot, orderBy, query, where } from 'firebase/firestore';
-import {db} from "@/src/config/firebase";
+import {db} from "@/src/shared/config/firebase";
 
 import Toast from "react-native-toast-message";
 
 
 
-import { logger } from '@/src/lib/logger';
+import { logger } from '@/src/shared/lib/logger';
 import { AuthProvider, useAuth } from "@/src/contexts/AuthContext";
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import getImages from '@/src/database/getImages';
 import { useImagesStore } from '@/src/store/imagesStore';
 import { useNotificationsStore } from '@/src/store/notificationsStore';
-import { Notification } from '@/src/types/Notification';
-import Memory from '@/src/types/Memory';
+import { Notification } from '@/src/shared/types/Notification';
+import Memory from '@/src/shared/types/Memory';
 import { useMemoryImageStore } from '@/src/store/memoryImageStore';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ModalProvider } from '@/src/contexts/ModalContext';
-import { CalendarEvent } from '@/src/types/Calendar';
-import { Game } from '@/src/types/Game';
+import { ModalProvider } from '@/src/shared/ui/ModalContext';
+import { CalendarEvent } from '@/src/shared/types/Calendar';
+import { Game } from '@/src/shared/types/Game';
 
 // Fail fast on missing or unsafe configuration before anything else loads.
 validateEnv();

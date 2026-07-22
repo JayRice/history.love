@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import ToggleButtons from '@/src/components/inputs/ToggleButtons';
-import { TextField } from '@/src/components/inputs/TextField';
-import FormProps from '@/src/types/props/FormProps';
+import ToggleButtons from '@/src/shared/ui/inputs/ToggleButtons';
+import { TextField } from '@/src/shared/ui/inputs/TextField';
+import FormProps from '@/src/shared/types/props/FormProps';
 
 
 const GenderForm = ({formUser, updateFormUser}: FormProps) => {

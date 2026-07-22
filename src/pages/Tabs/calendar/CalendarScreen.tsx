@@ -3,17 +3,17 @@ import { Dimensions, View , useColorScheme } from "react-native";
 import { Calendar } from "react-native-big-calendar";
 
 import { addDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from "date-fns";
-import type { OccurrenceEvent, CalendarMode } from "@/src/types/Calendar";
+import type { OccurrenceEvent, CalendarMode } from "@/src/shared/types/Calendar";
 import { expandEventsForRange } from "./rrule.expand";
 import { activityColor, activityIcon } from "./icons.map";
-import { Screen } from '@/src/components/layout/Screen';
+import { Screen } from '@/src/shared/ui/layout/Screen';
 import { Plus } from 'lucide-react-native';
 import { FAB, Text } from 'react-native-paper';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
-import { detectUsesAMPM } from '@/src/utils/detectUsesAMPM';
-import { useModal } from '@/src/contexts/ModalContext';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
+import { detectUsesAMPM } from '@/src/shared/lib/utils/detectUsesAMPM';
+import { useModal } from '@/src/shared/ui/ModalContext';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
-import { TabHeader } from '@/src/components/layout/TabHeader';
+import { TabHeader } from '@/src/shared/ui/layout/TabHeader';
 import CalendarImage from '@/assets/images/home-images/calendar.svg';
 
 

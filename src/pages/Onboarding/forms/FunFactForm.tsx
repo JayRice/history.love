@@ -1,9 +1,9 @@
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import { View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { CircleCheck, CircleMinus } from 'lucide-react-native';
 import React from 'react';
-import FormProps from '@/src/types/props/FormProps';
+import FormProps from '@/src/shared/types/props/FormProps';
 
 
 const FunFactForm = ({formUser, updateFormUser}: FormProps) => {

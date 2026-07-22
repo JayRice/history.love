@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-import { auth } from "@/src/config/firebase";
+import { auth } from "@/src/shared/config/firebase";
 import { FirebaseError } from "firebase/app";
 
 

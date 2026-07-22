@@ -1,6 +1,6 @@
 
-import Memory from "../../types/Memory"
-import fetchServer from "../fetchServer"
+import Memory from "@/src/shared/types/Memory"
+import fetchServer from "@/src/server/fetchServer"
 
 export async function editMemory(memoryData: Memory, shouldDelete: boolean, deletedPhotos : string[]) {
 

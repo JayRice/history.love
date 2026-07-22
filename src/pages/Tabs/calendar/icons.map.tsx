@@ -1,6 +1,6 @@
 import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import type { ActivityType } from "@/src/types/Calendar";
+import type { ActivityType } from "@/src/shared/types/Calendar";
 
 
 export const activityIcon = (t?: ActivityType, size = 14) => {

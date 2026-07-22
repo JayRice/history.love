@@ -1,17 +1,17 @@
-import { useCurrentModal } from '@/src/hooks/useCurrentModal';
-import { GameData, GameMode } from '@/src/types/GameData';
-import { Screen } from '@/src/components/layout/Screen';
+import { useCurrentModal } from '@/src/shared/lib/hooks/useCurrentModal';
+import { GameData, GameMode } from '@/src/shared/types/GameData';
+import { Screen } from '@/src/shared/ui/layout/Screen';
 import { Text } from 'react-native-paper';
-import { CategoryPicker } from '@/src/components/inputs/CategoryPicker';
+import { CategoryPicker } from '@/src/shared/ui/inputs/CategoryPicker';
 import React, { useEffect } from 'react';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
 import { View } from 'react-native';
-import { BackButton } from '@/src/components/buttons/BackButton';
+import { BackButton } from '@/src/shared/ui/buttons/BackButton';
 import { startGame } from '@/src/server/game/startGame';
-import { GamePreferences } from '@/src/types/GamePreferences';
+import { GamePreferences } from '@/src/shared/types/GamePreferences';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import Toast from 'react-native-toast-message';
-import { useModal } from '@/src/contexts/ModalContext';
+import { useModal } from '@/src/shared/ui/ModalContext';
 
 interface ModalData {
   game: GameData;

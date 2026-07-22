@@ -1,19 +1,19 @@
-import { Screen } from '@/src/components/layout/Screen';
+import { Screen } from '@/src/shared/ui/layout/Screen';
 import { Card, Text } from 'react-native-paper';
 import { View } from 'react-native';
 import React, { useMemo } from 'react';
 import { gameImages } from '@/src/data/games/gameImages';
-import { FlipCard } from '@/src/components/cards/FlipCard';
-import { getPartnerName } from '@/src/utils/getPartnerName';
+import { FlipCard } from '@/src/shared/ui/cards/FlipCard';
+import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
 import { gameData } from '@/src/data/games/gameData';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { useModal } from '@/src/contexts/ModalContext';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
+import { useModal } from '@/src/shared/ui/ModalContext';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { endGame } from '@/src/server/game/endGame';
 import { archiveGame } from '@/src/server/game/archiveGame';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import Trophy from '@/assets/images/home-images/trophy.svg';
-import { TabHeader } from '@/src/components/layout/TabHeader';
+import { TabHeader } from '@/src/shared/ui/layout/TabHeader';
 function GameCard({game, idx, currentFlipped, setCurrentFlipped}: {game: any, idx: number, currentFlipped: string, setCurrentFlipped: (cf: string) => void}) {
   const image = game.image;
 

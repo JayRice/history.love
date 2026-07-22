@@ -2,20 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { Plus, Heart } from 'lucide-react-native';
-import { Screen } from '@/src/components/layout/Screen';
-import { SectionHeader } from '@/src/components/layout/SectionHeader';
-import { RelationshipCard } from '@/src/components/cards/RelationshipCard';
-import { EmptyState } from '@/src/components/feedback/EmptyState';
-import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
-import Memory from "../../types/Memory"
-import  Relationship  from '@/src/types/Relationship';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { SectionHeader } from '@/src/shared/ui/layout/SectionHeader';
+import { RelationshipCard } from '@/src/shared/ui/cards/RelationshipCard';
+import { EmptyState } from '@/src/shared/ui/feedback/EmptyState';
+import { LoadingSpinner } from '@/src/shared/ui/feedback/LoadingSpinner';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
+import Memory from "@/src/shared/types/Memory"
+import  Relationship  from '@/src/shared/types/Relationship';
 import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/userStore';
-import { getPartnerName } from '@/src/utils/getPartnerName';
+import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
-import {GalleryScreen} from "../../components/elements/GalleryScreen"
-import { useModal } from '../../contexts/ModalContext';
+import {GalleryScreen} from "@/src/shared/ui/elements/GalleryScreen"
+import { useModal } from '@/src/shared/ui/ModalContext';
 
 
 export default function TimelineScreen() {

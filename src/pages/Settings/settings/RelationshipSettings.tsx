@@ -1,7 +1,7 @@
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { getPartnerName } from '@/src/utils/getPartnerName';
-import { ConfirmOverlay } from '@/src/components/feedback/ConfirmOverlay';
-import { Screen } from '@/src/components/layout/Screen';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
+import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
+import { ConfirmOverlay } from '@/src/shared/ui/feedback/ConfirmOverlay';
+import { Screen } from '@/src/shared/ui/layout/Screen';
 import { useState } from 'react';
 import unpairUsers from '@/src/server/unpairUsers';
 

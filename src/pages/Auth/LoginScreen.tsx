@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Card } from 'react-native-paper';
-import { Screen } from '@/src/components/layout/Screen';
-import { TextField } from '@/src/components/inputs/TextField';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import { SecondaryButton } from '@/src/components/buttons/SecondaryButton';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { TextField } from '@/src/shared/ui/inputs/TextField';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
+import { SecondaryButton } from '@/src/shared/ui/buttons/SecondaryButton';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import { router } from 'expo-router';
-import { BackButton } from '@/src/components/buttons/BackButton';
+import { BackButton } from '@/src/shared/ui/buttons/BackButton';
 import Logo from '@/assets/images/logo.svg';
 import useLogin from '@/src/hooks/useLogin';
 

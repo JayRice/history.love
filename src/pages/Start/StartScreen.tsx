@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Dimensions, Platform } from 'react-native';
 import { Text, Card } from 'react-native-paper';
-import { Screen } from '@/src/components/layout/Screen';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
 
-import { useThemeColors } from '@/src/hooks/useThemeColors';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
 import Swiper from "react-native-swiper";
 import Logo from "@/assets/images/logo.svg";
 

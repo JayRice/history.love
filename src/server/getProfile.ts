@@ -1,4 +1,4 @@
-import { Profile } from '@/src/types';
+import { Profile } from '@/src/shared/types';
 
 // Placeholder API function for getting user profile
 export default async function getProfile(userId: string) {

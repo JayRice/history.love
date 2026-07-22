@@ -5,10 +5,10 @@ import {Text} from "react-native-paper"
 import { router } from "expo-router";
 import { useUserStore } from "@/src/store/userStore";
 import { useRelationshipStore } from "@/src/store/relationshipStore";
-import CollisionHeartAnimation from '@/src/components/animations/CollisionHeartAnimation';
+import CollisionHeartAnimation from '@/src/shared/ui/animations/CollisionHeartAnimation';
 import { useImagesStore } from '@/src/store/imagesStore';
-import { PrimaryButton } from '@/src/components/buttons/PrimaryButton';
-import CongratulationsScreen from '@/src/components/layout/CongratulationsScreen';
+import { PrimaryButton } from '@/src/shared/ui/buttons/PrimaryButton';
+import CongratulationsScreen from '@/src/shared/ui/layout/CongratulationsScreen';
 
 const GOAL_LABELS: Record<string, string> = {
   "better-communication": "Better Communication",

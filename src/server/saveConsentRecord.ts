@@ -1,4 +1,4 @@
-import { ConsentRecord } from '@/src/types';
+import { ConsentRecord } from '@/src/shared/types';
 
 // Placeholder API function for saving consent records
 export default async function saveConsentRecord(consentData: Omit<ConsentRecord, 'id' | 'createdAt' | 'updatedAt'>) {

@@ -1,4 +1,4 @@
-import { WouldYouRatherQuestion, WYRMode } from '../../types/Game';
+import { WouldYouRatherQuestion, WYRMode } from '@/src/shared/types/Game';
 
 export let wouldYouRatherData : Record<WYRMode, WouldYouRatherQuestion[]> = {
   "casual": [

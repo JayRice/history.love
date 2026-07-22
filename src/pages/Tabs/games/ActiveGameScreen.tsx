@@ -1,14 +1,14 @@
-import { Screen } from '@/src/components/layout/Screen';
+import { Screen } from '@/src/shared/ui/layout/Screen';
 
 import React, { useEffect } from 'react';
-import { BackButton } from '@/src/components/buttons/BackButton';
-import { getPartnerName } from '@/src/utils/getPartnerName';
-import { Game, WouldYouRatherGame } from '@/src/types/Game';
+import { BackButton } from '@/src/shared/ui/buttons/BackButton';
+import { getPartnerName } from '@/src/shared/lib/utils/getPartnerName';
+import { Game, WouldYouRatherGame } from '@/src/shared/types/Game';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { WouldYouRather } from '@/src/pages/Tabs/games/game-modes/WouldYouRather';
-import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
+import { LoadingSpinner } from '@/src/shared/ui/feedback/LoadingSpinner';
 import { View } from 'react-native';
-import { useCurrentModal } from '@/src/hooks/useCurrentModal';
+import { useCurrentModal } from '@/src/shared/lib/hooks/useCurrentModal';
 
 export default function  ActiveGameScreen(){
   const partnerName = getPartnerName();

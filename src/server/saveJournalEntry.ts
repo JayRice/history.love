@@ -1,4 +1,4 @@
-import { JournalEntry } from '@/src/types';
+import { JournalEntry } from '@/src/shared/types';
 
 // Placeholder API function for saving journal entries
 export default async function saveJournalEntry(entryData: Omit<JournalEntry, 'id' | 'createdAt' | 'updatedAt'>) {

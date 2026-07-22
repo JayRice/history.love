@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import ToggleButtons from '@/src/components/inputs/ToggleButtons';
-import { Cohabitation } from '@/src/types/User';
+import ToggleButtons from '@/src/shared/ui/inputs/ToggleButtons';
+import { Cohabitation } from '@/src/shared/types/User';
 import React from 'react';
-import FormProps from '@/src/types/props/FormProps';
+import FormProps from '@/src/shared/types/props/FormProps';
 
 
 const CohabitationForm = ({formUser, updateFormUser}: FormProps) => {

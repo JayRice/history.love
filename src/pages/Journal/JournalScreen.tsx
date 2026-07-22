@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList } from 'react-native';
 import { Card, Text, FAB, Chip } from 'react-native-paper';
 import { Plus, BookOpen, Mic, Sparkles } from 'lucide-react-native';
-import { Screen } from '@/src/components/layout/Screen';
-import { SectionHeader } from '@/src/components/layout/SectionHeader';
-import { EmptyState } from '@/src/components/feedback/EmptyState';
-import { LoadingSpinner } from '@/src/components/feedback/LoadingSpinner';
-import { useThemeColors } from '@/src/hooks/useThemeColors';
-import { JournalEntry, AIPrompt } from '@/src/types/Journal';
+import { Screen } from '@/src/shared/ui/layout/Screen';
+import { SectionHeader } from '@/src/shared/ui/layout/SectionHeader';
+import { EmptyState } from '@/src/shared/ui/feedback/EmptyState';
+import { LoadingSpinner } from '@/src/shared/ui/feedback/LoadingSpinner';
+import { useThemeColors } from '@/src/shared/lib/hooks/useThemeColors';
+import { JournalEntry, AIPrompt } from '@/src/shared/types/Journal';
 
 const aiPrompts: AIPrompt[] = [
   {

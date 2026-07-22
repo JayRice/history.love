@@ -3,28 +3,28 @@ import { View } from "react-native";
 import { router } from "expo-router";
 import { Text } from "react-native-paper";
 
-import { Screen } from "@/src/components/layout/Screen";
-import { BackButton } from "@/src/components/buttons/BackButton";
-import { PrimaryButton } from "@/src/components/buttons/PrimaryButton";
-import { TextField } from "@/src/components/inputs/TextField";
-import { LocationPicker } from "@/src/components/inputs/LocationPicker";
-import { ToggleField } from "@/src/components/inputs/ToggleField";
-import { useThemeColors } from "@/src/hooks/useThemeColors";
+import { Screen } from "@/src/shared/ui/layout/Screen";
+import { BackButton } from "@/src/shared/ui/buttons/BackButton";
+import { PrimaryButton } from "@/src/shared/ui/buttons/PrimaryButton";
+import { TextField } from "@/src/shared/ui/inputs/TextField";
+import { LocationPicker } from "@/src/shared/ui/inputs/LocationPicker";
+import { ToggleField } from "@/src/shared/ui/inputs/ToggleField";
+import { useThemeColors } from "@/src/shared/lib/hooks/useThemeColors";
 import { useAuth } from "@/src/contexts/AuthContext";
-import { useCurrentModal } from "@/src/hooks/useCurrentModal";
+import { useCurrentModal } from "@/src/shared/lib/hooks/useCurrentModal";
 
-import { DateTimeRangeField } from "@/src/components/inputs/DateTimeRangeField";
-import { TimeRangeField } from "@/src/components/inputs/TimeRangeField";
-import { ActivityTypePicker } from "@/src/components/inputs/ActivityTypePicker";
-import { RepeatPicker, toRRULE } from "@/src/components/inputs/RepeatPicker";
+import { DateTimeRangeField } from "@/src/shared/ui/inputs/DateTimeRangeField";
+import { TimeRangeField } from "@/src/shared/ui/inputs/TimeRangeField";
+import { ActivityTypePicker } from "@/src/shared/ui/inputs/ActivityTypePicker";
+import { RepeatPicker, toRRULE } from "@/src/shared/ui/inputs/RepeatPicker";
 
-import type { GeoLocation } from "@/src/types/GeoLocation";
-import type { ActivityType, CalendarEvent } from "@/src/types/Calendar";
+import type { GeoLocation } from "@/src/shared/types/GeoLocation";
+import type { ActivityType, CalendarEvent } from "@/src/shared/types/Calendar";
 
 import { addCalenderEvent } from "@/src/server/set/addCalenderEvent";
 import { useUserStore } from "@/src/store/userStore";
-import { getPartnerName } from "@/src/utils/getPartnerName";
-import { detectUsesAMPM } from '@/src/utils/detectUsesAMPM';
+import { getPartnerName } from "@/src/shared/lib/utils/getPartnerName";
+import { detectUsesAMPM } from '@/src/shared/lib/utils/detectUsesAMPM';
 
 type ModalData = {
   initialStart?: string; // ISO

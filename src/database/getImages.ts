@@ -1,5 +1,5 @@
 import { getDownloadURL, ref } from 'firebase/storage';
-import { storage } from '@/src/config/firebase';
+import { storage } from '@/src/shared/config/firebase';
 
 
 export default async function getImages(dir: string, images: string[]) {

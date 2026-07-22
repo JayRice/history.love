@@ -100,6 +100,24 @@ Cataloged with death plans in `docs/architecture/dependency-boundaries.md`. Coun
 - Legacy stores still mirror Firestore; the guard still depends on the user store via the legacy hook. Unchanged behavior, but any Phase 1+ work must not add new consumers.
 - `src/pages/Home/HomeScreen.tsx` carries a user-owned uncommitted change; sweeps must keep excluding it from staging.
 
-## Phase 1: Supabase foundation — IN PROGRESS
+## Phase 1: Supabase foundation — LOCAL FOUNDATION COMPLETE
 
-Authoring migrations, RLS, storage policies, seed, and pgTAP locally per `docs/plans/history-love-mvp-implementation-plan.md` section 3 (migration group 01). Remote project creation is deliberately NOT done: it spends money and needs an organization decision (morning-review question).
+Migration group 01 authored, applied, and tested against the local stack (Docker + supabase CLI, ports shifted to 553xx to coexist with another local project).
+
+### Completed
+
+- Migrations 0001-0004: identity (profiles, append-only consents, service-only legacy_identity_map), relationship container model (members, invitations with hash-only codes, visibility grants, append-only status events/confirmations), blocks + both-direction predicate, append-only audit ledger, security helper schema, four private storage buckets with per-verb policies, and the trusted RPCs (accept_policy, create/accept/revoke_invitation, confirm_relationship).
+- Grant discipline: explicit table grants are the ceiling; append-only tables have no UPDATE/DELETE grant so forgery fails with 42501 rather than silently matching zero rows.
+- pgTAP suite: 50/50 passing (schema/RLS-forced checks, cross-user isolation incl. UUID guessing, immutability, block visibility, invitation lifecycle with six abuse cases). `supabase db lint`: zero findings in public/private/security.
+- Generated TypeScript database types at `src/shared/types/database.ts`.
+- CI `database` job: fresh stack, migrations from zero, pgTAP.
+
+### Remaining Phase 1 work
+
+- Remote projects (staging/production): NOT created. Spends money and needs an org decision (see Questions for Morning Review).
+- supabase-js client factory + TanStack Query provider: deliberately deferred to Phase 2 with their first consumer (the auth repository).
+
+### Requires future runtime verification
+
+- CI `database` job has not run on GitHub Actions yet (verified locally only).
+- Hosted-platform grant semantics (service_role/authenticated) assumed to match local; re-verify against the first staging project.

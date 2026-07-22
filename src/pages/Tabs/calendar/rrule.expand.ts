@@ -1,6 +1,6 @@
 import { RRule } from "rrule";
 import { addMilliseconds } from "date-fns";
-import type { CalenderEvent, OccurrenceEvent } from "@/src/types/Calender";
+import type { CalendarEvent, OccurrenceEvent } from "@/src/types/Calendar";
 
 
 function toDate(x: string | Date): Date {
@@ -9,7 +9,7 @@ function toDate(x: string | Date): Date {
 
 
 export function expandEventsForRange(
-  events: CalenderEvent[],
+  events: CalendarEvent[],
   rangeStart: Date,
   rangeEnd: Date
 ): OccurrenceEvent[] {
@@ -22,7 +22,7 @@ export function expandEventsForRange(
     const baseStart = toDate(e.start);
     const baseEnd = toDate(e.end);
     const durationMs = baseEnd.getTime() - baseStart.getTime();
-    const exdateSet = new Set((e.exdates ?? []).map((x) => toDate(x).toISOString()));
+    const exdateSet = new Set((e.exdates ?? []).map((x: string | Date) => toDate(x).toISOString()));
 
 
     if (!e.recurrence) {

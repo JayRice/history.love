@@ -24,8 +24,6 @@ import Logo from "@/assets/images/logo.svg";
 import { router } from 'expo-router';
 
 import {useUserStore} from '@/src/store/userStore';
-import { Input } from 'postcss';
-import InputLabel from 'react-native-paper/src/components/TextInput/Label/InputLabel';
 import { TextField } from '@/src/components/inputs/TextField';
 
 
@@ -45,6 +43,7 @@ import Animated, {
   FadeOut, SlideInLeft, SlideOutRight
 } from 'react-native-reanimated';
 import handleOnboarding from '@/src/server/user/handleOnboarding';
+import ProfileFormProps from '@/src/types/props/ProfileFormProps';
 import isUsernameTaken from '@/src/server/user/isUsernameTaken';
 import { BackButton } from '@/src/components/buttons/BackButton';
 import ToggleButtons from '@/src/components/inputs/ToggleButtons';
@@ -178,7 +177,11 @@ export default function OnboardingScreen() {
   const formKeys = Object.keys(forms) as FormKey[];
 
   const currentForm = formKeys[screenFormIndex];
-  const ActiveForm = currentForm && forms[currentForm];
+  // All forms take FormProps; ProfileForm additionally takes the optional
+  // usernameTaken props (ProfileFormProps extends FormProps), which are only
+  // spread when currentForm === "profile". Widening to the superset props
+  // type is sound for the union and keeps the conditional spread typed.
+  const ActiveForm = currentForm && (forms[currentForm] as React.FC<ProfileFormProps>);
 
 
   /*

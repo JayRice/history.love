@@ -1,4 +1,9 @@
-const gameModesList = ["casual", "romantic", "deep", "funny", "spicy", "daily life", "preferences", "fun", "playful"] as const
+const gameModesList = [
+  "casual", "romantic", "deep", "funny", "spicy", "daily life", "preferences",
+  "fun", "playful", "nostalgic", "personal", "challenge", "adventurous",
+  "insightful", "creative", "fantasy", "memory", "emotional", "reflective",
+  "supportive", "daily", "competitive", "growth",
+] as const
 export type GameMode = (typeof gameModesList)[number];
 export const GameTypeList = [
   "would-you-rather",

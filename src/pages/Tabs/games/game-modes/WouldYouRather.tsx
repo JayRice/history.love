@@ -224,7 +224,11 @@ export function WouldYouRather({ game }: { game: Game<WouldYouRatherGame> }) {
 
       {showResults && (
         <View className={"absolute w-full bottom-8 z-50 flex justify-center items-center"}>
-          <PrimaryButton style={continueOpacity} onPress={() => {
+          {/* NOTE: passes the raw SharedValue, which RN ignores as a style, so
+              the button renders fully visible today. The prepared animated
+              `continueStyle` above is unused; wiring it up is a deliberate
+              UI-phase change. Cast preserves current behavior. */}
+          <PrimaryButton style={continueOpacity as unknown as object} onPress={() => {
           setSeenResults(true);
         }}>Continue</PrimaryButton></View>
       )}

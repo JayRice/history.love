@@ -4,8 +4,9 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import ToggleButtons from '@/src/components/inputs/ToggleButtons';
 import React from 'react';
+import FormProps from '@/src/types/props/FormProps';
 
-const SourceForm = ({formUser, updateFormUser}: ScreenProps) => {
+const SourceForm = ({formUser, updateFormUser}: FormProps) => {
 
   const colors = useThemeColors()
 

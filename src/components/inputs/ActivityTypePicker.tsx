@@ -1,6 +1,6 @@
 import React from "react";
 import { CategoryPicker } from "@/src/components/inputs/CategoryPicker";
-import type { ActivityType } from "@/src/types/CalendarTypes"; // or wherever your type lives
+import type { ActivityType } from "@/src/types/Calendar";
 
 export const ActivityTypeList: ActivityType[] = [
   "date-night",

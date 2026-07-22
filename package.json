@@ -9,7 +9,8 @@
     "lint": "expo lint",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "check:safety": "node scripts/check-migration-safety.mjs"
+    "check:safety": "node scripts/check-migration-safety.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",

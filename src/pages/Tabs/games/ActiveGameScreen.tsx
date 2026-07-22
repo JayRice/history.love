@@ -3,7 +3,7 @@ import { Screen } from '@/src/components/layout/Screen';
 import React, { useEffect, useState } from 'react';
 import { BackButton } from '@/src/components/buttons/BackButton';
 import { getPartnerName } from '@/src/utils/getPartnerName';
-import { Game } from '@/src/types/Game';
+import { Game, WouldYouRatherGame } from '@/src/types/Game';
 import { useRelationshipStore } from '@/src/store/relationshipStore';
 import { Text } from 'react-native-paper';
 import { WouldYouRather } from '@/src/pages/Tabs/games/game-modes/WouldYouRather';
@@ -50,7 +50,8 @@ export default function  ActiveGameScreen(){
         <BackButton addedClasses={"left-2 top-6"} labelStyle={{color: "white"}}></BackButton>
 
 
-      {currentGame.type == "would-you-rather" && <WouldYouRather game={currentGame}/>}
+      {/* Discriminant-guarded: type check above narrows the payload. */}
+      {currentGame.type == "would-you-rather" && <WouldYouRather game={currentGame as Game<WouldYouRatherGame>}/>}
 
     </View>
   )

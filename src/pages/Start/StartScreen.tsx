@@ -82,7 +82,7 @@ export default function StartScreen() {
           style={{ width: "100%", height: 44 }}
           onPress={async () => {
             try {
-              const { userCred, fullName, email } = await loginWithApple();
+              await loginWithApple();
               // If first login, save profile fields (fullName/email) while you have them.
             } catch (e: any) {
               console.error(e);

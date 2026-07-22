@@ -66,7 +66,7 @@ export const TimelineEventCard: React.FC<TimelineEventCardProps> = ({
               <View className="flex-row items-center mt-1">
                 <Calendar size={14} color={colors.onSurfaceVariant} />
                 <Text variant="bodySmall" className="text-gray-600 ml-2">
-                  {formatDate(event.date)}
+                  {formatDate(new Date(event.date))}
                 </Text>
                 {event.location && (
                   <>
@@ -85,10 +85,10 @@ export const TimelineEventCard: React.FC<TimelineEventCardProps> = ({
             {event.note}
           </Text>
 
-          {event?.categories.length > 0 && (
+          {(event.categories?.length ?? 0) > 0 && (
             <View className="flex-row items-center flex-wrap">
               <Tag size={14} color={colors.onSurfaceVariant} />
-              {event.tags.slice(0, 3).map((tag, index) => (
+              {(event.tags ?? []).slice(0, 3).map((tag, index) => (
                 <Chip 
                   key={index}
                   mode="outlined"
@@ -103,9 +103,9 @@ export const TimelineEventCard: React.FC<TimelineEventCardProps> = ({
                   <Text className={"m-8"}>{tag}</Text>
                 </Chip>
               ))}
-              {event.tags.length > 3 && (
+              {(event.tags?.length ?? 0) > 3 && (
                 <Text variant="bodySmall" className="text-gray-500">
-                  +{event.tags.length - 3} more
+                  +{(event.tags?.length ?? 0) - 3} more
                 </Text>
               )}
             </View>

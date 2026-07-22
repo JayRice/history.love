@@ -19,7 +19,7 @@ import { ActivityTypePicker } from "@/src/components/inputs/ActivityTypePicker";
 import { RepeatPicker, toRRULE } from "@/src/components/inputs/RepeatPicker";
 
 import type { GeoLocation } from "@/src/types/GeoLocation";
-import type { ActivityType, CalenderEvent } from "@/src/types/Calender";
+import type { ActivityType, CalendarEvent } from "@/src/types/Calendar";
 
 import { addCalenderEvent } from "@/src/server/set/addCalenderEvent";
 import { useUserStore } from "@/src/store/userStore";
@@ -114,7 +114,7 @@ export default function AddCalendarEventScreen() {
     const recurrence =
       repeat.freq === "NONE" ? undefined : toRRULE(repeat, range.start, timezone);
 
-    const calenderEvent: Omit<CalenderEvent, "id"> = {
+    const calenderEvent: Omit<CalendarEvent, "id"> = {
       title: title.trim(),
       description: description?.trim() || undefined,
       location: location?.label || undefined,

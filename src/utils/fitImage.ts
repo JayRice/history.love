@@ -23,7 +23,8 @@ export async function convertToJpeg(uri: string): Promise<string> {
 
     // Get file size
     const fileInfo = await FileSystem.getInfoAsync(currentUri);
-    const size = fileInfo.size ?? 0;
+    // FileInfo is a union; size only exists when the file exists.
+    const size = fileInfo.exists ? fileInfo.size : 0;
 
     if (size <= MAX_FILE_SIZE || compress <= 0.3) {
       return currentUri;

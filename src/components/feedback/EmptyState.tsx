@@ -37,7 +37,6 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       {actionText && onAction && (
         <PrimaryButton
           onPress={onAction}
-          mode="contained"
           size="large"
         >
           {actionText}

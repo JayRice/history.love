@@ -55,6 +55,11 @@ export default interface Relationship {
   notes?: string;
   isPrivate?: boolean;
 
+  // Legacy field read by RelationshipCard; not written anywhere in the app,
+  // so it renders as undefined today. Reconcile in the Phase 3 relationship
+  // model migration.
+  partnerName?: string;
+
   moods?: Record<string, RelationshipMood>;
 
   profileImageIds: Record<string, string | null>;

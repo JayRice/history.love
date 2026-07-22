@@ -208,7 +208,7 @@ export default function CollisionHeartAnimation({
               gap: 8
             }}
           >
-            <ProfileImage style={{borderColor: colors.primary }} source={userSource} size={imageSize * 0.8} />
+            <ProfileImage source={userSource} size={imageSize * 0.8} />
             <ProfileImage source={partnerSource} size={imageSize * 0.8} />
           </View>
         </Animated.View>

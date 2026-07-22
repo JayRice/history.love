@@ -1,6 +1,9 @@
 import User from '../User';
 
 export default interface FormProps {
-  updateFormUser: <K extends keyof User>(key: K | string, value: User[K] | string) => void;
+  // Path-based setter ("profile.birthday", "partner.goals", ...). Values are
+  // heterogeneous (dates, arrays, booleans, objects); the implementation in
+  // OnboardingScreen is (key: string, value: any). Typed to match reality.
+  updateFormUser: (key: string, value: unknown) => void;
   formUser: User | null;
 }

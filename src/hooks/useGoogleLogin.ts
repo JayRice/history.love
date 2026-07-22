@@ -10,7 +10,8 @@ import type { AuthRequest } from "expo-auth-session";
 WebBrowser.maybeCompleteAuthSession();
 
 type UseGoogleLogin = {
-  signInWithGoogle: () => Promise<UserCredential | null>;
+  // Returns the app's success envelope, not the raw Firebase UserCredential.
+  signInWithGoogle: () => Promise<{ success: boolean; user: UserCredential["user"] } | null>;
   googleLoading: boolean;
   googleError: string | null;
   // Expose these in case you want to inspect/debug

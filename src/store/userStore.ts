@@ -10,7 +10,10 @@ type Store = {
   user: User | null;
   setIsUserInitialized: (b: boolean) => void;
   setUser: (u: User | null) => void;
-  setUserProperty: <K extends keyof User>(key: K, value: User[K]) => void;
+  // Dynamic property setter; RegisterScreen writes draft fields ("name",
+  // "profileImage") that are not part of the User type. Typed to match the
+  // implementation, which spreads `[key]: value` and casts.
+  setUserProperty: (key: string, value: unknown) => void;
   reset: () => void;
 };
 

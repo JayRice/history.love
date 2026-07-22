@@ -165,7 +165,7 @@ export const PhotoInput: React.FC<PhotoInputProps> = ({
         ) : (
           <FlatList
             data={[...displayPhotos, ...photos]}
-            keyExtractor={(item) => item?.uri}
+            keyExtractor={(item, index) => item?.uri ?? String(index)}
             numColumns={3}
             contentContainerStyle={{ gap: 8 }}
             columnWrapperStyle={{ gap: 8 }}

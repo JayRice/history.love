@@ -1,6 +1,26 @@
 import { MD3LightTheme } from 'react-native-paper';
 import { colors } from './colors';
 
+/**
+ * The app's theme colors: MD3 plus the custom tokens added below.
+ *
+ * `border`, `text`, and `textSecondary` are referenced by some legacy
+ * inputs (RepeatPicker, TimeOfDayPicker, DateTimeRangeField) but are NOT
+ * defined in this theme, so they are `undefined` at runtime today. They
+ * are typed optional to reflect that reality; defining them is UI-phase
+ * work (see docs/migration-status.md).
+ */
+export type AppColors = typeof MD3LightTheme.colors & {
+  primaryAccent: string;
+  primaryAccent2: string;
+  card_surface: string;
+  secondaryAccent: string;
+  secondaryAccent2: string;
+  border?: string;
+  text?: string;
+  textSecondary?: string;
+};
+
 export const paperTheme = {
   ...MD3LightTheme,
   colors: {

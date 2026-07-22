@@ -40,9 +40,6 @@ export function MemoryTile({ memory }: Props) {
       borderWidth: 1,
       borderColor: theme.colors.outlineVariant ?? theme.colors.outline,
   }}
-    onPress={() => {
-
-    }}
     >
   {/* ---------- IMAGE ---------- */}
   <Image

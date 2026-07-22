@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import type { ActivityType } from "@/src/types/Calender";
+import type { ActivityType } from "@/src/types/Calendar";
 
 
 export const activityIcon = (t?: ActivityType, size = 14) => {

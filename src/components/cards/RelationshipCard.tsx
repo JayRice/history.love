@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Card, Text, Chip } from 'react-native-paper';
 import { Calendar, MapPin, Heart } from 'lucide-react-native';
-import { Relationship } from '@/src/types/Relationship';
+import Relationship from '@/src/types/Relationship';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { formatDate } from '@/src/utils/formatDate';
 
@@ -27,9 +27,9 @@ export const RelationshipCard: React.FC<RelationshipCardProps> = ({
     }
   };
 
-  const duration = relationship.endDate 
-    ? `${formatDate(relationship.startDate)} - ${formatDate(relationship.endDate)}`
-    : `Since ${formatDate(relationship.startDate)}`;
+  const duration = relationship.endDate
+    ? `${formatDate(new Date(relationship.startDate))} - ${formatDate(new Date(relationship.endDate))}`
+    : `Since ${formatDate(new Date(relationship.startDate))}`;
 
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
@@ -70,7 +70,7 @@ export const RelationshipCard: React.FC<RelationshipCardProps> = ({
                 fill={relationship.status === 'active' ? colors.primary : 'transparent'} 
               />
               <Text variant="bodySmall" className="text-gray-600 ml-2">
-                {relationship.events.length} events
+                {relationship.events?.length ?? 0} events
               </Text>
             </View>
           </View>

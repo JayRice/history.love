@@ -3,9 +3,10 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import ToggleButtons from '@/src/components/inputs/ToggleButtons';
 import { TextField } from '@/src/components/inputs/TextField';
-import {getPartnerName} from "@/src/utils/getPartnerName.tsx"
+import {getPartnerName} from "@/src/utils/getPartnerName"
+import FormProps from '@/src/types/props/FormProps';
 
-const RelationshipForm = ({formUser, updateFormUser}: ScreenProps) => {
+const RelationshipForm = ({formUser, updateFormUser}: FormProps) => {
 
   const [showOtherInput, setShowOtherInput] = useState<boolean>(false);
 

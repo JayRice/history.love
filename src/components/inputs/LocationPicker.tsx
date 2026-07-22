@@ -8,9 +8,6 @@ import { Text, TextInput } from 'react-native-paper';
 import { MapPin as MapPinIcon, X as XIcon } from 'lucide-react-native';
 import { useThemeColors } from '@/src/hooks/useThemeColors';
 import { GeoLocation } from '@/src/types/GeoLocation';
-import { LocationSearchModal } from '@/src/components/modals/LocationSearchModal';
-import { useLocationModalStore } from '@/src/store/useLocationModalStore';
-import { router } from 'expo-router';
 import { useModal } from '../../contexts/ModalContext';
 
 type LocationPickerProps = {

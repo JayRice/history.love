@@ -76,6 +76,8 @@ Recorded in `eslint.config.js` section 4 with exact paths. Summary and death pla
 
 **How the list shrinks:** every later phase that rebuilds a file must delete its allowlist entry in the same commit. A PR that adds a new path to section 4 is a rejected PR; the rules exist to make new violations impossible, not to catalog them.
 
-## Firebase-touching files after Phase 0B (complete list)
+## Provider access after the Firebase removal (2026-07-22)
 
-`src/shared/config/firebase.ts` (client init), `src/shared/lib/legacy/getImages.ts` (Storage reads), `src/shared/lib/legacy/useLegacyFirebaseSync.ts` (the six Firestore listeners), `features/auth/hooks/{AuthContext,useGoogleLogin}`, `features/auth/data/legacy/*` (5 files), `features/notifications/data/legacy/{handleFcmMessaging,markRead}`. Nothing else imports `firebase*`. All die by Phase 7.
+Firebase is gone (package, config, and every import). Supabase access is confined to: `src/shared/lib/supabase.ts` (client factory), `src/shared/lib/legacy/{supabaseAppHelpers,useSupabaseAppSync}.ts` (transitional sync + helpers), `features/*/data/**` (data modules), and `features/auth/data/authRepository.ts`. The firebase lint patterns remain active purely as regression guards.
+
+Cross-feature calls now have one sanctioned shape: import the other feature's `domain/` contract (example: `features/notifications/domain/pushTokens`). The remaining allowlist exceptions are the profiles-UI reach into auth's legacy logout and OnboardingScreen's alias import of the relationships invitation module, both dying with the PRD onboarding/closure rebuilds.

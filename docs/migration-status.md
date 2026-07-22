@@ -115,9 +115,71 @@ Migration group 01 authored, applied, and tested against the local stack (Docker
 ### Remaining Phase 1 work
 
 - Remote projects (staging/production): NOT created. Spends money and needs an org decision (see Questions for Morning Review).
-- supabase-js client factory + TanStack Query provider: deliberately deferred to Phase 2 with their first consumer (the auth repository).
 
-### Requires future runtime verification
+## Firebase removal — COMPLETE (founder-directed, 2026-07-22)
 
-- CI `database` job has not run on GitHub Actions yet (verified locally only).
-- Hosted-platform grant semantics (service_role/authenticated) assumed to match local; re-verify against the first staging project.
+Founder clarification: zero Firebase users exist, nothing to migrate, Firebase is disposable. Executed as a direct cutover; the `firebase` package and every Firebase code path are deleted. The app now runs on Supabase Auth + Postgres + Storage, verified end-to-end against the local stack.
+
+### What runs on Supabase now
+
+- **Auth**: email signup/login/logout, session restoration (AsyncStorage-persisted, `onAuthStateChange`), password-reset requests, route protection via the untouched guard. `AuthContext` keeps the `{ authUser.uid, authUserLoading }` contract so screens did not change.
+- **User model**: signup DB trigger creates `profiles`; onboarding persists through `complete_onboarding` (structured columns + transitional `legacy_meta`); handle checks via `is_handle_taken`; protected columns (age_verified, verification_state, search fields) rejected by trigger.
+- **App data**: `useSupabaseAppSync` replaces the six Firestore listeners, mapping rows into the legacy store shapes with realtime refetch; memories/calendar/games/notifications ride the transitional `app_*` doc tables; media uploads land in private buckets with signed-URL reads; pairing uses hashed 6-char single-use invitations; games merge choices server-side; unpair is `leave_relationship` with an immutable status event.
+
+### Verification record
+
+| Check | Result |
+|---|---|
+| `npm run typecheck` | clean |
+| `npm run lint` | 0 errors |
+| `npm run check:safety` | clean |
+| Android export (Metro bundle) | clean |
+| pgTAP (`supabase test db`) | 64/64 |
+| `node scripts/smoke-supabase.mjs` vs live local stack | 27/27 |
+
+### Decisions and assumptions (reversible unless noted)
+
+1. **Stores stay as the transitional cache** instead of introducing TanStack Query mid-cutover: screens stay untouched, one data-feeder swapped. Query hooks arrive per feature as screens are rebuilt (PRD phases). Evidence: plan E3 targets the end state; the cutover minimizes simultaneous change.
+2. **Transitional `app_*` doc tables + `legacy_meta`** keep Firestore-shaped documents under real RLS columns. Death plans are in the migration headers; PRD-shaped entities (moments, revisions, etc.) remain scheduled for Phases 4-6 under their unclaimed names.
+3. **6-character invitation codes** (was 10): matches the existing PinInput UI exactly; hash-only storage, 5-attempt cap, and 7-day expiry carry the security.
+4. **Own-profile cache of the invite code** in `legacy_meta` mirrors where the legacy app kept `match_code` (owner-only RLS); the invitations table still stores only the hash.
+5. **OAuth (Google/Apple) stubbed** with honest in-app messaging: requires Supabase provider configuration + Apple/Google credentials (founder action), not safely fakeable.
+6. **AsyncStorage session storage**: expo-secure-store's 2KB value limit truncates Supabase sessions; chunked secure storage is a hardening follow-up.
+7. **fetchLocations returns []**: venue search died with the ngrok backend; manual location entry still works (the search screen offers the raw query). Geocoding provider choice is a founder decision.
+8. **WYR round assembly reimplemented client+RPC** (question selection client-side at start, choice merging server-side): the legacy backend's exact logic was never visible. Marked *requires runtime verification*.
+
+### Blockers hit and resolved
+
+- Default-port collision with another local Supabase project → this project pinned to 553xx ports in `config.toml`.
+- Analytics (Logflare) container unhealthy on Windows (needs Docker on tcp:2375) → disabled in `config.toml` with a comment.
+- Signup trigger collided with test/seed profile inserts → fixtures switched to updates; seed upsert fixed.
+- Supabase generated types made RPC args required → SQL defaults added to `complete_onboarding`.
+- expo-file-system SDK 54 moved the base64 API → `expo-file-system/legacy` import.
+- The boundary lint caught two of my own violations (shared→features import; cross-feature data alias) → fixed architecturally (shared AuthUser contract; notifications domain contract), not allowlisted.
+
+### Requires future runtime verification (device/emulator)
+
+- Full app flows on hardware: onboarding end-to-end with camera/photos, pairing UX, memory photo upload/rendering, WYR realtime turn-taking, session restore across app restarts, partner-avatar gap (see problems).
+- CI `database` job on GitHub Actions (local-only so far).
+- Hosted-platform grant semantics vs local.
+
+### Problems discovered
+
+- **Partner avatar/name display gap** (mitigated, deferred): profiles are owner-only under RLS, so the partner's avatar cannot render yet (`profileImageIds` maps to `{}`). Partner name still comes from the user's own onboarding meta. Proper fix is the Phase 3 member-visibility model. UI shows a blank partner image until then.
+- **Notifications are read-only**: nothing generates rows anymore (the legacy backend did). Inbox stays empty until Phase 6 server-generated notifications.
+- **Legacy timeline feed mock** (`getTimeline`) remains mocked; the store-fed gallery works via the sync hook.
+
+## Questions for Morning Review
+
+1. **Supabase organization + billing** for staging/production projects; until then everything runs on the local stack.
+2. **OAuth**: provide Google/Apple credentials and enable providers in Supabase Auth config; then replace the two stubs (`useLogin` google branch, `loginWithApple`).
+3. **Geocoding provider** for location search (or drop venue search; manual entry works).
+4. **Device test pass**: the entire cutover is bundle- and integration-verified but has never rendered on hardware. Recommend: `npx supabase start -x studio` + `npm run dev` on an emulator against `.env.local`.
+5. Email confirmations are OFF locally (default); decide when to enable for staging (the auth code already handles the no-session signup case).
+6. Prior open items: calendar location granularity, journal AI-framing removal timing, exit-badge taxonomy governance.
+
+### Next executable tasks (in plan order)
+
+1. Rebuild consent/onboarding per PRD (age gate + versioned policies) on the now-live `accept_policy`/`user_consents` rails — replaces the off-spec Consent screen.
+2. Phase 4 PRD memories (moments + revisions + one-photo limit) replacing `app_memories`.
+3. TanStack Query hooks per feature, shrinking `useSupabaseAppSync` and the stores.
